@@ -26,7 +26,7 @@ rescue LoadError
   retry
 end
 
-p. *NOTE:* Do make sure that @gem "jbundler"@ as the first entry in your @Gemfile@ if you also plan to have _JAR_ dependencies (described below).
+p. *NOTE:* Do make sure that @gem "jbundler"@ is the first entry in your @Gemfile@ if you also plan to have _JAR_ dependencies (described below).
 
 h3. JARs
 
