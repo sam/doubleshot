@@ -8,6 +8,10 @@ Doubleshot is intended to simplify your build process when you have a combinatio
 
 During testing or packaging of your project you'll want to @require "doubleshot/build"@. If you have your @Jarfile@ and @Gemfile@ setup correctly, this will be all you need to resolve your dependencies, compile your Java, and ensure your @CLASSPATH@ is setup correctly.
 
+When actually using your packaged library, all you should need it @require "doubleshot/setup"@, which will skip the build process.
+
+*NOTE:* Below we'll provide an overview of the basic implementation of the _Doubleshot_ library. These are mostly our own development notes.
+
 h2. Dependencies
 
 h3. Gems
