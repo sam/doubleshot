@@ -12,6 +12,15 @@ When actually using your packaged library, all you should need is @require "doub
 
 *NOTE:* Below we'll provide an overview of the basic implementation of the _Doubleshot_ library. These are mostly our own development notes.
 
+h2. Example
+
+bc.. $ git clone git://github.com/sam/doubleshot.git
+$ cd doubleshot
+$ jruby -r lib/doubleshot/build.rb -e "p org.foo.Bar.baz"
+# SUCCESS!
+
+p. If you look under @lib/java/Bar.java@ you'll notice the @baz@ method just returns _"SUCCESS!"_, which is the output you're seeing there.
+
 h2. Dependencies
 
 h3. Gems
