@@ -17,7 +17,6 @@ if (Pathname::pwd + "Jarfile").exist?
 end
 
 require "ant"
-require "pathname"
 
 source = (Pathname::pwd + "lib" + "java")
 target = (Pathname::pwd + "target")
