@@ -1,7 +1,8 @@
 #!/usr/bin/env jruby
 
 require "lib/doubleshot/build"
-require "perfer"
+# require "perfer"
+require "benchmark/ips"
 require "json"
 java_import com.fasterxml.jackson.databind.ObjectMapper
 java_import org.foo.Bar
@@ -10,8 +11,27 @@ java_import org.foo.Bar
 # read the data in as a String to be used during parsing.
 SAMPLE = File.read("user.json")
 
-Perfer::session "JSON Parsing" do |x|
-  x.iterate("JSON") do
+# Perfer::session "JSON Parsing" do |x|
+#   x.iterate("JSON") do
+#     JSON.parse SAMPLE
+#   end
+# 
+#   # This is cheating a bit really, but it's certainly conceivable that
+#   # you would have a Singleton mapper, and cached target Class in a Java
+#   # implementation substituting for Ruby's JSON library.
+#   mapper = ObjectMapper.new
+#   target = java.util.Map.java_class
+#   x.iterate("Jackson") do    
+#     mapper.read_value SAMPLE, target
+#   end
+# 
+#   x.iterate("Jackson Wrapper") do
+#     Bar.parse SAMPLE
+#   end
+# end
+
+Benchmark::ips do |x|
+  x.report("JSON") do
     JSON.parse SAMPLE
   end
   
@@ -20,11 +40,11 @@ Perfer::session "JSON Parsing" do |x|
   # implementation substituting for Ruby's JSON library.
   mapper = ObjectMapper.new
   target = java.util.Map.java_class
-  x.iterate("Jackson") do    
+  x.report("Jackson") do
     mapper.read_value SAMPLE, target
   end
   
-  x.iterate("Jackson Wrapper") do
+  x.report("Jackson Wrapper") do
     Bar.parse SAMPLE
   end
 end

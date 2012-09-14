@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     backports (2.6.4)
+    benchmark-ips (1.2.0)
     ffi (1.0.11-java)
     hitimes (1.1.1-java)
     jbundler (0.3.0)
@@ -22,5 +23,6 @@ PLATFORMS
   java
 
 DEPENDENCIES
+  benchmark-ips
   jbundler
   perfer
