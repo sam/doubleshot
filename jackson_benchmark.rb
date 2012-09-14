@@ -11,7 +11,6 @@ SAMPLE = File.read("user.json")
 
 # To execute the benchmarks:
 #   perfer run jackson_benchmark.rb
-require "perfer"
 Perfer::session "JSON Parsing" do |x|
   x.iterate("JSON") do
     JSON.parse SAMPLE
