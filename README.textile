@@ -65,7 +65,7 @@ Your compiled code will also need to be added to the CLASSPATH. This can be acco
 bc.. require "java"
 $CLASSPATH << "target"
 org.foo.Bar.baz
-# => 1
+# => "SUCCESS!"
 
 h2. Packaging
 
@@ -74,3 +74,14 @@ Your project has a mix of Java and Ruby code and is intended to be consumed by o
 Since gemspecs don't support Java JARs, you'll want to add the JARs to your Gem. Yes, this will bloat the size of your Gem significantly, but there's no real alternative unless you want to force downstream users to use something like JBundler themselves.
 
 So just keep in mind that you'll need to drop your JAR dependencies into a @./jars/@ folder or some-such, and require them from that location in you packaged Gem.
+
+h2. TODO
+
+* Get rid of Bundler and replace with our own Rubygem dependency resolution
+* Get rid of JBundler and replace with our own Maven hooks
+* Condense Gemfile and Jarfile into one unified Doubleshot file
+* Compile .java sources on the fly and reload with Apache Commons JCI
+* Use a file-system watcher to detect when .java sources should be recompiled so you never have to shutdown your java process
+* Provide simplified helpers to create and reload Ruby ScriptingContainers to sandbox Ruby code
+* Use above helpers in conjunction with a filesystem watcher to reload Ruby code when it's changed
+* Provide build task to use a gemspec, package the jars in the gem, and require them for you
