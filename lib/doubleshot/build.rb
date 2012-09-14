@@ -1,19 +1,33 @@
 require "pathname"
 
-if (Pathname::pwd + "Gemfile").exist?
+gemfile = (Pathname::pwd + "Gemfile")
+gemfile_lock = (Pathname::pwd + "Gemfile.lock")
+
+install_gems = -> do
+  require "bundler"
+  require "bundler/cli"
+  Bundler::CLI.new.install
+end
+
+if gemfile.exist?
   begin
+    install_gems.call if !gemfile_lock.exist? || gemfile.mtime > gemfile_lock.mtime
     require "bundler/setup"
-  rescue LoadError
-    require "bundler/cli"
-    Bundler::CLI.new.install
-    retry
   end
 end
 
-if (Pathname::pwd + "Jarfile").exist?
-  require "bundler"
+install_jars = -> do
   require "jbundler/cli"
   JBundler::Cli.new.install
+end
+
+jarfile = (Pathname::pwd + "Jarfile")
+jarfile_lock = (Pathname::pwd + "Jarfile.lock")
+
+if jarfile.exist?
+  require "bundler" unless Object::const_defined?("Bundler")
+  require "jbundler"
+  install_jars.call if !jarfile_lock.exist? || jarfile.mtime > jarfile_lock.mtime
 end
 
 require "ant"
@@ -32,5 +46,4 @@ end
 
 ant.javac srcdir: source.to_s, destdir: target.to_s, debug: "yes", includeantruntime: "no", classpathref: "classpath"
 
-require "java"
 $CLASSPATH << target.to_s
