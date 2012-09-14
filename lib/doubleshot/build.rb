@@ -22,7 +22,15 @@ source = (Pathname::pwd + "lib" + "java")
 target = (Pathname::pwd + "target")
 
 target.mkdir unless target.exist?
-ant.javac srcdir: source.to_s, destdir: target.to_s, debug: "yes", includeantruntime: "no"
+
+ant.path id: "classpath" do  
+  fileset dir: target.to_s
+  JBUNDLER_CLASSPATH.each do |jar|
+    fileset dir: Pathname(jar).dirname
+  end
+end
+
+ant.javac srcdir: source.to_s, destdir: target.to_s, debug: "yes", includeantruntime: "no", classpathref: "classpath"
 
 require "java"
 $CLASSPATH << target.to_s

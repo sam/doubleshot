@@ -1,5 +1,7 @@
 GEM
+  remote: https://rubygems.org/
   specs:
+    benchmark-ips (1.2.0)
     jbundler (0.3.0)
       ruby-maven (= 3.0.4.0.29.0)
     maven-tools (0.29.3)
@@ -12,4 +14,5 @@ PLATFORMS
   java
 
 DEPENDENCIES
+  benchmark-ips
   jbundler

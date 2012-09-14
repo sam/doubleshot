@@ -1,3 +1,5 @@
 jar "org.apache.commons:commons-jci-core", "1.0"
 jar "org.apache.commons:commons-jci-javac", "1.0"
 jar "org.apache.commons:commons-jci-fam", "1.0"
+jar "com.fasterxml.jackson.core:jackson-core", "2.0.6"
+jar "com.fasterxml.jackson.core:jackson-databind", "2.0.6"
