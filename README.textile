@@ -1,16 +1,30 @@
 h1. Doubleshot
 
-bc. gem install doubleshot
-
 At it's heart Doubleshot is a...
 
-* Build tool for Java sources
-* Dependency manifest for Java JARs and Ruby Gems
-* Dependency resolver/downloader to setup your Java classpaths and Ruby loadpaths
-* Test harness to recompile and reload your Java classes, and sandbox your Ruby code
-* Packaging tool to bundle up your mixed environment project into a distributable Ruby Gem
+- Packaging tool := For mixed projects containing both Ruby and Java source code that you want to distribute as a Rubygem
+- Build tool := To compile your Java source
+- Dependency Manifest := Allowing you to declare dependencies for both Java JARs and Ruby Gems
+- Dependency Installer := It will download dependencies and setup your Java classpaths and Ruby loadpaths
+- Test Harness := Testing is integral to a good build, and Doubleshot aims to make mixed Java/Ruby language projects easier to test by recompiling and reloading your Java classes, and sandboxing your Ruby code
+
+It's probably easiest to describe Doubleshot, by explaining what tools it replaces in your workflow:
+
+h2. Doubleshot deprecates
+
+* Bundler
+* JBundler
+* GemPackageTask
+* RakeTestTask
+* Maven Dependencies
+* Maven Assemblies
+* Build tools like Ant or Buildr
 
 h1. Usage
+
+h2. Installation
+
+bc. gem install doubleshot
 
 h2. Project Layout
 
