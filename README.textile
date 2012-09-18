@@ -2,6 +2,7 @@ h1. Doubleshot
 
 * "Overview":#overview
 * "Usage":#usage
+** "Requirements":#requirements
 ** "Installation":#installation
 ** "Project Layout":#project-layout
 ** "Testing":#testing-two-ways
@@ -52,6 +53,13 @@ h2. What's in a Name?
 A shot each of JRuby and Java. Doubleshot.
 
 h1. Usage
+
+h2. Requirements
+
+* Java 6 or later
+* Maven
+* Ruby 1.9 Syntax only
+* JRuby 1.7 or later
 
 h2. Installation
 
