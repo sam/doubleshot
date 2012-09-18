@@ -48,10 +48,9 @@ h2. Project Layout
 The typical project using Doubleshot as it's build-tool will have the following layout:
 
 bc.. lib/
+    world.rb
     java/
         Hello.java
-    ruby/
-        world.rb
 test/
     helper.rb
     hello_spec.rb
@@ -65,9 +64,11 @@ bc.. #!/usr/local/env jruby
 
 require_relative "helper.rb"
 
-describe org.sam.doubleshot.examples.Hello do
+java_import org.sam.doubleshot.examples.Hello
+
+describe Hello do
   it "must rock you" do
-    org.sam.doubleshot.examples.Hello.you.must_equal "rock"
+    Hello.rock(:you).must_equal true
   end
 end
 
