@@ -99,7 +99,7 @@ Doubleshot also provides a @doubleshot@ bin file that basically amounts to @requ
 * If a @SIGINT@ (@^C@) is received, all tests will be loaded and executed
 * If a second @SIGINT@ is received before execution of the full test-suite is finished, the monitor will exit cleanly
 
-This is the typical use-case for day to day development of new projects/features when using Doubleshot to manage your build process.
+This is the typical use-case for day to day development of new projects/features when using Doubleshot to manage your build process. It allows you to write and test new code, without ever having to restart your Java VM, saving you ten seconds or so for every run, encouraging continuous testing so you can spend more time writing code, and less time waiting for processes to load.
 
 h2. Packaging
 
