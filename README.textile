@@ -111,6 +111,20 @@ If you're running inside of a @doubleshot/build@ then requiring @doublehsot/setu
 
 To build a gem, run the @doubleshot build@ command on the command line. Doubleshot will ensure all dependencies are satisfied, compile your code, vendor any JAR dependencies, run your tests, and finally create a gem for you based on your @example.gemspec@ file. We really don't think you should be releasing code with broken tests so the build will fail if the tests don't pass (you can always @skip@ bad tests you want to keep for reference). If you _really_ want to skip this step and force a build though you can run @NOTEST=1 doubleshot build@.
 
+h1. Tips
+
+h2. Use Doubleshot with Nailgun for Great Success!
+
+Open a terminal window and navigate to the root of your project (to make sure you're using the right JRuby if you have an @.rvmrc@). Then run:
+
+bc. jruby --ng-server
+
+Now run your code (any JRuby code, not just Doubleshot) as usual, but add the @--ng@ option to JRuby:
+
+bc. jruby --ng -r lib/doubleshot/build.rb -e "puts org.foo.Bar.baz"
+
+It may take a few cycles while things warm up, but you should see this cut your process load-time by several seconds. It's especially handy if you're running lots of test cases directly as detailed in the first testing scenario. It could easily cut your testing time in half (or more).
+
 h1. FAQ
 
 h2. Where is @doubleshot show@?
