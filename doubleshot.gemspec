@@ -13,6 +13,7 @@ EOS
   spec.homepage = "https://github.com/sam/doubleshot"
   spec.email = "ssmoot@gmail.com"
   spec.version = "0.1.0"
+  spec.license = "MIT-LICENSE"
   spec.platform = Gem::Platform::RUBY
   spec.files         = `git ls-files`.split("\n") + Dir["target/**/*.class"]
   spec.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
