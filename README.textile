@@ -48,15 +48,16 @@ h2. Project Layout
 The typical project using Doubleshot as it's build-tool will have the following layout:
 
 bc.. lib/
-    world.rb
+    world.rb         # Ruby sources go in the standard location.
     java/
-        Hello.java
+        Hello.java   # Java sources appear under the lib/java folder.
 test/
     helper.rb
-    hello_spec.rb
+    hello_spec.rb    # specs match up to lib/**/*.rb or lib/java/**/*.java
     world_spec.rb
-Doubleshot
-hello_world.gemspec
+hello_world.gemspec  # Standard Ruby gemspec, where gem dependencies are declared.
+Doubleshot           # Your Doubleshot file replaces JBundler's Jarfile, and pulls
+                     # in your gemspec.
 
 p. Your tests should be executable and look something like this:
 
@@ -83,7 +84,7 @@ h3. Direct Execution
 
 p. Now you can execute your spec file directly and Doubleshot will:
 
-# Ensure that the dependencies defined in the @./Doubleshot@ file are met by resolving their versions, downloading them, and adding them to your environment.
+# Ensure that the dependencies defined in the @Doubleshot@ file are met by resolving their versions, downloading them, and adding them to your environment.
 # Compile any code found in @lib/java@ that's not already compiled.
 
 Then Minitest will run your test and exit when it's done.
