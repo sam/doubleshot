@@ -1,13 +1,17 @@
 #!/usr/bin/env jruby
 
-require "lib/doubleshot/build"
+require_relative "../lib/doubleshot/build"
 require "json"
 java_import com.fasterxml.jackson.databind.ObjectMapper
 java_import org.foo.Bar
 
-# We're not trying to benchmark the IO classes, so we'll
-# read the data in as a String to be used during parsing.
-SAMPLE = File.read("user.json")
+SAMPLE = <<EOS.strip
+{
+  "name" : { "first" : "Joe", "last" : "Sixpack" },
+  "gender" : "MALE",
+  "verified" : false
+}
+EOS
 
 # To execute the benchmarks:
 #   perfer run jackson_benchmark.rb
