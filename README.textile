@@ -4,7 +4,17 @@ h1(#doubleshot). Doubleshot
 ** "Overview":#overview
 ** "Origin of the name Doubleshot":#naming_origin
 * "Usage":#usage
+** "Installation":#installation
+** "Project Layout":#layout
+** "Testing":#testing
+*** "Direct Invocation":#testing_direct
+*** "Monitored Sandbox":#testing_sandbox
+** "Packaging":#packaging
 * "Tips":#tips
+** "Nailgun Usage":#nailgun
+* "FAQ":#faq
+* "TODO":#todo
+* "Notes":#notes
 
 h2(#overview). Overview
 
@@ -47,11 +57,11 @@ A shot each of JRuby and Java. Doubleshot.
 
 h1(#usage). Usage
 
-h2. Installation
+h2(#installation). Installation
 
 bc. gem install doubleshot
 
-h2. Project Layout
+h2(#layout). Project Layout
 
 The typical project using Doubleshot as it's build-tool will have the following layout:
 
@@ -86,9 +96,9 @@ p. ...and @helper.rb@ would look something like this:
 bc.. require "doubleshot/build"
 require "minitest/autorun"
 
-h2. Testing Two Ways
+h2(#testing). Testing Two Ways
 
-h3. Direct Execution
+h3(#testing_direct). Direct Execution
 
 p. Now you can execute your spec file directly and Doubleshot will:
 
@@ -97,7 +107,7 @@ p. Now you can execute your spec file directly and Doubleshot will:
 
 Then Minitest will run your test and exit when it's done.
 
-h3. Sandbox Execution
+h3(#testing_sandbox). Sandbox Execution
 
 Doubleshot also provides a @doubleshot@ bin file that basically amounts to @require("doubleshot/sandbox")@. Running @doubleshot@ in your project's home directory will setup monitors for @lib/@ and @test/@ and wait for changes, applying the rules below to it's execution:
 
@@ -109,7 +119,7 @@ Doubleshot also provides a @doubleshot@ bin file that basically amounts to @requ
 
 This is the typical use-case for day to day development of new projects/features when using Doubleshot to manage your build process. It allows you to write and test new code, without ever having to restart your Java VM, saving you ten seconds or so for every run, encouraging continuous testing so you can spend more time writing code, and less time waiting for processes to load.
 
-h2. Packaging
+h2(#packaging). Packaging
 
 Given a project named _Example_, then @example.gemspec@ would include your Gem dependencies (including "doubleshot") and your @Doubleshot@ file would include your JAR dependencies as well as pulling in your Gem dependencies from your gemspec. This way your project is backwards compatible with Rubygems and Bundler. When packaging your project, your JAR dependencies will be "vendored" into the gem you've built.
 
@@ -121,7 +131,7 @@ To build a gem, run the @doubleshot build@ command on the command line. Doublesh
 
 h1(#tips). Tips
 
-h2. Use Doubleshot with Nailgun for Great Success!
+h2(#nailgun). Use Doubleshot with Nailgun for Great Success!
 
 Open a terminal window and navigate to the root of your project (to make sure you're using the right JRuby if you have an @.rvmrc@). Then run:
 
@@ -135,7 +145,7 @@ It may take a few cycles while things warm up, but you should see this cut your 
 
 When you're done for the day, just foreground the server with the @fg@ command, and @SIGINT@ it (@^C@) to quit.
 
-h1. FAQ
+h1(#faq). FAQ
 
 h2. Where is @doubleshot show@?
 
@@ -177,7 +187,7 @@ h2. Does Doubleshot support Ruby 1.8.x syntax?
 
 No.
 
-h1. TODO
+h1(#todo). TODO
 
 * Build and release a doubleshot gem
 * Get rid of Bundler and replace with our own Rubygem dependency resolution
@@ -189,7 +199,7 @@ h1. TODO
 * Use above helpers in conjunction with a filesystem watcher to reload Ruby code when it's changed
 * Provide build task to use a gemspec, package the jars in the gem, and require them for you
 
-h1. NOTES
+h1(#notes). NOTES
 
 h2. CLASSPATH
 
