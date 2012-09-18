@@ -47,19 +47,19 @@ h2. Project Layout
 
 The typical project using Doubleshot as it's build-tool will have the following layout:
 
-* lib
-** java
-*** Hello.java
-** ruby
-*** world.rb
-* test
-** helper.rb
-** hello_spec.rb
-** world_spec.rb
-* Doubleshot
-* hello_world.gemspec
+bc.. lib/
+    java/
+        Hello.java
+    ruby/
+        world.rb
+test/
+    helper.rb
+    hello_spec.rb
+    world_spec.rb
+Doubleshot
+hello_world.gemspec
 
-Your tests should be executable and look something like this:
+p. Your tests should be executable and look something like this:
 
 bc.. #!/usr/local/env jruby
 
