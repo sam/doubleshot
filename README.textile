@@ -13,8 +13,6 @@ h1(#doubleshot). Doubleshot
 * "Tips":#tips
 ** "Nailgun Usage":#nailgun
 * "FAQ":#faq
-* "TODO":#todo
-* "Notes":#notes
 
 h2(#overview). Overview
 
@@ -186,41 +184,3 @@ This will leave you with an @example.jar@ you can just copy up to a server, and 
 h2. Does Doubleshot support Ruby 1.8.x syntax?
 
 No.
-
-h1(#todo). TODO
-
-* Build and release a doubleshot gem
-* Get rid of Bundler and replace with our own Rubygem dependency resolution
-* Get rid of JBundler and replace with our own Maven hooks
-* Condense Gemfile and Jarfile into one unified Doubleshot file
-* Compile .java sources on the fly and reload with Apache Commons JCI
-* Use a file-system watcher to detect when .java sources should be recompiled so you never have to shutdown your java process
-* Provide simplified helpers to create and reload Ruby ScriptingContainers to sandbox Ruby code
-* Use above helpers in conjunction with a filesystem watcher to reload Ruby code when it's changed
-* Provide build task to use a gemspec, package the jars in the gem, and require them for you
-
-h1(#notes). NOTES
-
-h2. CLASSPATH
-
-If you @require("path/to/some.jar")@, all JRuby is doing is modifying your _CLASSPATH_ so later references to a Class can locate the Class. Unlike Rubygems, it's not actually auto-requiring any code for you.
-
-Your compiled code will also need to be added to the CLASSPATH. This can be accomplished by simply adding the output directory:
-
-bc.. require "java"
-$CLASSPATH << "target"
-org.foo.Bar.baz
-# => "SUCCESS!"
-
-h2. Program Execution
-
-Since Doubleshot is a build tool, we assume your entry-point is always JRuby and not a Java class of your own making (since there would be no compiled version of it for you to execute yet).
-
-h2. Example
-
-bc.. $ git clone git://github.com/sam/doubleshot.git
-$ cd doubleshot
-$ jruby -r lib/doubleshot/build.rb -e "p org.foo.Bar.baz"
-# SUCCESS!
-
-p. If you look under @lib/java/Bar.java@ you'll notice the @baz@ method just returns _"SUCCESS!"_, which is the output you're seeing there.
