@@ -18,8 +18,8 @@ You have a JRuby project with both Java and Ruby source files. You need to:
 * Ensure that Java Classes and Dependencies are added to the @$CLASSPATH@ at runtime
 * Package your mixed-language project and it's JAR dependencies into a Gem you can release
 * Write your tests in a single language (Ruby) using "Minitest":https://github.com/seattlerb/minitest
-* When you modify a Java source file, you want it to automatically compile, reload the Java Class and execute the appropriate tests
-* When you modify a Ruby source file you want your testing sandbox to reload without side-effects from previous versions of the class
+* If you modify a Java source file, you want it to automatically compile, reload the Java Class and execute the appropriate tests
+* If you modify a Ruby source file you want your testing sandbox to reload without side-effects from previous versions of a class
 * You want to be able to execute your Ruby normally, without the need for wrappers like Rake or @bundle exec@
 * You want to be able to package a project and all it's dependencies up as a JAR so all you need to deploy is a working Java installation on your server
 
