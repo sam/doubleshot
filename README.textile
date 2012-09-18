@@ -1,16 +1,27 @@
 h1. Doubleshot
 
-At it's heart Doubleshot is a...
+JRuby is amazing.
 
-* Packaging tool: For mixed projects containing both Ruby and Java source code that you want to distribute as a Rubygem
-* Build tool: To compile your Java source
-* Dependency Manifest: Allowing you to declare dependencies for both Java JARs and Ruby Gems
-* Dependency Installer: It will download dependencies and setup your Java classpaths and Ruby loadpaths
-* Test Harness: Testing is integral to a good build, and Doubleshot aims to make mixed Java/Ruby language projects easier to test by recompiling and reloading your Java classes, and sandboxing your Ruby code
+Unfortunately there's no simple standard way to create a Gem that contains both Java and Ruby sources, with both JAR and Gem dependencies. Before Doubleshot you'd probably use Bundler to manage your Gem dependencies, JBundler to manage your JAR dependencies and Buildr (which is built on top of Rake) to compile and package your project.
 
-h2. Deprecations
+That's really cumbersome. Especially since Buildr wasn't built for this, and there really is very little documentation on how to accomplish your goals. On top of that, you're now forced to run Rake and load these massive libraries even just to execute a single @TestCase@. And you'll have to run it every time. If you're a fan of TDD, you can realistically spend a substantial portion of your day just waiting for the JVM to load Maven, Bundler and Rake. Over. And Over. And Over.
 
-It's probably easiest to describe Doubleshot, by explaining what tools it replaces in your workflow:
+It's painful is what it is.
+
+You have a JRuby project with both Java and Ruby source files. You need to:
+
+* Compile your Java
+* Resolve and Download your JAR dependencies from a Maven repository
+* Resolve and Download your Gem dependencies from a Rubygems server
+* Ensure that Java Classes and Dependencies are added to the @$CLASSPATH@ at runtime
+* Package your mixed-language project and it's JAR dependencies into a Gem you can release
+* Write your tests in a single language (Ruby) using "Minitest":https://github.com/seattlerb/minitest
+* When you modify a Java source file, you want it to automatically compile, reload the Java Class and execute the appropriate tests
+* When you modify a Ruby source file you want your testing sandbox to reload without side-effects from previous versions of the class
+* You want to be able to execute your Ruby normally, without the need for wrappers like Rake or @bundle exec@
+* You want to be able to package a project and all it's dependencies up as a JAR so all you need to deploy is a working Java installation on your server
+
+Here's what tools it replaces in your workflow:
 
 * Bundler
 * JBundler
@@ -19,6 +30,10 @@ It's probably easiest to describe Doubleshot, by explaining what tools it replac
 * Maven Dependencies
 * Maven Assemblies
 * Build tools like Ant or Buildr
+
+h2. What's in a Name?
+
+Like espresso. A shot each of JRuby and Java. Doubleshot.
 
 h1. Usage
 
@@ -117,13 +132,13 @@ bc. require "doubleshot/setup"
 Doubleshot will first see if all it's dependencies are available, and if not, install any that are missing. So you don't have to manually run an installation step.
 
 bq.. But I just want to install my Gem dependencies on a remote server and not actually attempt to run any code!
-      *-- Said No One Ever*
+span{margin-left: 20px;}. *-- Said No One Ever*
 
 p. If you _really_ want to pre-download your dependencies just run @jruby -r "doubleshot/setup"@ in your project's home-directory. Nothing to it.
 
 h2. What if I want to create a unified JAR containing all my dependencies?
 
-Use @doubleshot jar [main-class]@. By default the main-class will use JRuby's bootstrapping mechanism @org.jruby.JarBootstrapMain@, where you add your own @jar-bootstrap.rb@ file to be @require@d.
+Use @doubleshot jar [main-class]@. By default the main-class will use JRuby's bootstrapping mechanism @org.jruby.JarBootstrapMain@, where you add your own @jar-bootstrap.rb@ file to be required.
 
 All gems will be unpacked and copied in. All JAR dependencies will be copied in as well.
 
