@@ -58,8 +58,8 @@ h2. Requirements
 
 * Java 6 or later
 * Maven
-* Ruby 1.9 Syntax only
 * JRuby 1.7 or later
+* Ruby 1.9 Syntax only
 
 h2. Installation
 
