@@ -3,13 +3,13 @@ h1. Doubleshot
 * "Overview":#overview
 * "Usage":#usage
 ** "Installation":#installation
-** "Project Layout":#layout
-** "Testing":#testing
-*** "Direct Execution":#direct_execution
-*** "Sandbox Execution":#sandbox_execution
+** "Project Layout":#project-layout
+** "Testing":#testing-two-ways
+*** "Direct Execution":#direct-execution
+*** "Sandbox Execution":#sandbox-execution
 ** "Packaging":#packaging
 * "Tips":#tips
-** "Nailgun Usage":#nailgun
+** "Nailgun Usage":#use-doubleshot-with-nailgun-for-great-success
 * "FAQ":#faq
 
 h2. Overview
@@ -57,7 +57,7 @@ h2. Installation
 
 bc. gem install doubleshot
 
-h2(#layout). Project Layout
+h2. Project Layout
 
 The typical project using Doubleshot as it's build-tool will have the following layout:
 
@@ -92,7 +92,7 @@ p. ...and @helper.rb@ would look something like this:
 bc.. require "doubleshot/build"
 require "minitest/autorun"
 
-h2(#testing). Testing Two Ways
+h2. Testing Two Ways
 
 h3. Direct Execution
 
@@ -127,7 +127,7 @@ To build a gem, run the @doubleshot build@ command on the command line. Doublesh
 
 h1. Tips
 
-h2(#nailgun). Use Doubleshot with Nailgun for Great Success!
+h2. Use Doubleshot with Nailgun for Great Success!
 
 Open a terminal window and navigate to the root of your project (to make sure you're using the right JRuby if you have an @.rvmrc@). Then run:
 
