@@ -103,13 +103,13 @@ This is the typical use-case for day to day development of new projects/features
 
 h2. Packaging
 
-Given a project named _Example_, then @example.gemspec@ would include your Gem dependencies (including "doubleshot") and your @Doubleshot@ file would include both your Gem and JAR dependencies. This way your project is backwards compatible with Rubygems and Bundler. When packaging your project, your JAR dependencies will be "vendored" into the gem you've built.
+Given a project named _Example_, then @example.gemspec@ would include your Gem dependencies (including "doubleshot") and your @Doubleshot@ file would include your JAR dependencies as well as pulling in your Gem dependencies from your gemspec. This way your project is backwards compatible with Rubygems and Bundler. When packaging your project, your JAR dependencies will be "vendored" into the gem you've built.
 
 Within your project (ie: @lib/example.rb@) you'll @require "doubleshot/setup"@. This will ensure any dependencies for your Gem are satisfied at runtime. If a dependency is already loaded, (an upstream project called @require "bundler/setup"@ for example) then Doubleshot will skip it.
 
-If you're running inside of a @doubleshot/build@ then requiring @doublehsot/setup@ will have no effect.
+If you're running inside of a @doubleshot/build@ then requiring @doublehsot/setup@ will have no effect to avoid doubling up on the work.
 
-To build a gem, run the @doubleshot build@ command on the command line. Doubleshot will ensure all dependencies are satisfied, compile your code, vendor any JAR dependencies, run your tests, and finally create a gem for you based on your @example.gemspec@ file. We really don't think you should be releasing code with broken tests so the build will fail if the tests don't pass (or bad tests skipped). If you _really_ want to skip this step though you can run @NOTEST=1 doubleshot build@.
+To build a gem, run the @doubleshot build@ command on the command line. Doubleshot will ensure all dependencies are satisfied, compile your code, vendor any JAR dependencies, run your tests, and finally create a gem for you based on your @example.gemspec@ file. We really don't think you should be releasing code with broken tests so the build will fail if the tests don't pass (you can always @skip@ bad tests you want to keep for reference). If you _really_ want to skip this step and force a build though you can run @NOTEST=1 doubleshot build@.
 
 h1. FAQ
 
