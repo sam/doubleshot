@@ -167,7 +167,7 @@ bc. require "doubleshot/setup"
 Doubleshot will first see if all it's dependencies are available, and if not, install any that are missing. So you don't have to manually run an installation step.
 
 bq.. But I just want to install my Gem dependencies on a remote server and not actually attempt to run any code!
-span{margin-left: 20px;}. *-- Said No One Ever*
+*-- Said No One Ever*
 
 p. If you _really_ want to pre-download your dependencies just run @jruby -r "doubleshot/setup"@ in your project's home-directory. Nothing to it.
 
