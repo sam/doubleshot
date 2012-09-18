@@ -65,17 +65,17 @@ h2. Project Layout
 
 The *default* project using Doubleshot as it's build-tool will have the following layout:
 
-bc.. lib/
-    world.rb         # Ruby sources go in the standard location.
+bc.. ext/
     java/
-        Hello.java   # Java sources appear under the lib/java folder.
+        Hello.java   # Java sources appear under the ext/java folder.
+lib/
+    world.rb         # Ruby sources go in the standard location.
 test/
     helper.rb
-    hello_spec.rb    # specs match up to lib/**/*.rb or lib/java/**/*.java
+    hello_spec.rb    # specs match up to lib/**/*.rb or ext/java/**/*.java
     world_spec.rb
-hello_world.gemspec  # Standard Ruby gemspec, where gem dependencies are declared.
-Doubleshot           # Your Doubleshot file replaces JBundler's Jarfile, and pulls
-                     # in your gemspec.
+Doubleshot           # Your Doubleshot file replaces your project's gemspec
+                     # and JBundler's Jarfile.
 
 p. Your tests should be executable and look something like this:
 
@@ -83,7 +83,7 @@ bc.. #!/usr/local/env jruby
 
 require_relative "helper.rb"
 
-java_import org.sam.doubleshot.examples.Hello
+java_import org.sam.doubleshot.example.Hello
 
 describe Hello do
   it "must rock you" do
@@ -103,7 +103,7 @@ h3. Direct Execution
 p. Now you can execute your spec file directly and Doubleshot will:
 
 # Ensure that the dependencies defined in the @Doubleshot@ file are met by resolving their versions, downloading them, and adding them to your environment.
-# Compile any code found in @lib/java@ that's not already compiled.
+# Compile any code found in @ext/java@ that's not already compiled.
 
 Then Minitest will run your test and exit when it's done.
 
@@ -111,7 +111,7 @@ h3. Sandbox Execution
 
 Doubleshot also provides a @doubleshot@ bin file that basically amounts to @require("doubleshot/sandbox")@. Running @doubleshot@ in your project's home directory will setup monitors for @lib/@ and @test/@ and wait for changes, applying the rules below to it's execution:
 
-* When source under @lib/java/@ changes, it will be recompiled, reloaded, and matching tests searched for to execute
+* When source under @ext/java/@ changes, it will be recompiled, reloaded, and matching tests searched for to execute
 * When Ruby source under @lib/@ changes, your Ruby VM will be reloaded, and matching tests executed
 * If any tests change, the sandbox will be reloaded (since tests are written in Ruby), and the test file executed
 * If a @SIGINT@ (@^C@) is received, all tests will be loaded and executed
