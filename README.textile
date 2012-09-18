@@ -48,10 +48,6 @@ Here's what tools Doubleshot replaces in your workflow:
 * Maven Assemblies
 * Build tools like Ant or Buildr
 
-h2. What's in a Name?
-
-A shot each of JRuby and Java. Doubleshot.
-
 h1. Usage
 
 h2. Requirements
@@ -67,7 +63,7 @@ bc. gem install doubleshot
 
 h2. Project Layout
 
-The typical project using Doubleshot as it's build-tool will have the following layout:
+The *default* project using Doubleshot as it's build-tool will have the following layout:
 
 bc.. lib/
     world.rb         # Ruby sources go in the standard location.
@@ -152,6 +148,10 @@ It may take a few cycles while things warm up, but you should see this cut your 
 When you're done for the day, just foreground the server with the @fg@ command, and @SIGINT@ it (@^C@) to quit.
 
 h1. FAQ
+
+h2. What's in a Name?
+
+A shot each of JRuby and Java. Doubleshot.
 
 h2. Where is @doubleshot show@?
 
