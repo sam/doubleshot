@@ -117,8 +117,9 @@ h2. Where is @doubleshot show@?
 
 Bundler includes a @bundle show some_gem@ command that shows you the path where a dependency was unpacked after running @bundle install@. I've only ever used that in two cases:
 
-- View the source of some library to try to trace a bug := Write a test to trace your bug. View the source online or clone it and view it locally. It's a minor inconvenience sure, but it's a lot less prone to abuse.
-- Hack in a quick "hot-fix" for a production issue := You shouldn't be making changes outside of source-control. That's an obvious development anti-pattern.
+*View the source of some library to try to trace a bug:* Write a test to trace your bug. View the source online or clone it and view it locally. It's a minor inconvenience sure, but it's a lot less prone to abuse.
+
+*Hack in a quick "hot-fix" for a production issue:* You shouldn't be making changes outside of source-control. That's an obvious development anti-pattern.
 
 It's our opinion that you don't _need_ this functionality, and it opens the window to abuse, so we're not implementing it.
 
