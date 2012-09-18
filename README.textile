@@ -1,12 +1,14 @@
 h1. Doubleshot
 
-JRuby is amazing.
+*JRuby is amazing.*
 
-Unfortunately there's no simple standard way to create a Gem that contains both Java and Ruby sources, with both JAR and Gem dependencies. Before Doubleshot you'd probably use Bundler to manage your Gem dependencies, JBundler to manage your JAR dependencies and Buildr (which is built on top of Rake) to compile and package your project.
+Unfortunately there's no simple standard way to create a Ruby Gem that contains both Java and Ruby sources, with both JAR and Gem dependencies.
 
-That's really cumbersome. Especially since Buildr wasn't built for this, and there really is very little documentation on how to accomplish your goals. On top of that, you're now forced to run Rake and load these massive libraries even just to execute a single @TestCase@. And you'll have to run it every time. If you're a fan of TDD, you can realistically spend a substantial portion of your day just waiting for the JVM to load Maven, Bundler and Rake. Over. And Over. And Over.
+Before Doubleshot you'd probably use Bundler to manage your Gem dependencies, JBundler to manage your JAR dependencies and Buildr (which is built on top of Rake) to compile and package your project. That's really cumbersome. Especially since Buildr wasn't built for this, (it's focus is Java projects, as a substitute for Maven) and there really is very little documentation on how to accomplish your goals.
 
-It's painful is what it is.
+On top of that, you're now forced to run Rake and load these massive libraries even just to execute a single @TestCase@. And you'll have to run it every time. If you're a fan of TDD, you can realistically spend a substantial portion of your day just waiting for the JVM to load Maven, Bundler and Rake. Over. And Over. And Over.
+
+It's _painful_ is what it is.
 
 You have a JRuby project with both Java and Ruby source files. You need to:
 
@@ -21,7 +23,7 @@ You have a JRuby project with both Java and Ruby source files. You need to:
 * You want to be able to execute your Ruby normally, without the need for wrappers like Rake or @bundle exec@
 * You want to be able to package a project and all it's dependencies up as a JAR so all you need to deploy is a working Java installation on your server
 
-Here's what tools it replaces in your workflow:
+Here's what tools Doubleshot replaces in your workflow:
 
 * Bundler
 * JBundler
@@ -33,7 +35,7 @@ Here's what tools it replaces in your workflow:
 
 h2. What's in a Name?
 
-Like espresso. A shot each of JRuby and Java. Doubleshot.
+A shot each of JRuby and Java. Doubleshot.
 
 h1. Usage
 
