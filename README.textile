@@ -131,7 +131,9 @@ Within your project (ie: @lib/example.rb@) you'll @require "doubleshot/setup"@. 
 
 If you're running inside of a @doubleshot/build@ then requiring @doublehsot/setup@ will have no effect to avoid doubling up on the work.
 
-To build a gem, run the @doubleshot build@ command on the command line. Doubleshot will ensure all dependencies are satisfied, compile your code, vendor any JAR dependencies, run your tests, and finally create a gem for you based on your @example.gemspec@ file. We really don't think you should be releasing code with broken tests so the build will fail if the tests don't pass (you can always @skip@ bad tests you want to keep for reference). If you _really_ want to skip this step and force a build though you can run @NOTEST=1 doubleshot build@.
+To build a gem, run the @doubleshot build@ command on the command line. Doubleshot will ensure all dependencies are satisfied, compile your code, vendor any JAR dependencies and finally create a gem for you based on your @example.gemspec@ file.
+
+If you want your build to be conditional upon passing tests, add the @test :minitest@ directive to your @Doubleshot@ file. If you need to temporarily skip the tests to build a gem with this option enabled, use @NOTEST=true doubleshot build@ to package your gem.
 
 h1. Tips
 
