@@ -13,15 +13,15 @@ It's *painful* is what it is.
 You have a JRuby project with both Java and Ruby source files. You need to:
 
 * Compile your Java
-* Resolve and Download your JAR dependencies from a "Maven repository":http://mvnrepository.com/
-* Resolve and Download your Gem dependencies from a "Rubygems server":https://github.com/sam/geminaboxplus
-* Ensure that Java Classes and Dependencies are added to the @$CLASSPATH@ at runtime
-* Package your mixed-language project and it's JAR dependencies into a Gem you can release
+* Download JAR dependencies from a "Maven repository":http://mvnrepository.com/
+* Download Gem dependencies from a "Rubygems server":https://github.com/sam/geminaboxplus
+* Java Classes and Dependencies should be added to the @$CLASSPATH@ at runtime
 * Write your tests in a single language (Ruby) using "Minitest":https://github.com/seattlerb/minitest
-* If you modify a Java source file, you want it to automatically compile, reload the Java Class and execute the appropriate tests
-* If you modify a Ruby source file you want your testing sandbox to reload without side-effects from previous versions of a class
-* You want to be able to execute your Ruby normally, without the need for wrappers like Rake or @bundle exec@
-* You want to be able to package a project and all it's dependencies up as a JAR so all you need to deploy is a working Java installation on your server
+* Execute your Ruby normally, without the need for wrappers like Rake or @bundle exec@
+* Automatically compile and reload Java sources on update, then execute the appropriate tests
+* Reload your testing sandbox after updating Ruby sources without side-effects from previous versions code
+* Package your mixed-language project and it's JAR dependencies into a Gem you can release
+* Package a project and all it's dependencies up as a JAR so all you need on your server is Java
 
 Here's what tools Doubleshot replaces in your workflow:
 
