@@ -16,7 +16,8 @@ EOS
   spec.platform = Gem::Platform::RUBY
   spec.files         = `git ls-files`.split("\n") + Dir["target/**/*.class"]
   spec.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  spec.require_paths = ["lib"]
+  spec.require_paths = [ "lib" ]
+  spec.executables   = [ "doubleshot" ]
 
   spec.rdoc_options = [
     "-T", "doubleshot",
@@ -32,8 +33,8 @@ EOS
   spec.add_development_dependency "rdoc", ">= 2.4.2"
   
   # Test dependencies:
-  # spec.add_development_dependency "minitest", ">= 3.0.1"
-  # spec.add_development_dependency "minitest-wscolor"
-  # spec.add_development_dependency "listen"
-  # spec.add_development_dependency "simplecov"
+  spec.add_development_dependency "minitest", ">= 3.0.1"
+  spec.add_development_dependency "minitest-wscolor"
+  spec.add_development_dependency "listen"
+  spec.add_development_dependency "simplecov"
 end

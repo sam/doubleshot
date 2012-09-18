@@ -1,0 +1,7 @@
+#!/usr/bin/env jruby
+
+require "pathname"
+
+require(Pathname(__FILE__).dirname.parent + "lib" + "doubleshot")
+
+puts "Hello World!"
