@@ -117,13 +117,15 @@ h2. Use Doubleshot with Nailgun for Great Success!
 
 Open a terminal window and navigate to the root of your project (to make sure you're using the right JRuby if you have an @.rvmrc@). Then run:
 
-bc. jruby --ng-server
+bc. jruby --ng-server &
 
 Now run your code (any JRuby code, not just Doubleshot) as usual, but add the @--ng@ option to JRuby:
 
 bc. jruby --ng -r lib/doubleshot/build.rb -e "puts org.foo.Bar.baz"
 
 It may take a few cycles while things warm up, but you should see this cut your process load-time by several seconds. It's especially handy if you're running lots of test cases directly as detailed in the first testing scenario. It could easily cut your testing time in half (or more).
+
+When you're done for the day, just foreground the server with the @fg@ command, and @SIGINT@ it (@^C@) to quit.
 
 h1. FAQ
 
