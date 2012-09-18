@@ -93,8 +93,8 @@ h3. Sandbox Execution
 
 Doubleshot also provides a @doubleshot@ bin file that basically amounts to @require("doubleshot/sandbox")@. Running @doubleshot@ in your project's home directory will setup monitors for @lib/@ and @test/@ and wait for changes, applying the rules below to it's execution:
 
-* If any Java source under @lib/java@ changes, it will be recompiled, reloaded, and matching tests searched for to execute
-* If any Ruby source under @lib@ changes, the testing sandbox that isolates your Ruby code will be reloaded, and matching tests executed
+* When source under @lib/java/@ changes, it will be recompiled, reloaded, and matching tests searched for to execute
+* When Ruby source under @lib/@ changes, your Ruby VM will be reloaded, and matching tests executed
 * If any tests change, the sandbox will be reloaded (since tests are written in Ruby), and the test file executed
 * If a @SIGINT@ (@^C@) is received, all tests will be loaded and executed
 * If a second @SIGINT@s is received before execution of the full test-suite is finished, the monitor will exit cleanly
