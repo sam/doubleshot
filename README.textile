@@ -8,7 +8,7 @@ Before Doubleshot you'd probably use "Bundler":https://github.com/carlhuda/bundl
 
 On top of that, you're now forced to run Rake and load these massive libraries even just to execute a single @TestCase@. And you'll have to run it every time. If you're a fan of TDD, you can realistically spend a substantial portion of your day just waiting for the JVM to load Maven, Bundler and Rake. Over. And Over. And Over.
 
-It's _painful_ is what it is.
+It's *painful* is what it is.
 
 You have a JRuby project with both Java and Ruby source files. You need to:
 
