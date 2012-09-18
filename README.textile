@@ -4,7 +4,7 @@ h1. Doubleshot
 
 Unfortunately there's no simple standard way to create a Ruby Gem that contains both Java and Ruby sources, with both JAR and Gem dependencies.
 
-Before Doubleshot you'd probably use Bundler to manage your Gem dependencies, JBundler to manage your JAR dependencies and Buildr (which is built on top of Rake) to compile and package your project. That's really cumbersome. Especially since Buildr wasn't built for this, (it's focus is Java projects, as a substitute for Maven) and there really is very little documentation on how to accomplish your goals.
+Before Doubleshot you'd probably use "Bundler":https://github.com/carlhuda/bundler to manage your Gem dependencies, "JBundler":https://github.com/mkristian/jbundler to manage your JAR dependencies and "Buildr":https://github.com/apache/buildr (which is built on top of Rake) to compile and package your project. That's _really_ cumbersome. Especially since Buildr wasn't built for this, (it's focus is _Java_ projects, as a substitute for Maven) and there really is very little documentation on how to accomplish your goals.
 
 On top of that, you're now forced to run Rake and load these massive libraries even just to execute a single @TestCase@. And you'll have to run it every time. If you're a fan of TDD, you can realistically spend a substantial portion of your day just waiting for the JVM to load Maven, Bundler and Rake. Over. And Over. And Over.
 
@@ -13,8 +13,8 @@ It's _painful_ is what it is.
 You have a JRuby project with both Java and Ruby source files. You need to:
 
 * Compile your Java
-* Resolve and Download your JAR dependencies from a Maven repository
-* Resolve and Download your Gem dependencies from a Rubygems server
+* Resolve and Download your JAR dependencies from a "Maven repository":http://mvnrepository.com/
+* Resolve and Download your Gem dependencies from a "Rubygems server":https://github.com/sam/geminaboxplus
 * Ensure that Java Classes and Dependencies are added to the @$CLASSPATH@ at runtime
 * Package your mixed-language project and it's JAR dependencies into a Gem you can release
 * Write your tests in a single language (Ruby) using "Minitest":https://github.com/seattlerb/minitest
