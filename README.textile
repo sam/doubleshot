@@ -97,7 +97,7 @@ Doubleshot also provides a @doubleshot@ bin file that basically amounts to @requ
 * When Ruby source under @lib/@ changes, your Ruby VM will be reloaded, and matching tests executed
 * If any tests change, the sandbox will be reloaded (since tests are written in Ruby), and the test file executed
 * If a @SIGINT@ (@^C@) is received, all tests will be loaded and executed
-* If a second @SIGINT@s is received before execution of the full test-suite is finished, the monitor will exit cleanly
+* If a second @SIGINT@ is received before execution of the full test-suite is finished, the monitor will exit cleanly
 
 This is the typical use-case for day to day development of new projects/features when using Doubleshot to manage your build process.
 
