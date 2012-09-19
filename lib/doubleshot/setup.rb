@@ -1,7 +1,7 @@
 require_relative "../doubleshot"
 
-gemfile = (Pathname::pwd + "Gemfile")
-gemfile_lock = (Pathname::pwd + "Gemfile.lock")
+gemfile = Pathname "Gemfile"
+gemfile_lock = Pathname "Gemfile.lock"
 
 install_gems = -> do
   require "bundler"
@@ -21,8 +21,8 @@ install_jars = -> do
   JBundler::Cli.new.install
 end
 
-jarfile = (Pathname::pwd + "Jarfile")
-jarfile_lock = (Pathname::pwd + "Jarfile.lock")
+jarfile = Pathname "Jarfile"
+jarfile_lock = Pathname "Jarfile.lock"
 
 if jarfile.exist?
   require "bundler" unless Object::const_defined?("Bundler")
@@ -32,8 +32,8 @@ end
 
 require "ant"
 
-source = (Pathname::pwd + "ext" + "java")
-target = (Pathname::pwd + "target")
+source = Pathname "ext/java"
+target = Pathname "target"
 
 target.mkdir unless target.exist?
 
