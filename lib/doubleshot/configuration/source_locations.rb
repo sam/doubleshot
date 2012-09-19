@@ -3,38 +3,36 @@ class Doubleshot
     class SourceLocations
       
       def initialize
-        @ruby = Pathname("lib")
-        @java = Pathname("ext/java")
+        @ruby   = Pathname("lib")
+        @java   = Pathname("ext/java")
+        @tests  = Pathname("test")
       end
       
-      def ruby
-        @ruby
+      attr_reader :ruby
+      def ruby=(path)
+        @ruby = validate_path(path)
       end
 
-      def ruby=(path)
+      attr_reader :java
+      def java=(path)
+        @java = validate_path(path)
+      end
+      
+      attr_reader :tests
+      def tests=(path)
+        @tests = validate_path(path)
+      end
+      
+      private
+      def validate_path(path)
         check = Pathname(path.to_s)
         
         unless check.directory?
           raise IOError.new("+path+ must be a directory but was #{path.inspect}")
         end
         
-        @ruby = check
+        check
       end
-
-      def java
-        @java
-      end
-      
-      def java=(path)
-        check = Pathname(path.to_s)
-         
-         unless check.directory?
-           raise IOError.new("+path+ must be a directory but was #{path.inspect}")
-         end
-         
-         @java = check   
-      end
-      
     end
   end
 end 

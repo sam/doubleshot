@@ -53,14 +53,37 @@ describe Doubleshot::Configuration do
         "--line-numbers",
         "--main", "README.textile",
         "--title", "Doubleshot Documentation",
-        "README.textile" ] + @config.source.ruby)
+        "lib", "README.textile" ])
     end
     
-    # spec.platform      = Gem::Platform::RUBY
-    # spec.files         = `git ls-files`.split("\n") + Dir["target/**/*.class"]
-    # spec.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-    # spec.require_paths = [ "lib" ]
-    # spec.rdoc_options = 
+    it "require_paths must default to the ruby source location" do
+      @config.gemspec.require_paths.must_equal [ "lib" ]
+    end
+    
+    it "require_paths must be updated when ruby source location is modified" do
+      @config.source.ruby = "test"
+      @config.gemspec.require_paths.must_equal [ "test" ]
+    end
+    
+    it "should include test_files if present" do
+      @config.gemspec.test_files.sort.must_equal Dir["test/**/*"].select { |path| Pathname(path).file? }.sort
+    end
+    
+    it "files must contain Ruby sources, Java sources, Doubleshot, LICENSE, README and any build files" do
+      @config.gemspec.files.sort.must_equal(
+        Dir[
+          "lib/**/*.rb",
+          "ext/java/*.java",
+          "Doubleshot",
+          "*LICENSE*",
+          "README*",
+          "target/**/*",
+          "test/**/*"
+        ].select { |path| Pathname(path).file? }.sort
+      )
+      # spec.files         = `git ls-files`.split("\n") + Dir["target/**/*.class"]
+    end
+    
   end
   
 end
