@@ -1,5 +1,13 @@
 h1. Doubleshot
 
+Doubleshot aims to let you write Java, and Ruby in the same project, and streamline the dependency, testing and build process.
+
+You can have dependencies on both Gems and JARs, and easily package it all up in a redistributable Gem or Unified JAR when you're ready to ship.
+
+When you clone a Doubleshot project, you can run it just like any other Ruby script. There's no external tool you have to call. There's no setup or installation process for dependencies. That all happens on-demand. You only need to use the provided @doubleshot@ command if you want to run the (optional) testing sandbox, or prepare a package for release. If you'd rather directly execute your test files, use a @RakeTestTask@, or whatever, you're free to do that.
+
+Happy coding!
+
 * "Overview":#overview
 * "Usage":#usage
 ** "Requirements":#requirements
