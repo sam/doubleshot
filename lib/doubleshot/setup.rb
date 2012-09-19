@@ -1,4 +1,4 @@
-require "pathname"
+require_relative "../doubleshot"
 
 gemfile = (Pathname::pwd + "Gemfile")
 gemfile_lock = (Pathname::pwd + "Gemfile.lock")

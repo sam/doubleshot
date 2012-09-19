@@ -1,6 +1,6 @@
 #!/usr/bin/env jruby
 
-require "doubleshot/build"
+require "doubleshot/setup"
 require "perfer"
 require "json"
 java_import com.fasterxml.jackson.databind.ObjectMapper

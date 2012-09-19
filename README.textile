@@ -101,7 +101,7 @@ end
 
 p. ...and @helper.rb@ would look something like this:
 
-bc.. require "doubleshot/build"
+bc.. require "doubleshot/setup"
 require "minitest/autorun"
 
 h2. Testing Two Ways
@@ -133,7 +133,7 @@ Given a project named _Example_, then @example.gemspec@ would include your Gem d
 
 Within your project (ie: @lib/example.rb@) you'll @require "doubleshot/setup"@. This will ensure any dependencies for your Gem are satisfied at runtime. If a dependency is already loaded, (an upstream project called @require "bundler/setup"@ for example) then Doubleshot will skip it.
 
-If you're running inside of a @doubleshot/build@ then requiring @doublehsot/setup@ will have no effect to avoid doubling up on the work.
+If you're running inside of a @doubleshot/setup@ then requiring @doublehsot/setup@ will have no effect to avoid doubling up on the work.
 
 To build a gem, run the @doubleshot build@ command on the command line. Doubleshot will ensure all dependencies are satisfied, compile your code, vendor any JAR dependencies and finally create a gem for you based on your @example.gemspec@ file.
 
@@ -149,7 +149,7 @@ bc. jruby --ng-server &
 
 Now run your code (any JRuby code, not just Doubleshot) as usual, but add the @--ng@ option to JRuby:
 
-bc. jruby --ng -r lib/doubleshot/build.rb -e "puts org.foo.Bar.baz"
+bc. jruby --ng -r lib/doubleshot/setup.rb -e "puts org.foo.Bar.baz"
 
 It may take a few cycles while things warm up, but you should see this cut your process load-time by several seconds. It's especially handy if you're running lots of test cases directly as detailed in the first testing scenario. It could easily cut your testing time in half (or more).
 
