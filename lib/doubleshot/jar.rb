@@ -32,7 +32,7 @@ end
 
 require "ant"
 
-source = (Pathname::pwd + "lib" + "java")
+source = (Pathname::pwd + "ext" + "java")
 target = (Pathname::pwd + "target")
 
 target.mkdir unless target.exist?

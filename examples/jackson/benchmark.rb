@@ -1,6 +1,7 @@
 #!/usr/bin/env jruby
 
-require_relative "../lib/doubleshot/build"
+require "doubleshot/build"
+require "perfer"
 require "json"
 java_import com.fasterxml.jackson.databind.ObjectMapper
 java_import org.foo.Bar
@@ -13,8 +14,6 @@ SAMPLE = <<EOS.strip
 }
 EOS
 
-# To execute the benchmarks:
-#   perfer run jackson_benchmark.rb
 Perfer::session "JSON Parsing" do |x|
   x.iterate("JSON") do
     JSON.parse SAMPLE
@@ -32,7 +31,7 @@ Perfer::session "JSON Parsing" do |x|
   x.iterate("Jackson Wrapper") do
     Bar.parse SAMPLE
   end
-end
+end.run
 
 __END__
 
