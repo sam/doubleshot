@@ -35,4 +35,4 @@ class Doubleshot
       end
     end
   end
-end 
+end

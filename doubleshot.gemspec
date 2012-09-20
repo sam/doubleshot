@@ -31,11 +31,15 @@ EOS
   # Build dependencies:
   spec.add_dependency "bundler"
   spec.add_dependency "jbundler"
+  
+  # Build dependencies:
   spec.add_development_dependency "rdoc", ">= 2.4.2"
   
   # Test dependencies:
+  spec.add_development_dependency "perfer"
   spec.add_development_dependency "minitest", ">= 3.0.1"
   spec.add_development_dependency "minitest-wscolor"
   spec.add_development_dependency "listen"
+  spec.add_development_dependency "rb-fsevent", "~> 0.9.1"
   spec.add_development_dependency "simplecov"
 end

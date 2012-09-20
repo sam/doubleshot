@@ -81,7 +81,6 @@ describe Doubleshot::Configuration do
           "test/**/*"
         ].select { |path| Pathname(path).file? }.sort
       )
-      # spec.files         = `git ls-files`.split("\n") + Dir["target/**/*.class"]
     end
     
   end
