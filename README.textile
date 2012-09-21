@@ -2,7 +2,7 @@ h1. Doubleshot
 
 Latest test results:
 
-!https://secure.travis-ci.org/sam/doubleshot.png!:http://travis-ci.org/sam/doubleshot
+!https://secure.travis-ci.org/sam/doubleshot.png(Build Status)!:http://travis-ci.org/sam/doubleshot
 
 Doubleshot aims to let you write Java, and Ruby in the same project, and streamline the dependency, testing and build process.
 
