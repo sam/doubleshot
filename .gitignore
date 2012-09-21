@@ -2,3 +2,4 @@ target
 .jbundler
 *.swp
 doubleshot-*.gem
+.DS_Store

@@ -4,6 +4,8 @@ require "set"
 $:.unshift(Pathname(__FILE__).dirname)
 
 require "doubleshot/configuration"
+require "doubleshot/readonly_collection"
+require "ruby/gem/requirement"
 
 class Doubleshot
   def initialize(&b)

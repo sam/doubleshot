@@ -9,6 +9,10 @@ class Doubleshot
         @requirements = Set.new
       end
 
+      def requirements
+        ReadonlyCollection.new(@requirements)
+      end
+
       def add_requirement(requirement)
         requirement = Gem::Requirement.new(requirement)
         @requirements << requirement
