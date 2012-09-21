@@ -14,10 +14,6 @@ describe Doubleshot::Dependencies::DependencyList do
   end
 
   describe "add" do
-    it "must respond_to add" do
-      @list.must_respond_to :add
-    end
-
     it "must only accept Dependency instances" do
       assert_raises(ArgumentError) do
         @list.add(Object.new)

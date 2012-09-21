@@ -15,10 +15,6 @@ describe Doubleshot do
     end 
   end
 
-  it "must respond_to build_gemspec" do
-    Doubleshot.new { }.must_respond_to :build_gemspec
-  end
-
   it "must generate a valid gemspec" do
     gemspec = Doubleshot.new do |config|
       config.gemspec do |spec|

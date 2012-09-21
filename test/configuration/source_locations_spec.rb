@@ -38,10 +38,6 @@ describe Doubleshot::Configuration::SourceLocations do
   end
 
   describe "validate_path" do    
-    it "must respond_to validate_path" do
-      @source.must_respond_to :validate_path
-    end
-
     it "must call to_s on any passed object" do
       mock = MockWrapper.new
       mock.expect(:to_string, "test")
@@ -71,30 +67,18 @@ describe Doubleshot::Configuration::SourceLocations do
   end
 
   describe "ruby" do
-    it "must respond_to ruby" do
-      @source.must_respond_to :ruby
-    end
-
     it "must default to lib" do
       @source.ruby.must_equal Pathname("lib")
     end
   end
 
   describe "java" do
-    it "must respond_to java" do
-      @source.must_respond_to :java
-    end
-
     it "must default to ext/java" do
       @source.java.must_equal Pathname("ext/java")
     end
   end
 
   describe "tests" do
-    it "must respond_to tests" do
-      @source.must_respond_to :tests
-    end
-
     it "must default to test" do
       @source.tests.must_equal Pathname("test")
     end

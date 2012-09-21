@@ -9,10 +9,6 @@ describe Doubleshot::Configuration do
   end
 
   describe "gem" do
-    it "must respond_to gem" do
-      @config.must_respond_to :gem
-    end
-
     it "must accept a gem name" do
       @config.gem "listen"
       @config.dependencies.gems.must_include "listen"
@@ -28,10 +24,6 @@ describe Doubleshot::Configuration do
   end
 
   describe "gemspec" do
-    it "must respond_to gemspec" do
-      @config.must_respond_to :gemspec
-    end
-
     it "must be a Gem::Specification" do
       @config.gemspec.must_be_kind_of Gem::Specification
     end
