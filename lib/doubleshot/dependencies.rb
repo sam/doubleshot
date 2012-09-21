@@ -6,7 +6,7 @@ class Doubleshot
 
     def initialize
       @gems = GemDependencyList.new
-      @jars = JarDependencyList.new  
+      @jars = JarDependencyList.new
     end
 
     def gems
