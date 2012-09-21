@@ -21,6 +21,10 @@ describe Doubleshot::Configuration do
     it "must accept a list of requirements" do
       @config.gem "listen", ">0.4.0"
     end
+    
+    it "must return a dependency" do
+      @config.gem("listen").must_be_kind_of Doubleshot::Dependencies::Dependency
+    end
   end
 
   describe "gemspec" do

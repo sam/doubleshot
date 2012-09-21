@@ -19,6 +19,12 @@ class Doubleshot
     def gem(name, *requirements)
       dependency = @dependencies.gems.fetch(name)
       @dependencies.gems.add(dependency)
+      
+      requirements.each do |requirement|
+        dependency.add_requirement(requirement)
+      end
+
+      dependency
     end
 
     def dependencies

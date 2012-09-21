@@ -6,6 +6,13 @@ class Doubleshot
       def initialize(name, version = nil)
         @name = name
         @version = version
+        @requirements = Set.new
+      end
+
+      def add_requirement(requirement)
+        requirement = Gem::Requirement.new(requirement)
+        @requirements << requirement
+        requirement
       end
     end
   end

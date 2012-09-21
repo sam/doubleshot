@@ -1,4 +1,5 @@
 require "pathname"
+require "set"
 
 $:.unshift(Pathname(__FILE__).dirname)
 
