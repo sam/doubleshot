@@ -8,6 +8,21 @@ describe Doubleshot::Configuration do
     @config = Doubleshot::Configuration.new
   end
   
+  describe "gem" do
+    it "must respond_to gem" do
+      @config.must_respond_to :gem
+    end
+    
+    it "must accept a gem name" do
+      @config.gem "listen"
+      @config.dependencies.gems.must_include "listen"
+    end
+    
+    it "must accept a list of requirements" do
+      @config.gem "listen", ">0.4.0"
+    end
+  end
+  
   describe "gemspec" do
     it "must respond_to gemspec" do
       @config.must_respond_to :gemspec
@@ -40,7 +55,7 @@ describe Doubleshot::Configuration do
         fail e
       end
       
-      assert true
+      @config.gemspec.validate.must_equal true
     end
     
     it "must default the Platform to JRuby" do

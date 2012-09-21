@@ -1,3 +1,4 @@
+require "doubleshot/dependencies"
 require "doubleshot/configuration/source_locations"
 
 class Doubleshot
@@ -8,10 +9,20 @@ class Doubleshot
       @gemspec.platform = Gem::Platform.new("java")
       @source = SourceLocations.new
       @target = Pathname("target/**/*")
+      @dependencies = Dependencies.new
     end
     
     def source
       @source
+    end
+    
+    def gem(name, *requirements)
+      dependency = @dependencies.fetch(name)
+      @dependencies.gems.add(dependency)
+    end
+
+    def dependencies
+      @dependencies
     end
     
     def gemspec(&b)
