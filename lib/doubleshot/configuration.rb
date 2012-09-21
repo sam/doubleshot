@@ -17,7 +17,7 @@ class Doubleshot
     end
 
     def gem(name, *requirements)
-      dependency = @dependencies.fetch(name)
+      dependency = @dependencies.gems.fetch(name)
       @dependencies.gems.add(dependency)
     end
 

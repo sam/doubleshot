@@ -14,6 +14,10 @@ class Doubleshot
         @dependencies << dependency
       end
 
+      def fetch(name)
+        dependency = @dependencies.select{ |entry| entry.name == name }.first || Dependency.new(name)
+      end
+
       def each
         @dependencies.each do |dependency|
           yield dependency
