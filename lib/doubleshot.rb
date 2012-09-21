@@ -9,7 +9,7 @@ class Doubleshot
     @config = Doubleshot::Configuration.new
     yield @config
   end
-  
+
   def build_gemspec
     @config.gemspec.to_ruby
   end

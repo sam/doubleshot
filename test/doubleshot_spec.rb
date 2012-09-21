@@ -14,11 +14,11 @@ describe Doubleshot do
       assert called, "block not called"
     end 
   end
-  
+
   it "must respond_to build_gemspec" do
     Doubleshot.new { }.must_respond_to :build_gemspec
   end
-  
+
   it "must generate a valid gemspec" do
     gemspec = Doubleshot.new do |config|
       config.gemspec do |spec|
@@ -33,8 +33,8 @@ describe Doubleshot do
         spec.executables   = [ "doubleshot" ]
       end
     end.build_gemspec
-    
+
     eval(gemspec).validate
   end
-  
+
 end

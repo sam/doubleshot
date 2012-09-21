@@ -3,5 +3,5 @@
 require_relative "../helper"
 
 describe Doubleshot::Dependencies::Dependency do
-  
+
 end

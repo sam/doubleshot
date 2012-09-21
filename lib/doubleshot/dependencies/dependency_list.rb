@@ -2,7 +2,7 @@ class Doubleshot
   class Dependencies
     class DependencyList
       include Enumerable
-      
+
       def initialize
         @dependencies = []
       end
@@ -13,7 +13,7 @@ class Doubleshot
         end
         @dependencies << dependency
       end
-      
+
       def each
         @dependencies.each do |dependency|
           yield dependency
