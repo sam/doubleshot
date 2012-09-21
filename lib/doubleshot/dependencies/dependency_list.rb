@@ -4,7 +4,7 @@ class Doubleshot
       include Enumerable
 
       def initialize
-        @dependencies = []
+        @dependencies = Set.new
       end
 
       def add(dependency)
@@ -25,6 +25,11 @@ class Doubleshot
         
         dependency
       end
+
+      def size
+        @dependencies.size
+      end
+      alias :length :size 
 
       def each
         @dependencies.each do |dependency|

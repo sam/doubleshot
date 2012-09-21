@@ -28,6 +28,12 @@ describe Doubleshot::Dependencies::DependencyList do
       @list.add @dependency
       @list.must_include @dependency
     end
+
+    it "must not add duplicate dependencies" do
+      @list.add @dependency
+      @list.add @dependency
+      @list.size.must_equal 1
+    end
     
     it "must always return self for chainability" do
       @list.add(@dependency).must_equal @list
