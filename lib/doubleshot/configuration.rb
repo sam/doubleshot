@@ -68,6 +68,10 @@ class Doubleshot
 
         @gemspec.files.concat(files)
 
+        @dependencies.gems.each do |dependency|
+          @gemspec.add_dependency dependency.name, *dependency.requirements
+        end
+
         @gemspec
       end
     end

@@ -54,6 +54,16 @@ describe Doubleshot::Configuration do
       @config.gemspec.validate.must_equal true
     end
 
+    it "must add dependencies to the gemspec" do
+      @config.gem "listen"
+      @config.gemspec.dependencies.first.name.must_equal "listen"
+    end
+
+    it "must add requirements to dependencies" do
+      @config.gem "listen", "~> 0.1.0"
+      @config.gemspec.dependencies.first.requirements_list.must_include "~> 0.1.0"
+    end
+
     it "must default the Platform to JRuby" do
       @config.gemspec.platform.os.must_equal "java"
     end
