@@ -11,7 +11,7 @@ describe Doubleshot::Configuration do
   describe "gem" do
     it "must accept a gem name" do
       @config.gem "listen"
-      @config.dependencies.gems.must_include "listen"
+      @config.runtime.gems.must_include "listen"
     end
 
     it "must accept a list of requirements" do
@@ -56,12 +56,12 @@ describe Doubleshot::Configuration do
 
     it "must add dependencies to the gemspec" do
       @config.gem "listen"
-      @config.gemspec.dependencies.first.name.must_equal "listen"
+      @config.gemspec.runtime_dependencies.first.name.must_equal "listen"
     end
 
     it "must add requirements to dependencies" do
       @config.gem "listen", "~> 0.1.0"
-      @config.gemspec.dependencies.first.requirements_list.must_include "~> 0.1.0"
+      @config.gemspec.runtime_dependencies.first.requirements_list.must_include "~> 0.1.0"
     end
 
     it "must default the Platform to JRuby" do
@@ -104,6 +104,31 @@ describe Doubleshot::Configuration do
       )
     end
 
+    describe "development" do
+      before do
+        @config.development do
+          @config.gem "minitest", ">= 3.0.1"
+        end
+      end
+
+      it "must add dependencies to the development list" do
+        @config.development.gems.must_include "minitest"
+      end
+
+      it "won't add dependencies to the main list" do
+        @config.runtime.gems.wont_include "minitest"
+      end
+
+      describe "gemspec" do
+        it "must add dependencies to the gemspec" do
+          @config.gemspec.development_dependencies.first.name.must_equal "minitest"
+        end
+
+        it "must add requirements to dependencies" do
+          @config.gemspec.development_dependencies.first.requirements_list.must_include ">= 3.0.1"
+        end
+      end
+    end
   end
 
 end

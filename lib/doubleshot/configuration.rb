@@ -5,20 +5,36 @@ class Doubleshot
   class Configuration
 
     def initialize
-      @gemspec = Gem::Specification.new
-      @gemspec.platform = Gem::Platform.new("java")
-      @source = SourceLocations.new
-      @target = Pathname("target/**/*")
-      @dependencies = Dependencies.new
+      @gemspec                     = Gem::Specification.new
+      @gemspec.platform            = Gem::Platform.new("java")
+      @source                      = SourceLocations.new
+      @target                      = Pathname("target/**/*")
+
+      @runtime_dependencies        = Dependencies.new
+      @development_dependencies    = Dependencies.new
+      @development_environment = false
     end
 
     def source
       @source
     end
 
+    def development
+      if block_given?
+        @development_environment = true
+        yield
+        @development_environment = false
+      end
+      @development_dependencies
+    end
+
     def gem(name, *requirements)
-      dependency = @dependencies.gems.fetch(name)
-      @dependencies.gems.add(dependency)
+      dependencies = @development_environment ?
+        @development_dependencies :
+        @runtime_dependencies
+
+      dependency = dependencies.gems.fetch(name)
+      dependencies.gems.add(dependency)
       
       requirements.each do |requirement|
         dependency.add_requirement(requirement)
@@ -27,8 +43,8 @@ class Doubleshot
       dependency
     end
 
-    def dependencies
-      @dependencies
+    def runtime
+      @runtime_dependencies
     end
 
     def gemspec(&b)
@@ -68,8 +84,12 @@ class Doubleshot
 
         @gemspec.files.concat(files)
 
-        @dependencies.gems.each do |dependency|
-          @gemspec.add_dependency dependency.name, *dependency.requirements
+        @runtime_dependencies.gems.each do |dependency|
+          @gemspec.add_runtime_dependency dependency.name, *dependency.requirements
+        end
+
+        @development_dependencies.gems.each do |dependency|
+          @gemspec.add_development_dependency dependency.name, *dependency.requirements
         end
 
         @gemspec
