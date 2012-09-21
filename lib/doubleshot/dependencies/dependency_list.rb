@@ -12,10 +12,18 @@ class Doubleshot
           raise ArgumentError.new("+dependency+ must be a Doubleshot::Dependencies::Dependency")
         end
         @dependencies << dependency
+        self
       end
 
       def fetch(name)
-        dependency = @dependencies.select{ |entry| entry.name == name }.first || Dependency.new(name)
+        raise ArgumentError.new("+name+ must be a String") unless name.is_a? String
+        
+        unless dependency = @dependencies.detect { |entry| entry.name == name }
+          dependency = Dependency.new(name)
+          add dependency
+        end
+        
+        dependency
       end
 
       def each

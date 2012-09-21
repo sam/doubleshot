@@ -88,7 +88,7 @@ describe Doubleshot::Configuration do
       @config.gemspec.files.sort.must_equal(
         Dir[
           "lib/**/*.rb",
-          "ext/java/*.java",
+          "ext/java/**/*.java",
           "Doubleshot",
           "*LICENSE*",
           "README*",
