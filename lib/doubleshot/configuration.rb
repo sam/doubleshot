@@ -4,6 +4,8 @@ require "doubleshot/configuration/source_locations"
 class Doubleshot
   class Configuration
 
+    DEFAULT_PATHS = [ "Doubleshot", "*LICENSE*", "README*" ]
+
     def initialize
       @gemspec                     = Gem::Specification.new
       @gemspec.platform            = Gem::Platform.new("java")
@@ -12,7 +14,9 @@ class Doubleshot
 
       @runtime_dependencies        = Dependencies.new
       @development_dependencies    = Dependencies.new
-      @development_environment = false
+      @development_environment     = false
+
+      @paths                       = DEFAULT_PATHS.dup
     end
 
     def source
@@ -47,6 +51,10 @@ class Doubleshot
       @runtime_dependencies
     end
 
+    def add_path(path)
+      @paths << path
+    end
+
     def gemspec(&b)
       if b
         yield @gemspec
@@ -62,18 +70,18 @@ class Doubleshot
 
         files = []
 
-        [ "Doubleshot", "*LICENSE*", "README*" ].each do |path|
+        @paths.each do |path|
           Pathname::glob(path).each do |match|
             files << match.to_s if match.file?
           end
         end
 
         @source.ruby.find do |path|
-          files << path.to_s if path.file?
+          files << path.to_s if path.file? && path.extname == ".rb"
         end
 
         @source.java.find do |path|
-          files << path.to_s if path.file?
+          files << path.to_s if path.file? && path.extname == ".java"
         end
 
         if @target.exist?

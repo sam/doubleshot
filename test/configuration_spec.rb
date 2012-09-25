@@ -90,6 +90,11 @@ describe Doubleshot::Configuration do
       @config.gemspec.test_files.sort.must_equal Dir["test/**/*"].select { |path| Pathname(path).file? }.sort
     end
 
+    it "must allow you to add arbitrary paths" do
+      @config.add_path ".gitignore"
+      @config.gemspec.files.must_include(Pathname(".gitignore").to_s)
+    end
+
     it "files must contain Ruby sources, Java sources, Doubleshot, LICENSE, README and any build files" do
       @config.gemspec.files.sort.must_equal(
         Dir[
@@ -128,6 +133,31 @@ describe Doubleshot::Configuration do
           @config.gemspec.development_dependencies.first.requirements_list.must_include ">= 3.0.1"
         end
       end
+    end
+  end
+
+  describe "equality" do
+
+    it "must have equal hash codes" do
+      skip
+      @config.hash.must_equal @other.hash
+    end
+
+    it "must have semantic equality" do
+      skip
+      assert @config.eql?(@other)
+    end
+
+    it "must override the equality operator to consider requirements" do
+      skip
+      @config.must_be :==, @other
+    end
+  end
+
+  describe "to_ruby" do
+    it "must equal generated output" do
+      skip
+      @config.must_equal eval(@config.to_ruby)
     end
   end
 
