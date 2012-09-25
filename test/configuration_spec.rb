@@ -137,17 +137,6 @@ describe Doubleshot::Configuration do
   end
 
   describe "equality" do
-
-    it "must have equal hash codes" do
-      skip
-      @config.hash.must_equal @other.hash
-    end
-
-    it "must have semantic equality" do
-      skip
-      assert @config.eql?(@other)
-    end
-
     it "must override the equality operator to consider requirements" do
       skip
       @config.must_be :==, @other

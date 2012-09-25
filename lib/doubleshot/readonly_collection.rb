@@ -18,6 +18,11 @@ class Doubleshot
       entries.size
     end
     alias :length :size
+
+    def eql?(other)
+      other.is_a?(self.class) && entries == other.entries
+    end
+    alias :== :eql?
   end
 
 end

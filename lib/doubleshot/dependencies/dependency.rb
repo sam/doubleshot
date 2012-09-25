@@ -1,10 +1,10 @@
 class Doubleshot
   class Dependencies
     class Dependency
-      attr_accessor :name
+      attr_reader :name
 
       def initialize(name, version = nil)
-        @name = name
+        @name = name.dup.freeze
         @version = version
         @requirements = Set.new
       end
@@ -17,6 +17,18 @@ class Doubleshot
         requirement = Gem::Requirement.new(requirement)
         @requirements << requirement
         requirement
+      end
+
+      # def eql?(other)
+      #   other.is_a?(self.class) && @name == other.name
+      # end
+
+      # def hash
+      #   @hash ||= @name.hash
+      # end
+
+      def ==(other)
+        eql?(other) && requirements == other.requirements
       end
     end
   end
