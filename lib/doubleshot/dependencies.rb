@@ -16,5 +16,12 @@ class Doubleshot
     def jars
       @jars
     end
+
+    def eql?(other)
+      other.is_a?(self.class) &&
+        other.gems == gems &&
+        other.jars == jars
+    end
+    alias :== :eql?
   end
 end
