@@ -133,6 +133,32 @@ describe Doubleshot::Configuration do
       )
     end
 
+    describe "whitelisting" do
+      before do
+        @tmp = Pathname("tmp")
+        @tmp.rmtree if @tmp.exist?
+        @tmp.mkpath
+
+        @tmp.touch "test.json"
+        @tmp.touch "test.example"
+      end
+
+      after do
+        @tmp.rmtree if @tmp.exist?
+      end
+
+      it "must add whitelisted files" do
+        @config.source.ruby = "tmp"
+        @config.gemspec.files.must_include "tmp/test.json"
+        @config.gemspec.files.wont_include "tmp/test.example"
+
+        @config.whitelist ".example"
+        @config.gemspec.files.must_include "tmp/test.json"
+        @config.gemspec.files.must_include "tmp/test.example"
+      end
+
+    end
+
     describe "development" do
       before do
         @config.development do

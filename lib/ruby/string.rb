@@ -13,6 +13,14 @@ class String
     gsub(/(^|_|-)(.)/) { $2.upcase }
   end
 
+  def ensure_ends_with(fragment)
+    end_with?(fragment) ? self.dup : self + fragment
+  end
+
+  def ensure_starts_with(fragment)
+    start_with?(fragment) ? self.dup : fragment + self
+  end
+
   ##
   # Remove whitespace margin.
   #

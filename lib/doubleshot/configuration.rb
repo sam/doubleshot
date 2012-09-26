@@ -5,6 +5,12 @@ class Doubleshot
   class Configuration
 
     DEFAULT_PATHS = [ "Doubleshot", "*LICENSE*", "README*" ]
+    DEFAULT_WHITELIST = %w[
+      .rb .java .js
+      .yaml .yml .json .xml .properties
+      .css .less .sass .scss
+      .erb .haml .rxml .builder .html
+    ]
 
     def initialize
       @gemspec                     = Gem::Specification.new
@@ -17,6 +23,7 @@ class Doubleshot
       @development_environment     = false
 
       @paths                       = DEFAULT_PATHS.dup
+      @whitelist                   = DEFAULT_WHITELIST.dup
     end
 
     def source
@@ -29,6 +36,11 @@ class Doubleshot
 
     def target=(path)
       @target = Pathname(path.to_s)
+    end
+
+    def whitelist(extname)
+      @whitelist << extname.ensure_starts_with(".")
+      self
     end
 
     def development
@@ -101,11 +113,11 @@ class Doubleshot
         end
 
         @source.ruby.find do |path|
-          files << path.to_s if path.file? && path.extname == ".rb"
+          files << path.to_s if path.file? && @whitelist.include?(path.extname)
         end
 
         @source.java.find do |path|
-          files << path.to_s if path.file? && path.extname == ".java"
+          files << path.to_s if path.file? && @whitelist.include?(path.extname)
         end
 
         if @target.exist?
