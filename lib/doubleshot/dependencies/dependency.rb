@@ -19,13 +19,13 @@ class Doubleshot
         requirement
       end
 
-      # def eql?(other)
-      #   other.is_a?(self.class) && @name == other.name
-      # end
+      def eql?(other)
+        other.is_a?(Dependency) and other.name == @name
+      end
 
-      # def hash
-      #   @hash ||= @name.hash
-      # end
+      def hash
+        @hash ||= @name.hash
+      end
 
       def ==(other)
         eql?(other) && requirements == other.requirements
