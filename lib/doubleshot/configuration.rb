@@ -10,7 +10,7 @@ class Doubleshot
       @gemspec                     = Gem::Specification.new
       @gemspec.platform            = Gem::Platform.new("java")
       @source                      = SourceLocations.new
-      @target                      = Pathname("target/**/*")
+      @target                      = Pathname("target")
 
       @runtime_dependencies        = Dependencies.new
       @development_dependencies    = Dependencies.new
@@ -21,6 +21,14 @@ class Doubleshot
 
     def source
       @source
+    end
+
+    def target
+      @target
+    end
+
+    def target=(path)
+      @target = Pathname(path.to_s)
     end
 
     def development
@@ -51,9 +59,25 @@ class Doubleshot
       @runtime_dependencies
     end
 
+    def paths
+      ReadonlyCollection.new @paths
+    end
+
     def add_path(path)
       @paths << path
+      self
     end
+
+    def eql?(other)
+      other.is_a?(self.class) &&
+        other.target       == target       &&
+        other.source       == source       &&
+        other.runtime      == runtime      &&
+        other.development  == development  &&
+        other.paths        == paths        &&
+        other.gemspec      == gemspec
+    end
+    alias :== :eql?
 
     def gemspec(&b)
       if b

@@ -90,9 +90,33 @@ describe Doubleshot::Configuration do
       @config.gemspec.test_files.sort.must_equal Dir["test/**/*"].select { |path| Pathname(path).file? }.sort
     end
 
-    it "must allow you to add arbitrary paths" do
-      @config.add_path ".gitignore"
-      @config.gemspec.files.must_include(Pathname(".gitignore").to_s)
+    describe "target" do
+      it "must default to target" do
+        @config.target.must_equal Pathname("target")
+      end
+
+      it "must always return a Pathname" do
+        @config.target = "pkg"
+        @config.target.must_be_kind_of Pathname
+        @config.target.must_equal Pathname("pkg")
+      end
+    end
+
+    describe "paths" do
+      it "must return a readonly collection of paths" do
+        @config.paths.must_be_kind_of Doubleshot::ReadonlyCollection
+      end
+
+      describe "add_path" do
+        it "must return self from add_path" do
+          @config.add_path(".gitignore").must_be_same_as @config
+        end
+
+        it "must allow you to add arbitrary paths" do
+          @config.add_path ".gitignore"
+          @config.gemspec.files.must_include(Pathname(".gitignore").to_s)
+        end
+      end
     end
 
     it "files must contain Ruby sources, Java sources, Doubleshot, LICENSE, README and any build files" do
@@ -137,8 +161,11 @@ describe Doubleshot::Configuration do
   end
 
   describe "equality" do
-    it "must override the equality operator to consider requirements" do
-      skip
+    before do
+      @other = Doubleshot::Configuration.new
+    end
+
+    it "must equal if attributes are the same" do
       @config.must_be :==, @other
     end
   end
