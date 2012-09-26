@@ -47,4 +47,27 @@ describe Doubleshot::Dependencies::DependencyList do
     end
   end
 
+  describe "equality" do
+    before do
+      @other = Doubleshot::Dependencies::DependencyList.new
+      @other_dependency = Doubleshot::Dependencies::Dependency.new "listen"
+    end
+
+    it "must be equal if both are empty" do
+      @list.must_be :==, @other
+    end
+
+    it "must be equal if other list have equal dependencies" do
+      @list.add @dependency
+      @other.add @other_dependency
+
+      @list.must_be :==, @other
+    end
+
+    it "wont be equal" do
+      @list.add @dependency
+      @list.wont_be :==, @other
+    end
+  end
+
 end

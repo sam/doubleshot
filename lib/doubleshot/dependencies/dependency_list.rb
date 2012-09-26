@@ -7,6 +7,11 @@ class Doubleshot
         @dependencies = Set.new
       end
 
+      def eql?(other)
+        other.is_a?(self.class) && entries == other.entries
+      end
+      alias :== :eql?
+
       def add(dependency)
         unless dependency.is_a? Dependency
           raise ArgumentError.new("+dependency+ must be a Doubleshot::Dependencies::Dependency")
