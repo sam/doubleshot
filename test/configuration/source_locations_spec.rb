@@ -83,4 +83,16 @@ describe Doubleshot::Configuration::SourceLocations do
       @source.tests.must_equal Pathname("test")
     end
   end
+
+  describe "equality" do
+    before do
+      @other = Doubleshot::Configuration::SourceLocations.new
+      @other.java = "examples/jackson/ext/java"
+      @source.java = @other.java
+    end
+
+    it "must equal if all paths are the same" do
+      @source.must_equal @other
+    end
+  end
 end

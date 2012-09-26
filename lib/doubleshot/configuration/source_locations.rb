@@ -23,6 +23,14 @@ class Doubleshot
         @tests = validate_path(path)
       end
 
+      def eql?(other)
+        other.is_a?(self.class) &&
+          other.ruby == ruby &&
+          other.java == java &&
+          other.tests == tests
+      end
+      alias :== :eql?
+
       private
       def validate_path(path)
         check = Pathname(path.to_s)
