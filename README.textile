@@ -1,6 +1,6 @@
 h1. Doubleshot
 
-Latest test results:
+Latest test results (currently Travis CI's JRuby ~1.7 mode is broken as it runs `bundle install` but doesn't have the Bundler gem installed):
 
 !https://secure.travis-ci.org/sam/doubleshot.png(Build Status)!:http://travis-ci.org/sam/doubleshot
 
