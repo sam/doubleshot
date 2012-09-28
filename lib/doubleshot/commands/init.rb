@@ -3,16 +3,17 @@ class Doubleshot::CLI::Commands::Init < Doubleshot::CLI
   def self.summary
     <<-EOS.margin
       Generate a Doubleshot file for your project.
-      This command is interactive.
     EOS
   end
 
   def self.options
-    OptionParser.new do |options|
+    Options.new do |options|
       options.banner = "Usage: doubleshot init [PATH]"
       options.separator ""
       options.separator "  [PATH]      The path to your project directory."
       options.separator "              DEFAULT: Current working directory."
+      options.separator ""
+      options.separator "Summary: #{summary}"
     end
   end
 

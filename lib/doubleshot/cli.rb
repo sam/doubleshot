@@ -1,5 +1,5 @@
 require_relative "../doubleshot"
-require "optparse"
+require "doubleshot/cli/options"
 
 class Doubleshot
   class CLI
