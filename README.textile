@@ -105,7 +105,7 @@ end
 
 p. ...and @helper.rb@ would look something like this:
 
-bc.. require "doubleshot/setup"
+bc.. require "doubleshot"
 require "minitest/autorun"
 
 h2. Testing Two Ways
@@ -121,7 +121,7 @@ Then Minitest will run your test and exit when it's done.
 
 h3. Sandbox Execution
 
-Doubleshot also provides a @doubleshot@ bin file that basically amounts to @require("doubleshot/sandbox")@. Running @doubleshot@ in your project's home directory will setup monitors for @lib/@ and @test/@ and wait for changes, applying the rules below to it's execution:
+Doubleshot also provides a @doubleshot@ bin file. Running @doubleshot test@ in your project's home directory will setup monitors for @lib/@ and @test/@ and wait for changes, applying the rules below to it's execution:
 
 * When source under @ext/java/@ changes, it will be recompiled, reloaded, and matching tests searched for to execute
 * When Ruby source under @lib/@ changes, your Ruby VM will be reloaded, and matching tests executed
@@ -133,9 +133,11 @@ This is the typical use-case for day to day development of new projects/features
 
 h2. Packaging
 
+# TODO: This is all out of date...
+
 Given a project named _Example_, then @example.gemspec@ would include your Gem dependencies (including "doubleshot") and your @Doubleshot@ file would include your JAR dependencies as well as pulling in your Gem dependencies from your gemspec. This way your project is backwards compatible with Rubygems and Bundler. When packaging your project, your JAR dependencies will be "vendored" into the gem you've built.
 
-Within your project (ie: @lib/example.rb@) you'll @require "doubleshot/setup"@. This will ensure any dependencies for your Gem are satisfied at runtime. If a dependency is already loaded, (an upstream project called @require "bundler/setup"@ for example) then Doubleshot will skip it.
+Within your project (ie: @lib/example.rb@) you'll @require "doubleshot"@. This will ensure any dependencies for your Gem are satisfied at runtime. If a dependency is already loaded, (an upstream project called @require "bundler/setup"@ for example) then Doubleshot will skip it.
 
 If you're running inside of a @doubleshot/setup@ then requiring @doublehsot/setup@ will have no effect to avoid doubling up on the work.
 
