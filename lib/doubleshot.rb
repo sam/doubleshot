@@ -23,4 +23,17 @@ class Doubleshot
   def config
     @config
   end
+
+  def self.current
+    @current ||= load
+  end
+  
+  def self.load
+    file = Pathname("Doubleshot")
+    if file.exist?
+      eval(file.read)
+    else
+      nil
+    end
+  end
 end

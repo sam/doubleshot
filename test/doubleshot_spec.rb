@@ -18,7 +18,7 @@ describe Doubleshot do
   it "must generate a valid gemspec" do
     gemspec = Doubleshot.new do |config|
       config.gemspec do |spec|
-        spec.name          = "Doubleshot"
+        spec.name          = "doubleshot"
         spec.summary       = "Build, Dependencies and Testing all in one!"
         spec.description   = "Description"
         spec.author        = "Sam Smoot"
@@ -32,5 +32,20 @@ describe Doubleshot do
 
     eval(gemspec).validate
   end
+
+  describe "current" do
+    it "must be a kind of Doubleshot" do
+      Doubleshot::current.must_be_kind_of Doubleshot
+    end
+
+    it "must read a sampling of values correctly" do
+      config = Doubleshot::current.config
+      config.gemspec.name.must_equal "doubleshot"
+      config.source.ruby.to_s.must_equal "lib"
+      config.target.to_s.must_equal "target"
+    end
+  end
+
+
 
 end
