@@ -1,0 +1,22 @@
+# encoding: UTF-8
+
+Doubleshot.new do |config|
+  
+  config.gemspec do |spec|
+    spec.name           = "jackson"
+    spec.version        = "0.1.0"
+    spec.summary        = "A simple Jackson vs json-jruby benchmark."
+    spec.description    = <<-DESCRIPTION
+Jackson is a Java library for parsing/generating JSON.
+This benchmarks that it's parsing is about 2 to 3 times
+faster than the "json" Rubygem.
+
+To run the benchmark, just execute "benchmark.rb".
+DESCRIPTION
+    spec.homepage       = "https://github.com/sam/doubleshot/blob/master/examples/jackson"
+    spec.author         = "Sam Smoot"
+    spec.email          = "ssmoot@gmail.com"
+    spec.license        = "MIT-LICENSE"
+  end
+  
+end

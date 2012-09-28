@@ -1,10 +1,10 @@
 #!/usr/bin/env jruby
 
-require "doubleshot/setup"
+require "doubleshot"
 require "perfer"
 require "json"
 java_import com.fasterxml.jackson.databind.ObjectMapper
-java_import org.foo.Bar
+java_import org.sam.jackson.Jackson
 
 SAMPLE = <<EOS.strip
 {
@@ -29,7 +29,7 @@ Perfer::session "JSON Parsing" do |x|
   end
 
   x.iterate("Jackson Wrapper") do
-    Bar.parse SAMPLE
+    Jackson.parse SAMPLE
   end
 end.run
 
