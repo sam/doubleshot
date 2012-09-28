@@ -16,6 +16,16 @@ describe Doubleshot::ReadonlyCollection do
     end
   end
 
+  describe "empty?" do
+    it "must be empty" do
+      Doubleshot::ReadonlyCollection.new([]).must_be :empty?
+    end
+
+    it "wont be empty" do
+      @readonly_collection.wont_be :empty?
+    end
+  end
+
   describe "equality" do
 
     before do
@@ -25,7 +35,7 @@ describe Doubleshot::ReadonlyCollection do
     end
 
     it "must have semantic equality" do
-      assert @readonly_collection.eql?(@other_readonly_collection)
+      @readonly_collection.must_be :eql?, @other_readonly_collection
     end
 
     it "must override the equality operator to consider requirements" do

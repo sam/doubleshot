@@ -34,7 +34,7 @@ describe Doubleshot::Dependencies::Dependency do
     end
 
     it "must be equal if names are equal" do
-      assert @dependency.eql?(@other)
+      @dependency.must_be :eql?, @other
     end
   end
 

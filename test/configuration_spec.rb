@@ -246,9 +246,6 @@ describe Doubleshot::Configuration do
           #   config.jar "ch.qos.logback:logback:jar:0.5"
 
           #{Doubleshot::Configuration::DEVELOPMENT_MESSAGE}
-          #   config.development do
-          #     config.gem "doubleshot"
-          #   end
 
 
           #{Doubleshot::Configuration::GEMSPEC_MESSAGE}
@@ -265,8 +262,6 @@ describe Doubleshot::Configuration do
             spec.email          = "ssmoot@gmail.com"
             spec.license        = "MIT-LICENSE"
             spec.executables    = ["doubleshot"]
-
-            spec.platform       = "java"
           end
         EOS
       end

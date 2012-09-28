@@ -1,5 +1,7 @@
 #!/usr/bin/env jruby
 
-require "doubleshot/cli"
+require "pathname"
+require Pathname(__FILE__).dirname.parent + "lib/doubleshot"
+require Pathname(__FILE__).dirname.parent + "lib/doubleshot/cli"
 
 exit Doubleshot::CLI::start ? 0 : 1

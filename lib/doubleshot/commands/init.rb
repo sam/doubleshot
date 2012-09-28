@@ -64,6 +64,16 @@ class Doubleshot::CLI::Commands::Init < Doubleshot::CLI
       spec.license      = default original.license,     "MIT-LICENSE"
       spec.executables  = original.executables
     end
+
+    original.runtime_dependencies.each do |dependency|
+      @config.gem dependency.name, *dependency.requirements_list
+    end
+
+    @config.development do
+      original.development_dependencies.each do |dependency|
+        @config.gem dependency.name, *dependency.requirements_list
+      end
+    end
   end
 
   def eval_gemspec(contents)

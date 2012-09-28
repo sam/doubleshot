@@ -73,7 +73,16 @@ class Doubleshot
 
     DEVELOPMENT_MESSAGE = <<-EOS.margin
     # Add your Gem and JAR development dependencies
-    # similar to above.
+    # similar to above. By default "doubleshot" is
+    # added as a development dependency to your gemspec.
+    # That's the equivalent of:
+    #
+    #   config.development do
+    #     config.gem "doubleshot"
+    #   end
+    #
+    # NOTE: The above won't appear in your Doubleshot
+    # file as it's added during the build process for you.
     EOS
 
     def initialize
@@ -201,6 +210,8 @@ class Doubleshot
           @gemspec.add_development_dependency dependency.name, *dependency.requirements
         end
 
+        @gemspec.add_development_dependency "doubleshot"
+
         @gemspec
       end
     end
@@ -256,7 +267,7 @@ class Doubleshot
           if config_changes.include? :whitelist
             (@whitelist - DEFAULT_WHITELIST).map do |ext|
               "config.whitelist #{ext.inspect}"
-            end.join("\n")
+            end.join("\n        ")
           else
             "#   config.whitelist \".ext\""
           end
@@ -274,7 +285,7 @@ class Doubleshot
               else
                 "config.gem \"#{dependency}\", \"#{dependency.requirements.map(&:to_s).join("\", \"")}\""
               end
-            end.join("\n")
+            end.join("\n        ")
           end
         }
 
@@ -285,34 +296,28 @@ class Doubleshot
           else
             @runtime_dependencies.jars.map do |dependency|
               "config.jar \"#{dependency}\""
-            end.join("\n")
+            end.join("\n        ")
           end
         }
 
         #{Doubleshot::Configuration::DEVELOPMENT_MESSAGE}
         #{
-          if @development_dependencies.empty?
-            <<-DEVELOPMENT_EXAMPLE.margin
-            #   config.development do
-            #     config.gem "doubleshot"
-            #   end
-            DEVELOPMENT_EXAMPLE
-          else
-            "config.development do\n" +
-            @development_dependencies.gems.map do |dependency|
-              if dependency.requirements.empty?
-                "  config.gem \"#{dependency}\"\n"
-              else
-                "  config.gem \"#{dependency}\", \"#{dependency.requirements.map(&:to_s).join("\", \"")}\"\n"
-              end
-            end.join +
+          unless @development_dependencies.empty?
+            "config.development do\n        " +
+            (
+              @development_dependencies.gems.map do |dependency|
+                if dependency.requirements.empty?
+                  "  config.gem \"#{dependency}\""
+                else
+                  "  config.gem \"#{dependency}\", \"#{dependency.requirements.map(&:to_s).join("\", \"")}\""
+                end
+              end +
             @development_dependencies.jars.map do |dependency|
-                "config.jar \"#{dependency}\"\n"
-            end.join +
-            "\nend"
+                "  config.jar \"#{dependency}\""
+            end
+            ).join("\n        ") + "\n        end"
           end
         }
-
 
         #{Doubleshot::Configuration::GEMSPEC_MESSAGE}
         config.gemspec do |spec|
@@ -327,8 +332,6 @@ class Doubleshot
           spec.email          = #{spec.email.inspect}
           spec.license        = #{spec.license.inspect}
           spec.executables    = #{spec.executables.inspect}
-
-          spec.platform       = #{spec.platform.to_s.inspect}
         end
       EOS
     end
