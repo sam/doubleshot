@@ -1,15 +1,13 @@
-class Doubleshot::CLI::Build < Doubleshot::CLI
+class Doubleshot::CLI::Commands::Build < Doubleshot::CLI
   def self.summary
     <<-EOS.margin
       TODO
     EOS
   end
 
-  def self.usage
-    <<-EOS.margin
-      DO WILD AND CRAZY THINGS
-      WITH MULTIPLE LINES!!!
-      foo.
-    EOS
+  def self.options
+    OptionParser.new do |options|
+      options.banner = "Usage: doubleshot build"
+    end
   end
 end

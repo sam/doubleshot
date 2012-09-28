@@ -17,6 +17,10 @@ class Doubleshot
       @jars
     end
 
+    def empty?
+      @gems.empty? && @jars.empty?
+    end
+
     def eql?(other)
       other.is_a?(self.class) &&
         other.gems == gems &&

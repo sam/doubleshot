@@ -3,9 +3,8 @@ class Doubleshot
     class Dependency
       attr_reader :name
 
-      def initialize(name, version = nil)
+      def initialize(name)
         @name = name.dup.freeze
-        @version = version
         @requirements = Set.new
       end
 
@@ -29,6 +28,10 @@ class Doubleshot
 
       def ==(other)
         eql?(other) && requirements == other.requirements
+      end
+
+      def to_s
+        @name
       end
     end
   end

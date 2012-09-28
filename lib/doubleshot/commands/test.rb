@@ -1,4 +1,4 @@
-class Doubleshot::CLI::Test < Doubleshot::CLI
+class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
   def self.summary
     <<-EOS.margin
       A test harness that watches files, builds your

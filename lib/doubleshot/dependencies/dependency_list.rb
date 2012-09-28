@@ -36,6 +36,10 @@ class Doubleshot
       end
       alias :length :size 
 
+      def empty?
+        @dependencies.empty?
+      end
+      
       def each
         @dependencies.each do |dependency|
           yield dependency

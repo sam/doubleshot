@@ -3,9 +3,10 @@ class Doubleshot
     class SourceLocations
 
       def initialize
-        @ruby   = Pathname("lib")
-        @java   = Pathname("ext/java")
-        @tests  = Pathname("test")
+        @defaults  = {}
+        @ruby      = default :ruby, Pathname("lib")
+        @java      = default :java, Pathname("ext/java")
+        @tests     = default :tests, Pathname("test")
       end
 
       attr_reader :ruby
@@ -31,6 +32,14 @@ class Doubleshot
       end
       alias :== :eql?
 
+      def __changes__
+        changes = []
+        @defaults.each_pair do |key,value|
+          changes << key unless instance_variable_get("@#{key}") == value
+        end
+        changes
+      end
+
       private
       def validate_path(path)
         check = Pathname(path.to_s)
@@ -40,6 +49,10 @@ class Doubleshot
         end
 
         check
+      end
+
+      def default(key, value)
+        @defaults[key] = value
       end
     end
   end

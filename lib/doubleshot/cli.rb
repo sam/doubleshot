@@ -1,7 +1,15 @@
 require_relative "../doubleshot"
+require "optparse"
 
 class Doubleshot
   class CLI
+
+    module Commands
+    end
+
+    class << self
+      public :binding
+    end
 
     def self.commands
       @commands ||= []
@@ -12,14 +20,14 @@ class Doubleshot
     end
 
     def self.task_name
-      name.underscore.sub(/^doubleshot\/cli\//, "")
+      name.split("::").last.underscore
     end
 
     def self.summary
       raise NotImplementedError.new
     end
 
-    def self.usage
+    def self.options
       raise NotImplementedError.new
     end
 
@@ -29,7 +37,7 @@ class Doubleshot
 
     USAGE = <<-EOS.margin
     Usage: doubleshot COMMAND [ OPTIONS ]
-
+DERP
     Summary: Command line tool for creating and managing doubleshot projects.
 
     EOS
@@ -42,9 +50,7 @@ class Doubleshot
           puts("\n  doubleshot %-8s # %s" % [ command.task_name, command.summary.gsub("\n", "\n" + (" " * 22) + "# ") ])
         end
       elsif command = detect(command_name)
-        puts "\nUsage: doubleshot #{command_name}\n\n"
-        puts "Summary: #{command.summary}\n\n"
-        puts("    " + command.usage.gsub("\n", "\n" + "    "))
+        puts command.options
       else
         puts "\nERROR! COMMAND NOT FOUND: #{command_name}\n\n"
         usage
@@ -60,13 +66,11 @@ class Doubleshot
     def self.start
       if ARGV[0] == "help"
         usage(ARGV[1])
-      elsif command = commands.detect { |command| command.name.underscore == ARGV[0] }
-        command.start
+      elsif command = commands.detect { |command| command.task_name == ARGV[0] }
+        command.start(ARGV[1..-1])
       else
         usage(ARGV[0])
       end
-
-      exit 0
     end
 
   end # class CLI

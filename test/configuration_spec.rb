@@ -197,9 +197,109 @@ describe Doubleshot::Configuration do
   end
 
   describe "to_ruby" do
+    before do
+      @config.gemspec do |spec|
+        spec.name          = "doubleshot"
+        spec.summary       = "This is my summary."
+        spec.description   = <<-DESCRIPTION.margin
+        A very detailed description.
+        Indeed.
+        DESCRIPTION
+        spec.author        = "Sam Smoot"
+        spec.homepage      = "http://example.com/doubleshot"
+        spec.email         = "ssmoot@gmail.com"
+        spec.version       = "9000.1"
+        spec.license       = "MIT-LICENSE"
+        spec.executables   = [ "doubleshot" ]
+      end
+    end
+    
     it "must equal generated output" do
-      skip
-      @config.must_equal eval(@config.to_ruby)
+      @config.must_equal eval(@config.to_ruby).config
+    end
+
+    describe "to_ruby_body" do
+      before do
+        @output = <<-EOS.margin
+          #{Doubleshot::Configuration::SOURCE_RUBY_MESSAGE}
+          #   config.source.ruby    = "lib"
+
+          #{Doubleshot::Configuration::SOURCE_JAVA_MESSAGE}
+          #   config.source.java    = "ext/java"
+
+          #{Doubleshot::Configuration::SOURCE_TESTS_MESSAGE}
+          #   config.source.tests   = "test"
+
+
+          #{Doubleshot::Configuration::TARGET_MESSAGE}
+          #   config.target = "target"
+
+
+          #{Doubleshot::Configuration::WHITELIST_MESSAGE}
+          #   config.whitelist ".ext"
+
+
+          #{Doubleshot::Configuration::GEM_DEPENDENCY_MESSAGE}
+          #   config.gem "bcrypt-ruby", "~> 3.0"
+
+          #{Doubleshot::Configuration::JAR_DEPENDENCY_MESSAGE}
+          #   config.jar "ch.qos.logback:logback:jar:0.5"
+
+          #{Doubleshot::Configuration::DEVELOPMENT_MESSAGE}
+          #   config.development do
+          #     config.gem "doubleshot"
+          #   end
+
+
+          #{Doubleshot::Configuration::GEMSPEC_MESSAGE}
+          config.gemspec do |spec|
+            spec.name           = "doubleshot"
+            spec.version        = "9000.1"
+            spec.summary        = "This is my summary."
+            spec.description    = <<-DESCRIPTION
+          A very detailed description.
+          Indeed.
+          DESCRIPTION
+            spec.homepage       = "http://example.com/doubleshot"
+            spec.author         = "Sam Smoot"
+            spec.email          = "ssmoot@gmail.com"
+            spec.license        = "MIT-LICENSE"
+            spec.executables    = ["doubleshot"]
+
+            spec.platform       = "java"
+          end
+        EOS
+      end
+
+      it "must match the defined format" do
+        @config.to_ruby_body.must_equal @output
+      end
+
+      describe "non-default attributes" do
+        it "must include ruby" do
+          @config.source.ruby = "lib/doubleshot"
+          @config.to_ruby_body.must_include <<-EOS.margin
+          #{Doubleshot::Configuration::SOURCE_RUBY_MESSAGE}
+          config.source.ruby    = "lib/doubleshot"
+          EOS
+        end
+
+        it "must include java" do
+          @config.source.java = "ext"
+          @config.to_ruby_body.must_include <<-EOS.margin
+          #{Doubleshot::Configuration::SOURCE_JAVA_MESSAGE}
+          config.source.java    = "ext"
+          EOS
+        end
+
+        it "must include tests" do
+          @config.source.tests = "test/configuration"
+          @config.to_ruby_body.must_include <<-EOS.margin
+          #{Doubleshot::Configuration::SOURCE_TESTS_MESSAGE}
+          config.source.tests   = "test/configuration"
+          EOS
+        end
+      end
     end
   end
 

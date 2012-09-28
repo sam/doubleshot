@@ -1,4 +1,4 @@
-class Doubleshot::CLI::Gem < Doubleshot::CLI
+class Doubleshot::CLI::Commands::Gem < Doubleshot::CLI
   def self.summary
     <<-EOS.margin
       TODO

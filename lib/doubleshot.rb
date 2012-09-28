@@ -3,12 +3,12 @@ require "set"
 
 $:.unshift(Pathname(__FILE__).dirname)
 
-require "doubleshot/configuration"
-require "doubleshot/readonly_collection"
 require "ruby/gem/requirement"
 require "ruby/string"
 require "ruby/blank"
 require "ruby/pathname"
+require "doubleshot/readonly_collection"
+require "doubleshot/configuration"
 
 class Doubleshot
   def initialize(&b)
@@ -18,5 +18,9 @@ class Doubleshot
 
   def build_gemspec
     @config.gemspec.to_ruby
+  end
+
+  def config
+    @config
   end
 end
