@@ -29,11 +29,6 @@ class Doubleshot
   end
   
   def self.load
-    file = Pathname("Doubleshot")
-    if file.exist?
-      eval(file.read)
-    else
-      nil
-    end
+    eval(Pathname("Doubleshot").read)
   end
 end
