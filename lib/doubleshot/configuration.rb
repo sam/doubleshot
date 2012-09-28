@@ -31,7 +31,7 @@ class Doubleshot
     # Tests are assumed to be written in Ruby
     # exclusively. Java test frameworks are not
     # supported.
-    # This value is optional. The default is "tests".
+    # This value is optional. The default is "test".
     EOS
 
     TARGET_MESSAGE        = <<-EOS.margin
