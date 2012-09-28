@@ -5,15 +5,13 @@ Doubleshot.new do |config|
   config.gem "bundler", ">= 0"
   config.gem "jbundler", ">= 0"
   
-  config.development do
-    config.gem "rdoc", ">= 2.4.2"
-    config.gem "perfer", ">= 0"
-    config.gem "minitest", ">= 3.0.1"
-    config.gem "minitest-wscolor", ">= 0"
-    config.gem "listen", ">= 0"
-    config.gem "rb-fsevent", "~> 0.9.1"
-    config.gem "simplecov", ">= 0"
-  end
+  config.gem "rdoc", ">= 2.4.2"
+  config.gem "perfer", ">= 0"
+  config.gem "minitest", ">= 3.0.1"
+  config.gem "minitest-wscolor", ">= 0"
+  config.gem "listen", ">= 0"
+  config.gem "rb-fsevent", "~> 0.9.1"
+  config.gem "simplecov", ">= 0"
   
   config.gemspec do |spec|
     spec.name           = "doubleshot"
@@ -31,5 +29,5 @@ DESCRIPTION
     spec.license        = "MIT-LICENSE"
     spec.executables    = ["doubleshot"]
   end
-  
+
 end
