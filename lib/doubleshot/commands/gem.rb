@@ -30,6 +30,8 @@ class Doubleshot::CLI::Commands::Gem < Doubleshot::CLI
     # compile Java
     # download Jars and add them to the gemspec require_paths (I THINK).
     config = Doubleshot::current.config
+
+    # TODO: This is version specific since in HEAD they've changed this to Gem::Package::build.
     ::Gem::Builder.new(config.gemspec).build
 
     return true

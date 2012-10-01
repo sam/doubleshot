@@ -37,7 +37,7 @@ class Doubleshot
 
     USAGE = <<-EOS.margin
     Usage: doubleshot COMMAND [ OPTIONS ]
-DERP
+
     Summary: Command line tool for creating and managing doubleshot projects.
 
     EOS
