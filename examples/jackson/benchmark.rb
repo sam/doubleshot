@@ -4,7 +4,7 @@ require "doubleshot"
 require "perfer"
 require "json"
 java_import com.fasterxml.jackson.databind.ObjectMapper
-java_import org.sam.jackson.Jackson
+java_import org.sam.doubleshot.examples.jackson.Jackson
 
 SAMPLE = <<EOS.strip
 {

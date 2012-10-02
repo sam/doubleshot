@@ -1,4 +1,4 @@
-package org.sam.jackson;
+package org.sam.doubleshot.examples.jackson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
