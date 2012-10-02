@@ -12,6 +12,8 @@ Doubleshot.new do |config|
   config.gem "listen", ">= 0"
   config.gem "rb-fsevent", "~> 0.9.1"
   config.gem "simplecov", ">= 0"
+
+  # config.jar "ch.qos.logback:logback-core:jar:1.0.6"
   
   config.gemspec do |spec|
     spec.name           = "doubleshot"
