@@ -22,7 +22,9 @@ class Doubleshot::CLI::Commands::Build < Doubleshot::CLI
   def self.start(args)
     config = Doubleshot::current.config
 
-    Doubleshot::Compiler.new(config.source.java, config.target).build!
+    compiler = Doubleshot::Compiler.new(config.source.java, config.target)
+    # compiler.classpath = config.classpath
+    compiler.build!
 
     # TODO:
     # download JAR dependencies
