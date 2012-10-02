@@ -292,4 +292,31 @@ describe Doubleshot::Configuration do
     end
   end
 
+  describe "classpath" do
+    it "must return a set of paths" do
+      skip
+      @config.classpath.must_be_kind_of Set
+    end
+
+    it "must include all runtime dependencies" do
+      skip "until after jar_dependency_spec is implemented"
+      @config.jar "foo"
+      @config.jar "bar"
+      @config.classpath.must_include Pathname("foo")
+      @config.classpath.must_include Pathname("bar")
+    end
+
+    it "must include all development dependencies" do
+      skip "until after jar_dependency_spec is implemented"
+      
+      @config.development do
+        @config.jar "foo"
+        @config.jar "bar"
+      end
+
+      @config.classpath.must_include Pathname("foo")
+      @config.classpath.must_include Pathname("bar")
+    end
+  end
+
 end
