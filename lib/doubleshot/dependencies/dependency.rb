@@ -5,21 +5,10 @@ class Doubleshot
 
       def initialize(name)
         @name = name.dup.freeze
-        @requirements = Set.new
-      end
-
-      def requirements
-        ReadonlyCollection.new(@requirements)
-      end
-
-      def add_requirement(requirement)
-        requirement = Gem::Requirement.new(requirement)
-        @requirements << requirement
-        requirement
       end
 
       def eql?(other)
-        other.is_a?(Dependency) and other.name == @name
+        other.is_a?(self.class) and other.name == @name
       end
 
       def hash
@@ -27,7 +16,7 @@ class Doubleshot
       end
 
       def ==(other)
-        eql?(other) && requirements == other.requirements
+        eql?(other)
       end
 
       def to_s

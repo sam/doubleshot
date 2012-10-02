@@ -1,7 +1,11 @@
+require "doubleshot/dependencies/dependency"
+
 class Doubleshot
   class Dependencies
     class DependencyList
       include Enumerable
+
+      DEPENDENCY_CLASS = Dependency
 
       def initialize
         @dependencies = Set.new
@@ -24,7 +28,7 @@ class Doubleshot
         raise ArgumentError.new("+name+ must be a String") unless name.is_a? String
         
         unless dependency = @dependencies.detect { |entry| entry.name == name }
-          dependency = Dependency.new(name)
+          dependency = self.class::DEPENDENCY_CLASS.new(name)
           add dependency
         end
         
