@@ -22,11 +22,12 @@ class Doubleshot::CLI::Commands::Build < Doubleshot::CLI
   def self.start(args)
     config = Doubleshot::current.config
 
+    Doubleshot::Compiler.new(config.source.java, config.target).build!
+
     # TODO:
     # download JAR dependencies
     # setup correct class-path
     # download Gem dependencies
-    # compile Java
     # exit
 
     return true
