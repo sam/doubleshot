@@ -26,13 +26,17 @@ class Doubleshot
           end.select do |path|
             path.exist?
           end.map do |path|
-            (path.directory? ? path : path.dirname).expand_path.to_s.ensure_ends_with("/")
+            (path.directory? ? path : path.dirname).to_s.ensure_ends_with("/")
           end.uniq.each do |path|
             fileset dir: path
           end
         end
 
-        ant.javac srcdir: @source.to_s, destdir: @target.to_s, debug: "yes", includeantruntime: "no", classpathref: "classpath"
+        ant.javac srcdir:     @source.to_s,
+          destdir:            @target.to_s,
+          debug:              "yes",
+          includeantruntime:  "no",
+          classpathref:       "classpath"
       end
 
       p $CLASSPATH
