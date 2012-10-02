@@ -1,0 +1,24 @@
+# encoding: UTF-8
+
+Doubleshot.new do |config|
+  
+  config.gemspec do |spec|
+    spec.name           = "hello_world"
+    spec.version        = "0.1.0"
+    spec.summary        = "A simple Hello World sample."
+    spec.description    = <<-DESCRIPTION
+This sample demonstrates compiling Java sources with
+no dependencies.
+
+Just run "doubleshot build", then you can run the
+generated Java Class with:
+
+  java -cp target org.sam.doubleshot.examples.hello_world.HelloWorld
+DESCRIPTION
+    spec.homepage       = "https://github.com/sam/doubleshot/blob/master/examples/hello_world"
+    spec.author         = "Sam Smoot"
+    spec.email          = "ssmoot@gmail.com"
+    spec.license        = "MIT-LICENSE"
+  end
+  
+end
