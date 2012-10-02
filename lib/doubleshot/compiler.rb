@@ -39,7 +39,6 @@ class Doubleshot
           classpathref:       "classpath"
       end
 
-      p $CLASSPATH
       $CLASSPATH << @target.to_s unless $CLASSPATH.include?(@target.to_s)
     end
 
