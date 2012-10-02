@@ -7,8 +7,10 @@ require "ruby/gem/requirement"
 require "ruby/string"
 require "ruby/blank"
 require "ruby/pathname"
+require "ruby/kernel"
 require "doubleshot/readonly_collection"
 require "doubleshot/configuration"
+require "doubleshot/compiler"
 
 class Doubleshot
   def initialize(&b)
