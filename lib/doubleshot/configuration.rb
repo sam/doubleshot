@@ -17,7 +17,7 @@ class Doubleshot
     # Ruby source code (.rb files).
     # The default is "lib".
     EOS
-    
+
     SOURCE_JAVA_MESSAGE   = <<-EOS.margin
     # Relative path to the folder containing your
     # Java source code (.java files).
@@ -133,7 +133,7 @@ class Doubleshot
 
       dependency = dependencies.gems.fetch(name)
       dependencies.gems.add(dependency)
-      
+
       requirements.each do |requirement|
         dependency.add_requirement(requirement)
       end
@@ -174,7 +174,7 @@ class Doubleshot
 
         test_files = []
         @source.tests.find do |path|
-          test_files << path.to_s if path.file?
+          test_files << path.to_s if path.file? && @whitelist.include?(path.extname)
         end
         @gemspec.test_files = test_files
 
@@ -196,7 +196,7 @@ class Doubleshot
 
         if @target.exist?
           @target.find do |path|
-            files << path.to_s if path.file?  
+            files << path.to_s if path.file?
           end
         end
 
