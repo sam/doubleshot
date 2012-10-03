@@ -1,5 +1,6 @@
 require "java"
 require "ant"
+require "doubleshot/compiler/classpath"
 
 class Doubleshot
   class Compiler
