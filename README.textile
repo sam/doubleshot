@@ -177,23 +177,27 @@ Bundler includes a @bundle show some_gem@ command that shows you the path where 
 
 It's our opinion that you don't _need_ this functionality, and it opens the window to abuse, so we're not implementing it.
 
-h2. Where is @doubleshot install@?
+h2. I just ran @doubleshot install@ and I'm not sure what happened?
 
 With Bundler it's common to:
 
 # @bundle install@ to inspect your Gemfile and download/install any missing dependencies
 # @require "bundler/setup"@ to check/require dependencies at runtime
 
-With Doubleshot you'll:
+With Doubleshot you'll just:
 
-bc. require "doubleshot/setup"
+bc. require "doubleshot"
+
+In your @test/helper.rb@ (or whatever common file you use for test bootstrapping). Or you can run @doubleshot test@.
 
 Doubleshot will first see if all it's dependencies are available, and if not, install any that are missing. So you don't have to manually run an installation step.
+
+If you run @doubleshot help@ you'll see that the @install@ command actually packages up your project as a Gem and installs it locally. So @doubleshot install@ is analogous to @gem install@, *not* @bundle install@.
 
 bq.. But I just want to install my Gem dependencies on a remote server and not actually attempt to run any code!
 *-- Said No One Ever*
 
-p. If you _really_ want to pre-download your dependencies just run @jruby -r "doubleshot/setup"@ in your project's home-directory. Nothing to it.
+p. If you _really_ want to pre-download your dependencies just run @doubleshot build@ in your project's home-directory. Dependencies will be installed as part of the build process.
 
 h2. What if I want to create a unified JAR containing all my dependencies?
 
