@@ -23,6 +23,14 @@ class Doubleshot
         eql?(other) && requirements == other.requirements
       end
 
+      def to_s(long_form = false)
+        if long_form && !@requirements.empty?
+          "#{name} (#{@requirements.sort.map(&:to_s).join(", ")})"
+        else
+          @name
+        end
+      end
+
     end
   end
 end

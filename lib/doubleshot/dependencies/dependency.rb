@@ -19,8 +19,20 @@ class Doubleshot
         eql?(other)
       end
 
-      def to_s
-        @name
+      def lock(version)
+        @version = version
+      end
+
+      def locked?
+        !!@version
+      end
+
+      def to_s(long_form = false)
+        if long_form && @version
+          "#{name} (#{@version})"
+        else
+          @name
+        end
       end
     end
   end

@@ -48,4 +48,9 @@ describe Doubleshot::Dependencies::JarDependency do
     dependency.group.must_equal "ch.qos.logback"
     dependency.version.must_equal "1.0.6"
   end
+
+  it "returns the Buildr syntax string as the long form of to_s" do
+    Doubleshot::Dependencies::JarDependency.new("ch.qos.logback:logback-core:jar:1.0.6").to_s(true)
+      .must_equal "ch.qos.logback:logback-core:jar:1.0.6"
+  end
 end

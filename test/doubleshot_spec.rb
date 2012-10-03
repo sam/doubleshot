@@ -44,6 +44,12 @@ describe Doubleshot do
       config.source.ruby.to_s.must_equal "lib"
       config.target.to_s.must_equal "target"
     end
+
+    describe "lockfile" do
+      it "must return a Lockfile instance" do
+        Doubleshot::current.lockfile.must_be_kind_of Doubleshot::Lockfile
+      end
+    end
   end
 
 

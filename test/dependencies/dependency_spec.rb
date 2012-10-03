@@ -26,4 +26,25 @@ describe Doubleshot::Dependencies::Dependency do
     end
   end
 
+  describe "lock" do
+    it "must lock to a specific version" do
+      @dependency.lock "0.5.3"
+      @dependency.must_be :locked?
+    end
+  end
+
+  describe "to_s" do
+    before do
+      @dependency.lock "0.5.3"
+    end
+
+    it "must have a short-form" do
+      @dependency.to_s.must_equal "listen"
+    end
+
+    it "must have a long-form" do
+      @dependency.to_s(true).must_equal "listen (0.5.3)"
+    end
+  end
+
 end

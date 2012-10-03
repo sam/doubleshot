@@ -28,4 +28,19 @@ describe Doubleshot::Dependencies::GemDependency do
       @dependency.wont_be :==, @other
     end
   end
+
+  describe "to_s" do
+    before do
+      @dependency.add_requirement ">= 0.5"
+      @dependency.add_requirement "= 0.5.3"
+    end
+
+    it "must have a short-form" do
+      @dependency.to_s.must_equal "listen"
+    end
+
+    it "must have a long-form that includes requirements" do
+      @dependency.to_s(true).must_equal "listen (= 0.5.3, >= 0.5)"
+    end
+  end
 end

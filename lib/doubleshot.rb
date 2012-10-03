@@ -12,10 +12,12 @@ require "ruby/time"
 require "doubleshot/readonly_collection"
 require "doubleshot/configuration"
 require "doubleshot/compiler"
+require "doubleshot/lockfile"
 
 class Doubleshot
   def initialize(&b)
     @config = Doubleshot::Configuration.new
+    @lockfile = Doubleshot::Lockfile.new
     yield @config
   end
 
@@ -25,6 +27,10 @@ class Doubleshot
 
   def config
     @config
+  end
+
+  def lockfile
+    @lockfile
   end
 
   def self.current

@@ -13,6 +13,10 @@ class Doubleshot
         end
       end
 
+      def to_s(long_form = false)
+        @name
+      end
+      
       def path
         # TODO: THINGS
         # Give us back the path to the (presumably) JAR in the
