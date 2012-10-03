@@ -27,14 +27,14 @@ describe Doubleshot::Dependencies do
       # NOTE: #fetch will add the dependency if it does
       # not yet exist in the List.
       @dependencies.gems.fetch "listen"
-      @dependencies.jars.fetch "jetty"
+      @dependencies.jars.fetch "commons-cli:commons-cli:jar:1.2"
     end
 
     it "must equal if their DependencyLists are equal" do
       @dependencies.wont_equal @other
 
       @other.gems.fetch "listen"
-      @other.jars.fetch "jetty"
+      @other.jars.fetch "commons-cli:commons-cli:jar:1.2"
 
       @dependencies.must_equal @other
     end
