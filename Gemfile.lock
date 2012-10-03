@@ -2,12 +2,15 @@ GEM
   remote: https://rubygems.org/
   specs:
     backports (2.6.4)
+    ffi (1.0.11)
     ffi (1.0.11-java)
+    hitimes (1.1.1)
     hitimes (1.1.1-java)
     jbundler (0.3.0)
       ruby-maven (= 3.0.4.0.29.0)
+    json (1.7.5)
     json (1.7.5-java)
-    listen (0.5.0)
+    listen (0.5.3)
     maven-tools (0.29.3)
     minitest (3.4.0)
     minitest-wscolor (0.0.3)

@@ -9,8 +9,8 @@ Doubleshot.new do |config|
   config.gem "perfer", ">= 0"
   config.gem "minitest", ">= 3.0.1"
   config.gem "minitest-wscolor", ">= 0"
-  config.gem "listen", ">= 0"
-  config.gem "rb-fsevent", "~> 0.9.1"
+  config.gem "listen", ">= 0.5.3"
+  config.gem "rb-fsevent", ">= 0.9.1"
   config.gem "simplecov", ">= 0"
 
   # config.jar "ch.qos.logback:logback-core:jar:1.0.6"
