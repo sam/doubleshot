@@ -50,7 +50,7 @@ describe Doubleshot::Configuration::SourceLocations do
     end
 
     it "must return a valid path" do
-      @source.validate_path("lib").exist?.must_equal true
+      @source.validate_path("lib").must :exist
 
       assert_raises(IOError) do
         @source.validate_path "nothing"

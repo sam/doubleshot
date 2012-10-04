@@ -35,7 +35,7 @@ describe Doubleshot::Compiler do
       Doubleshot::Compiler.new(source, target).build!
 
       cow = target + "org/sam/doubleshot/Cow.class"
-      cow.exist?.must_equal true
+      cow.must :exist
 
       org.sam.doubleshot.Cow.new.moo.must_equal "MOO!"
     end

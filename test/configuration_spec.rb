@@ -51,7 +51,7 @@ describe Doubleshot::Configuration do
         fail e
       end
 
-      @config.gemspec.validate.must_equal true
+      @config.gemspec.must :validate
     end
 
     it "must add dependencies to the gemspec" do

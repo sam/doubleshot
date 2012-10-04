@@ -18,11 +18,11 @@ describe Doubleshot::ReadonlyCollection do
 
   describe "empty?" do
     it "must be empty" do
-      Doubleshot::ReadonlyCollection.new([]).must_be :empty?
+      Doubleshot::ReadonlyCollection.new([]).must_be_empty
     end
 
     it "wont be empty" do
-      @readonly_collection.wont_be :empty?
+      @readonly_collection.wont_be_empty
     end
   end
 
