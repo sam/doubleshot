@@ -21,6 +21,14 @@ describe Doubleshot::Compiler::Classpath do
         end.must_raise(Errno::ENOENT)
       end
     end
+
+    it "must alias to <<" do
+      @classpath.must_respond_to :<<
+      Helper::tmp do |tmp|
+        @classpath << tmp
+        @classpath.wont_be_empty
+      end
+    end
   end
 
   it "must return Pathnames" do

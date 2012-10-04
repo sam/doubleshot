@@ -23,11 +23,16 @@ class Doubleshot
 
         self
       end
+      alias :<< :add
 
       def size
         @set.size
       end
-      alias :length :size 
+      alias :length :size
+
+      def empty?
+       @set.empty?
+      end
 
       def each
         @set.each { |entry| yield entry }
