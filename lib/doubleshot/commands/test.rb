@@ -56,7 +56,7 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
         path = Pathname(location)
         next unless path.extname == ".rb"
 
-        test = if path.child_of? @config.source.tests
+        test = if path.child_of? @config.source.tests && path.basename.to_s =~ /_(spec|test).rb/
           path
         else
           relative_path = path.relative_path_from(@config.source.ruby.expand_path)
