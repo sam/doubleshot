@@ -13,13 +13,6 @@ class Doubleshot::CLI::Commands::Build < Doubleshot::CLI
   def self.options
     Options.new do |options|
       options.banner = "Usage: doubleshot build"
-
-      options.separator ""
-      options.separator "Summary: #{summary}"
-    end
-
-    Options.new do |options|
-      options.banner = "Usage: doubleshot build"
       options.separator ""
       options.separator "Options"
 
