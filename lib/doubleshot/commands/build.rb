@@ -17,18 +17,40 @@ class Doubleshot::CLI::Commands::Build < Doubleshot::CLI
       options.separator ""
       options.separator "Summary: #{summary}"
     end
+
+    Options.new do |options|
+      options.banner = "Usage: doubleshot build"
+      options.separator ""
+      options.separator "Options"
+
+      options.classpath = []
+      options.on "--classpath CLASSPATH", "Manually set the CLASSPATH the compiler should use." do |classpath|
+        options.classpath = classpath.to_s.split(":")
+      end
+
+      options.separator ""
+      options.separator "Summary: #{summary}"
+    end
   end
 
   def self.start(args)
+    options = self.options.parse!(args)
     config = Doubleshot::current.config
 
     compiler = Doubleshot::Compiler.new(config.source.java, config.target)
-    # compiler.classpath = config.classpath
+    
+    if options.classpath.empty?
+      config.classpath
+    else
+      options.classpath
+    end.each do |path|
+      compiler.classpath << path
+    end
+    
     compiler.build!
 
     # TODO:
     # download JAR dependencies
-    # setup correct class-path
     # download Gem dependencies
     # exit
 
