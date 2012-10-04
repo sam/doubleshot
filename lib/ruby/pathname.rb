@@ -1,7 +1,7 @@
 class Pathname
   def touch(path)
     file = self + path
-    file.open("w+") { nil }
+    file.open("w+") { nil } unless file.exist?
     file
   end
   

@@ -40,10 +40,10 @@ PLATFORMS
 DEPENDENCIES
   bundler
   jbundler
-  listen
+  listen (>= 0.5.3)
   minitest (>= 3.0.1)
   minitest-wscolor
   perfer
-  rb-fsevent (~> 0.9.1)
+  rb-fsevent (>= 0.9.1)
   rdoc (>= 2.4.2)
   simplecov

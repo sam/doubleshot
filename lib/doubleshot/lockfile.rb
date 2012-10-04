@@ -1,3 +1,5 @@
+require "yaml"
+
 class Doubleshot
   class Lockfile
 
@@ -26,6 +28,7 @@ class Doubleshot
     end
 
     def jars
+      load
       ReadonlyCollection.new @jars
     end
 
@@ -51,6 +54,24 @@ class Doubleshot
       end
       
       self
+    end
+
+    def load
+      unless @loaded
+        (data["JARS"] || []).each do |buildr_string|
+          @jars.add Dependencies::JarDependency.new(buildr_string)
+        end
+      end
+
+      # TODO: add gems to this method
+
+      @loaded = true
+    end
+
+    private
+
+    def data
+      @data ||= (YAML.load(@path.read) || {})
     end
 
   end # class Lockfile

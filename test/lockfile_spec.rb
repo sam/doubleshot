@@ -1,11 +1,14 @@
 #!/usr/bin/env jruby
 
+# encoding: utf-8
+
 require_relative "helper"
 
 describe Doubleshot::Lockfile do
   
   def lockfile(name = "test.lock")
     Helper::tmp do |tmp|
+      tmp.touch name
       yield Doubleshot::Lockfile.new(tmp + name)
     end
   end
@@ -118,6 +121,37 @@ describe Doubleshot::Lockfile do
     it "must be readonly" do
       lockfile do |lockfile|
         lockfile.gems.must_be_kind_of Doubleshot::ReadonlyCollection
+      end
+    end
+  end
+
+  describe "jar format" do
+    before do
+      @lockfile_contents = <<-EOS.margin
+        ---
+        GEMS: []
+        JARS:
+          - com.pyx4j:maven-plugin-log4j:jar:1.0.1
+          - org.springframework:spring-core:jar:3.1.2.RELEASE
+          - org.hibernate:hibernate-core:jar:4.1.7.Final
+      EOS
+    end
+
+    it "must handle proper YAML format" do
+      lockfile "test_good.lock" do |lockfile|
+        lockfile.path.open("w+") do |file|
+          file << @lockfile_contents
+        end
+        lockfile.jars.size.must_equal 3
+      end
+    end
+
+    it "must raise a Psych::SyntaxError for invalid YAML" do
+      lockfile "test_bad.lock" do |lockfile|
+        lockfile.path.open("w+") do |file|
+          file << "<(^.^)> <(^.^<) (>^.^)>" << @lockfile_contents
+        end
+        -> { lockfile.jars }.must_raise Psych::SyntaxError
       end
     end
   end

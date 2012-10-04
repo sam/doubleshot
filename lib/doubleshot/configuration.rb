@@ -218,7 +218,7 @@ class Doubleshot
 
     def to_ruby
       <<-EOS.margin
-        # encoding: UTF-8
+        # encoding: utf-8
 
         Doubleshot.new do |config|
 #{
