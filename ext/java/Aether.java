@@ -1,4 +1,7 @@
-package jbundler;
+// This class was lifted from the JBundler project:
+// https://github.com/mkristian/jbundler
+
+package org.sam.doubleshot;
 
 import java.io.File;
 import java.util.ArrayList;
