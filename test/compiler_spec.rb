@@ -32,13 +32,22 @@ describe Doubleshot::Compiler do
         EOS
       end
 
-      Doubleshot::Compiler.new(source, target).build!
+      compiler = Doubleshot::Compiler.new(source, target)
+      # We pass the add_target_to_current_classpath=true option
+      # so that we can then load a Cow instance a few lines
+      # further down.
+      compiler.build!(true).must_be_same_as compiler
 
       cow = target + "org/sam/doubleshot/Cow.class"
       cow.must :exist
 
       org.sam.doubleshot.Cow.new.moo.must_equal "MOO!"
     end
+  end
+
+  it "must have a classpath" do
+    compiler = Doubleshot::Compiler.new "ext/java", "target"
+    compiler.classpath.must_be_kind_of Doubleshot::Compiler::Classpath
   end
 
 end

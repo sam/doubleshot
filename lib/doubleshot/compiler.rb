@@ -8,27 +8,24 @@ class Doubleshot
     def initialize(source, target)
       @source = Pathname(source.to_s)
       @target = Pathname(target.to_s)
+      @classpath = Classpath.new
     end
 
-    attr_reader :source, :target
+    attr_reader :source, :target, :classpath
 
-    def build!
+    def build!(add_target_to_current_classpath = false)
       @target.mkdir unless @target.exist?
       
       # The JRuby ant integration throws JRuby Persistence
       # warnings that you can't supress, so we run it
       # inside of a Kernel#silence block.
       silence do
-        ant.path id: "classpath" do  
-          fileset dir: @target.to_s
-
-          $CLASSPATH.map do |path|
-            Pathname path.to_s.gsub(/file\:/, "")
-          end.select do |path|
-            path.exist?
-          end.map do |path|
-            (path.directory? ? path : path.dirname).to_s.ensure_ends_with("/")
-          end.uniq.each do |path|
+        # Since the ant.path block is instance_evaled,
+        # the following line is a hack to ensure we have
+        # access to the contents of @classpath.
+        classpath = @classpath
+        ant.path id: "classpath" do
+          classpath.each do |path|
             fileset dir: path
           end
         end
@@ -40,7 +37,12 @@ class Doubleshot
           classpathref:       "classpath"
       end
 
-      $CLASSPATH << @target.to_s unless $CLASSPATH.include?(@target.to_s)
+      if add_target_to_current_classpath
+        target_url = java.io.File.new(@target.expand_path.to_s.ensure_ends_with("/")).to_url.to_s
+        $CLASSPATH << target_url unless $CLASSPATH.include?(target_url)
+      end
+
+      self
     end
 
   end # class Compiler
