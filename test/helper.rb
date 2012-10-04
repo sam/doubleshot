@@ -1,4 +1,4 @@
-require_relative "../lib/doubleshot"
+require_relative "../lib/doubleshot/setup"
 
 require "minitest/autorun"
 require "minitest/pride"

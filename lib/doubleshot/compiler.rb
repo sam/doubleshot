@@ -37,10 +37,7 @@ class Doubleshot
           classpathref:       "classpath"
       end
 
-      if add_target_to_current_classpath
-        target_url = java.io.File.new(@target.expand_path.to_s.ensure_ends_with("/")).to_url.to_s
-        $CLASSPATH << target_url unless $CLASSPATH.include?(target_url)
-      end
+      $CLASSPATH << @target.to_url if add_target_to_current_classpath
 
       self
     end

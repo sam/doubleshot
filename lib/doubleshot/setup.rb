@@ -1,49 +1,68 @@
 require_relative "../doubleshot"
 
-gemfile = Pathname "Gemfile"
-gemfile_lock = Pathname "Gemfile.lock"
+config = Doubleshot::current.config
 
-install_gems = -> do
-  require "bundler"
-  require "bundler/cli"
-  Bundler::CLI.new.install
+# This will add your compiled sources to $CLASSPATH so
+# you can reference your Java classes in Ruby.
+if config.target.exist?
+  $CLASSPATH << config.target.to_url
 end
 
-if gemfile.exist?
-  begin
-    install_gems.call if !gemfile_lock.exist? || gemfile.mtime > gemfile_lock.mtime
-    require "bundler/setup"
+# TODO:
+#   config.jars.each { |jar| require jar.path }
+
+# This is for bootstrapping Doubleshot itself only!
+if config.gemspec.name == "doubleshot"
+  out = `mvn dependency:build-classpath`.split($/)
+  out[out.index(out.grep(/Dependencies classpath\:/).first) + 1].split(":").each do |jar|
+    require jar
   end
 end
 
-install_jars = -> do
-  require "jbundler/cli"
-  JBundler::Cli.new.install
-end
+# gemfile = Pathname "Gemfile"
+# gemfile_lock = Pathname "Gemfile.lock"
 
-jarfile = Pathname "Jarfile"
-jarfile_lock = Pathname "Jarfile.lock"
+# install_gems = -> do
+#   require "bundler"
+#   require "bundler/cli"
+#   Bundler::CLI.new.install
+# end
 
-if jarfile.exist?
-  require "bundler" unless Object::const_defined?("Bundler")
-  require "jbundler"
-  install_jars.call if !jarfile_lock.exist? || jarfile.mtime > jarfile_lock.mtime
-end
+# if gemfile.exist?
+#   begin
+#     install_gems.call if !gemfile_lock.exist? || gemfile.mtime > gemfile_lock.mtime
+#     require "bundler/setup"
+#   end
+# end
 
-require "ant"
+# install_jars = -> do
+#   require "jbundler/cli"
+#   JBundler::Cli.new.install
+# end
 
-source = Pathname "ext/java"
-target = Pathname "target"
+# jarfile = Pathname "Jarfile"
+# jarfile_lock = Pathname "Jarfile.lock"
 
-target.mkdir unless target.exist?
+# if jarfile.exist?
+#   require "bundler" unless Object::const_defined?("Bundler")
+#   require "jbundler"
+#   install_jars.call if !jarfile_lock.exist? || jarfile.mtime > jarfile_lock.mtime
+# end
 
-ant.path id: "classpath" do  
-  fileset dir: target.to_s
-  JBUNDLER_CLASSPATH.each do |jar|
-    fileset dir: Pathname(jar).dirname
-  end
-end
+# require "ant"
 
-ant.javac srcdir: source.to_s, destdir: target.to_s, debug: "yes", includeantruntime: "no", classpathref: "classpath"
+# source = Pathname "ext/java"
+# target = Pathname "target"
 
-$CLASSPATH << target.to_s
+# target.mkdir unless target.exist?
+
+# ant.path id: "classpath" do  
+#   fileset dir: target.to_s
+#   JBUNDLER_CLASSPATH.each do |jar|
+#     fileset dir: Pathname(jar).dirname
+#   end
+# end
+
+# ant.javac srcdir: source.to_s, destdir: target.to_s, debug: "yes", includeantruntime: "no", classpathref: "classpath"
+
+# $CLASSPATH << target.to_s
