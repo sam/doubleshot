@@ -4,3 +4,4 @@ target
 doubleshot-*.gem
 .DS_Store
 jars
+.classpath.rb

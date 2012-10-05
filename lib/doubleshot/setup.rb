@@ -13,10 +13,20 @@ end
 
 # This is for bootstrapping Doubleshot itself only!
 if config.gemspec.name == "doubleshot"
-  out = `mvn dependency:build-classpath`.split($/)
-  out[out.index(out.grep(/Dependencies classpath\:/).first) + 1].split(":").each do |jar|
-    require jar
+  # Caching the generated classpath is an optimization
+  # for continuous testing performance, so we're not
+  # shelling out to 'mvn' on every test run.
+  classpath = Pathname(".classpath.rb")
+  if !classpath.exist? || Pathname("pom.xml").mtime > classpath.mtime
+    classpath.open("w+") do |file|
+      out = `mvn dependency:build-classpath`.split($/)
+      out[out.index(out.grep(/Dependencies classpath\:/).first) + 1].split(":").each do |jar|
+        file.puts "require #{jar.to_s.inspect}"
+      end
+    end
   end
+
+  require classpath
 end
 
 # gemfile = Pathname "Gemfile"
