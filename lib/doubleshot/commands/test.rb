@@ -51,12 +51,12 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
   private
   def listener
     # This creates a MultiListener
-    Listen.to(@config.source.tests.to_s, @config.source.ruby.to_s).change do |modified, added, removed|      
+    Listen.to(@config.source.tests.to_s, @config.source.ruby.to_s).change do |modified, added, removed|
       modified.each do |location|
         path = Pathname(location)
         next unless path.extname == ".rb"
 
-        test = if path.child_of? @config.source.tests && path.basename.to_s =~ /_(spec|test).rb/
+        test = if path.basename.to_s =~ /_(spec|test).rb/ && path.child_of?(@config.source.tests)
           path
         else
           relative_path = path.relative_path_from(@config.source.ruby.expand_path)
@@ -69,7 +69,7 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
             end
           end
         end
-        
+
         if test && test.exist?
           duration = Time::measure do
             puts "\n --- Running test for #{test.to_s} ---\n\n"

@@ -6,7 +6,7 @@ class Pathname
   end
   
   def child_of?(p2)
-    expand_path.to_s.include? p2.expand_path.to_s
+    expand_path.to_s.include?(p2.expand_path.to_s)
   end
 
   def to_url
