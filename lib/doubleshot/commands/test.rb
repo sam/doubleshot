@@ -1,3 +1,5 @@
+require "doubleshot/setup"
+
 class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
   def self.summary
     <<-EOS.margin
