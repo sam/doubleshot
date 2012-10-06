@@ -43,4 +43,19 @@ describe Doubleshot::Dependencies::GemDependency do
       @dependency.to_s(true).must_equal "listen (= 0.5.3, >= 0.5)"
     end
   end
+
+  describe "gemspec" do
+    it "must return a Gem::Specification" do
+      skip
+      @dependency.gemspec = Gem::Specification.new
+      @dependency.gemspec.must_be_kind_of Gem::Specification
+    end
+  end
+
+  describe "dependencies" do
+    it "must return a Doubleshot::Dependencies::DependencyList" do
+      skip
+      @dependency.dependencies.must_be_kind_of Doubleshot::Dependencies::DependencyList
+    end
+  end
 end

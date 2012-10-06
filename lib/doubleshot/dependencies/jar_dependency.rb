@@ -4,6 +4,7 @@ class Doubleshot
   class Dependencies
     class JarDependency < Dependency
       attr_reader :group, :artifact, :type, :version
+      attr_accessor :path
 
       def initialize(name)
         @name = name
@@ -15,17 +16,6 @@ class Doubleshot
 
       def to_s(long_form = false)
         @name
-      end
-      
-      def path
-        # TODO: THINGS
-        # Give us back the path to the (presumably) JAR in the
-        # local Maven repository (usually $HOME/.m2/).
-        #
-        # OR?
-        # 
-        # If the JAR has been vendored-in, then return that path.
-        # All depends on the lock-file I guess?
       end
     end
   end

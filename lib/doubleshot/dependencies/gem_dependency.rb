@@ -31,6 +31,13 @@ class Doubleshot
         end
       end
 
+      # def gemspec
+      # end
+
+      # def dependencies
+      #   #gemspec.runtime_dependencies
+      # end
+
     end
   end
 end

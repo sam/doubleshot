@@ -32,6 +32,8 @@ end
 # gemfile = Pathname "Gemfile"
 # gemfile_lock = Pathname "Gemfile.lock"
 
+require "doubleshot/resolver"
+
 # install_gems = -> do
 #   require "bundler"
 #   require "bundler/cli"

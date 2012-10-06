@@ -156,4 +156,47 @@ describe Doubleshot::Lockfile do
     end
   end
 
+  describe "gem format" do
+    before do
+      @lockfile_contents = <<-EOS.margin
+        ---
+        GEMS:
+          backports (2.6.4): []
+          ffi (1.0.11): []
+          ffi (1.0.11-java): []
+          hitimes (1.1.1): []
+          hitimes (1.1.1-java): []
+          minitest (3.4.0): []
+          minitest-wscolor (0.0.3):
+          - minitest (>= 2.3.1)
+          multi_json (1.3.6): []
+          path (1.3.1): []
+          perfer (0.2.0):
+          - backports (~> 2.6.3)
+          - ffi (~> 1.0.11)
+          - hitimes (~> 1.1.1)
+          - path (~> 1.3.1)
+        JARS: []
+      EOS
+    end
+
+    it "must handle proper YAML format" do
+      skip
+      lockfile "test_good.lock" do |lockfile|
+        lockfile.path.open("w+") do |file|
+          file << @lockfile_contents
+        end
+        lockfile.gems.size.must_equal 10
+      end
+    end
+
+    it "must raise a Psych::SyntaxError for invalid YAML" do
+      lockfile "test_bad.lock" do |lockfile|
+        lockfile.path.open("w+") do |file|
+          file << "<(^.^)> <(^.^<) (>^.^)>" << @lockfile_contents
+        end
+        -> { lockfile.gems }.must_raise Psych::SyntaxError
+      end
+    end
+  end
 end

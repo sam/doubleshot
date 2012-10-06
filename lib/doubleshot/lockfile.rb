@@ -24,6 +24,7 @@ class Doubleshot
     end
 
     def gems
+      load
       ReadonlyCollection.new @gems
     end
 
@@ -61,9 +62,12 @@ class Doubleshot
         (data["JARS"] || []).each do |buildr_string|
           @jars.add Dependencies::JarDependency.new(buildr_string)
         end
-      end
 
-      # TODO: add gems to this method
+        # TODO: add gems to this method
+        # (data["GEMS"] || []).each do |gem_string|
+        #   @gems.add Dependencies::GemDependency.new(gem_string)
+        # end
+      end
 
       @loaded = true
     end
