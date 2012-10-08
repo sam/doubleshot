@@ -16,19 +16,28 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
       options.banner = "Usage: doubleshot test"
 
       options.separator ""
+      options.separator "Options:"
+      options.ci_test = false
+      options.on "--ci-test", "Run all tests, then exit. (No continuous listening for file changes.)" do
+        options.ci_test = true
+      end
+
+      options.separator ""
       options.separator "Summary: #{summary}"
     end
   end
 
   def self.start(args)
+    options = self.options.parse!(args)
     require "listen"
-    watcher = new(Doubleshot::current.config)
+    watcher = new(Doubleshot::current.config, options.ci_test)
     watcher.run
   end
 
-  def initialize(config)
+  def initialize(config, ci_test)
     @config = config
     @interrupted = false
+    @ci_test = ci_test
 
     # Hit Ctrl-C once to re-run all specs; twice to exit the program.
     Signal.trap("INT") do
@@ -44,10 +53,14 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
   end
 
   def run
-    # Output here just so you know when changes will be
-    # picked up after you start the program.
-    puts "Listening for changes..."
-    listener.start
+    if @ci_test
+      run_all_specs
+    else
+      # Output here just so you know when changes will be
+      # picked up after you start the program.
+      puts "Listening for changes..."
+      listener.start
+    end
   end
 
   private
