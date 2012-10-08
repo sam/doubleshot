@@ -12,7 +12,7 @@ describe Doubleshot do
         config.must_be_kind_of Doubleshot::Configuration
       end
       assert called, "block not called"
-    end 
+    end
   end
 
   it "must generate a valid gemspec" do

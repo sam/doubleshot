@@ -39,7 +39,7 @@ public class SimpleRepositoryListener extends AbstractRepositoryListener {
         if (verbose) {
             out.println("artifact installed: " + event.getArtifact() + " : "
                 + event.getFile());
-        }   
+        }
     }
 
     public void artifactResolved(RepositoryEvent event) {

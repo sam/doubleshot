@@ -37,7 +37,7 @@ describe Doubleshot::Configuration::SourceLocations do
     Doubleshot::Configuration::SourceLocations.send(:private, :validate_path)
   end
 
-  describe "validate_path" do    
+  describe "validate_path" do
     it "must call to_s on any passed object" do
       mock = MockWrapper.new
       mock.expect(:to_string, "test")

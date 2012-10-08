@@ -1,5 +1,4 @@
 class Time
-  
   def self.measure
     start = now
     yield

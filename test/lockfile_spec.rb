@@ -5,7 +5,7 @@
 require_relative "helper"
 
 describe Doubleshot::Lockfile do
-  
+
   def lockfile(name = "test.lock")
     Helper::tmp do |tmp|
       tmp.touch name
@@ -87,7 +87,7 @@ describe Doubleshot::Lockfile do
             true
           end
         end.new("some-raa-tar")
-        
+
         lockfile do |lockfile|
           lockfile.add(dependency)
         end

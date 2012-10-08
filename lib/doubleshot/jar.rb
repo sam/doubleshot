@@ -37,7 +37,7 @@ target = Pathname "target"
 
 target.mkdir unless target.exist?
 
-ant.path id: "classpath" do  
+ant.path id: "classpath" do
   fileset dir: target.to_s
   JBUNDLER_CLASSPATH.each do |jar|
     fileset dir: Pathname(jar).dirname

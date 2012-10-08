@@ -22,7 +22,7 @@ class Doubleshot
     def empty?
       entries.empty?
     end
-    
+
     def eql?(other)
       other.is_a?(self.class) && entries == other.entries
     end
