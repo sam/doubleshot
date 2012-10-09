@@ -19,10 +19,12 @@ if config.gemspec.name == "doubleshot"
   classpath = Pathname(".classpath.rb")
   if !classpath.exist? || Pathname("pom.xml").mtime > classpath.mtime
     classpath.open("w+") do |file|
+      file.puts "config = Doubleshot::current.config"
       out = `mvn dependency:build-classpath`.split($/)
       out[out.index(out.grep(/Dependencies classpath\:/).first) + 1].split(":").each do |jar|
-        file.puts "require #{jar.to_s.inspect}"
+        file.puts "config.classpath << #{jar.to_s.inspect}"
       end
+      file.puts "config.classpath.each { |jar| require jar }"
     end
   end
 
@@ -31,8 +33,6 @@ end
 
 # gemfile = Pathname "Gemfile"
 # gemfile_lock = Pathname "Gemfile.lock"
-
-require "doubleshot/resolver"
 
 # install_gems = -> do
 #   require "bundler"

@@ -1,5 +1,7 @@
 require_relative "../lib/doubleshot/setup"
 
+require "doubleshot/resolver"
+
 require "minitest/autorun"
 require "minitest/pride"
 require "minitest/wscolor"

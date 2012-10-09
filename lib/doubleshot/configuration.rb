@@ -98,6 +98,8 @@ class Doubleshot
 
       @paths                       = default :paths, DEFAULT_PATHS.dup
       @whitelist                   = default :whitelist, DEFAULT_WHITELIST.dup
+
+      @classpath                   = default :classpath, []
     end
 
     def source
@@ -115,6 +117,14 @@ class Doubleshot
     def whitelist(extname)
       @whitelist << extname.ensure_starts_with(".")
       self
+    end
+
+    def classpath
+      @classpath
+    end
+
+    def classpath=(value)
+      @classpath = value
     end
 
     def development

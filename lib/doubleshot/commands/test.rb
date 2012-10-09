@@ -17,9 +17,16 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
 
       options.separator ""
       options.separator "Options:"
+
+      options.build = false
+      options.on "--build", "Performs a Build before running the tests" do
+        options.build = true
+      end
+
       options.ci_test = false
       options.on "--ci-test", "Run all tests, then exit. (No continuous listening for file changes.)" do
         options.ci_test = true
+        options.build = true
       end
 
       options.separator ""
@@ -29,6 +36,9 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
 
   def self.start(args)
     options = self.options.parse!(args)
+
+    Doubleshot::CLI::Commands::Build.start([]) if options.build
+
     require "listen"
     watcher = new(Doubleshot::current.config, options.ci_test)
     watcher.run
