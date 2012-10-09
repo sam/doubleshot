@@ -53,7 +53,7 @@ class Doubleshot
       else
         raise ArgumentError.new("+dependency+ must be a type of Doubleshot::Dependencies::Dependency.")
       end
-      
+
       self
     end
 

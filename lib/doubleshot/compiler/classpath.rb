@@ -12,7 +12,7 @@ class Doubleshot
 
       def add(path)
         path = Pathname(path.to_s)
-        
+
         if path.directory?
           @set << path
         elsif path.file?

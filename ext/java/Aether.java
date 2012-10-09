@@ -35,7 +35,7 @@ import org.sonatype.aether.util.artifact.DefaultArtifact;
 import org.sonatype.aether.util.graph.PreorderNodeListGenerator;
 
 public class Aether {
-    
+
     private DependencyNode node;
     private RepositorySystem repoSystem;
     private RepositorySystemSession session;
@@ -47,24 +47,24 @@ public class Aether {
         ServiceLocator locator = newServiceLocator();
         repoSystem = locator.getService( RepositorySystem.class );
         installer = locator.getService( Installer.class );
-        
+
         session = newSession( repoSystem, localRepo, verbose, offline );
 
         RemoteRepository central = new RemoteRepository( "central", "default", "http://repo1.maven.org/maven2/" );
         repos.add(central);
     }
-    
+
     private ServiceLocator newServiceLocator() {
-        MavenServiceLocator locator = new MavenServiceLocator();// when using maven 3.0.4   
+        MavenServiceLocator locator = new MavenServiceLocator();// when using maven 3.0.4
         //locator.addService( RepositoryConnectorFactory.class, FileRepositoryConnectorFactory.class );
         locator.addService( RepositoryConnectorFactory.class, WagonRepositoryConnectorFactory.class );
-        
+
         locator.setServices( WagonProvider.class, new ManualWagonProvider() );
 
         return locator;
     }
-    
-    private RepositorySystemSession newSession( RepositorySystem system, String localRepoPath, boolean verbose, 
+
+    private RepositorySystemSession newSession( RepositorySystem system, String localRepoPath, boolean verbose,
             boolean offline ) {
         MavenRepositorySystemSession session = new MavenRepositorySystemSession();
 
@@ -74,11 +74,11 @@ public class Aether {
         session.setOffline(offline);
         return session;
     }
-    
+
     public void addArtifact(String coordinate){
         artifacts.add(new DefaultArtifact(coordinate));
     }
-    
+
     public void addRepository(String id, String url){
         repos.add(new RemoteRepository(id, "default", url));
     }
@@ -87,20 +87,20 @@ public class Aether {
         if (artifacts.size() == 0){
             throw new IllegalArgumentException("no artifacts given");
         }
-       
+
         CollectRequest collectRequest = new CollectRequest();
         for( Artifact a: artifacts ){
             collectRequest.addDependency( new Dependency( a, "compile" ) );
         }
 
         for( RemoteRepository r: repos ){
-            collectRequest.addRepository( r );            
+            collectRequest.addRepository( r );
         }
-        
+
         node = repoSystem.collectDependencies( session, collectRequest ).getRoot();
 
         DependencyRequest dependencyRequest = new DependencyRequest( node, null );
-        
+
         repoSystem.resolveDependencies( session, dependencyRequest  );
     }
 
@@ -111,11 +111,11 @@ public class Aether {
     public List<Artifact> getArtifacts(){
         return Collections.unmodifiableList( artifacts );
     }
-    
+
     public String getClasspath() {
         PreorderNodeListGenerator nlg = new PreorderNodeListGenerator();
         node.accept( nlg );
-        
+
         StringBuilder buffer = new StringBuilder( 1024 );
 
         for ( Iterator<DependencyNode> it = nlg.getNodes().iterator(); it.hasNext(); )
@@ -138,13 +138,13 @@ public class Aether {
 
         return buffer.toString();
     }
-    
+
     public List<String> getResolvedCoordinates() {
         List<String> result = new ArrayList<String>();
-        
+
         PreorderNodeListGenerator nlg = new PreorderNodeListGenerator();
         node.accept( nlg );
-        
+
         for ( DependencyNode node: nlg.getNodes() )
         {
             if ( node.getDependency() != null )
@@ -161,12 +161,12 @@ public class Aether {
 
         return result;
     }
-    
+
     public void install(String coordinate, String file) throws InstallationException{
         LocalRepositoryManager lrm = session.getLocalRepositoryManager();
 
         Artifact artifact = new DefaultArtifact(coordinate);
-        
+
         File dstFile = new File( lrm.getRepository().getBasedir(), lrm.getPathForLocalArtifact( artifact ) );
         if (!dstFile.exists() ){
             artifact = artifact.setFile(new File(file));

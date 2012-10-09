@@ -32,7 +32,7 @@ describe Doubleshot::Compiler::Classpath do
   end
 
   it "must return Pathnames" do
-    Helper::tmp do |tmp|      
+    Helper::tmp do |tmp|
       @classpath.add tmp
 
       @classpath.entries.wont_be_empty

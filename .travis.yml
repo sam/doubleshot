@@ -1,3 +1,4 @@
 language: ruby
 rvm:
   - jruby-head
+script: bundle exec bin/doubleshot test --ci-test

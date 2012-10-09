@@ -17,7 +17,7 @@ describe Doubleshot::Configuration do
     it "must accept a list of requirements" do
       @config.gem "listen", ">0.4.0"
     end
-    
+
     it "must return a dependency" do
       @config.gem("listen").must_be_kind_of Doubleshot::Dependencies::Dependency
     end
@@ -207,7 +207,7 @@ describe Doubleshot::Configuration do
         spec.executables   = [ "doubleshot" ]
       end
     end
-    
+
     it "must equal generated output" do
       @config.must_equal eval(@config.to_ruby).config
     end
@@ -308,7 +308,7 @@ describe Doubleshot::Configuration do
 
     it "must include all development dependencies" do
       skip "until after jar_dependency_spec is implemented"
-      
+
       @config.development do
         @config.jar "foo"
         @config.jar "bar"

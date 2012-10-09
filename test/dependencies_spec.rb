@@ -10,7 +10,7 @@ describe Doubleshot::Dependencies do
 
   describe "gems" do
     it "must be a DependencyList" do
-      @dependencies.gems.must_be_kind_of Doubleshot::Dependencies::DependencyList 
+      @dependencies.gems.must_be_kind_of Doubleshot::Dependencies::DependencyList
     end
   end
 

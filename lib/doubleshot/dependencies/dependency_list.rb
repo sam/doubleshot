@@ -26,24 +26,24 @@ class Doubleshot
 
       def fetch(name)
         raise ArgumentError.new("+name+ must be a String") unless name.is_a? String
-        
+
         unless dependency = @dependencies.detect { |entry| entry.name == name }
           dependency = self.class::DEPENDENCY_CLASS.new(name)
           add dependency
         end
-        
+
         dependency
       end
 
       def size
         @dependencies.size
       end
-      alias :length :size 
+      alias :length :size
 
       def empty?
         @dependencies.empty?
       end
-      
+
       def each
         @dependencies.each do |dependency|
           yield dependency
