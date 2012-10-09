@@ -131,6 +131,10 @@ Doubleshot also provides a @doubleshot@ bin file. Running @doubleshot test@ in y
 
 This is the typical use-case for day to day development of new projects/features when using Doubleshot to manage your build process. It allows you to write and test new code, without ever having to restart your Java VM, saving you ten seconds or so for every run, encouraging continuous testing so you can spend more time writing code, and less time waiting for processes to load.
 
+For your continuous testing/integration (CI) environment, you can also run all your tests just once by using the --ci-test option:
+
+bc. doubleshot test --ci-test
+
 h2. Packaging
 
 # TODO: This is all out of date...

@@ -15,7 +15,7 @@ class Doubleshot
 
     def build!(add_target_to_current_classpath = false)
       @target.mkdir unless @target.exist?
-      
+
       # The JRuby ant integration throws JRuby Persistence
       # warnings that you can't supress, so we run it
       # inside of a Kernel#silence block.

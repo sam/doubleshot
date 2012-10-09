@@ -31,7 +31,7 @@ class Doubleshot::CLI::Commands::Build < Doubleshot::CLI
     config = Doubleshot::current.config
 
     compiler = Doubleshot::Compiler.new(config.source.java, config.target)
-    
+
     if options.classpath.empty?
       config.classpath
     else
@@ -39,7 +39,7 @@ class Doubleshot::CLI::Commands::Build < Doubleshot::CLI
     end.each do |path|
       compiler.classpath << path
     end
-    
+
     compiler.build!
 
     # TODO:

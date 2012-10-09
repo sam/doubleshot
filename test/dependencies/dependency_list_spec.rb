@@ -30,18 +30,18 @@ describe Doubleshot::Dependencies::DependencyList do
       @list.add @dependency
       @list.size.must_equal 1
     end
-    
+
     it "must always return self for chainability" do
       @list.add(@dependency).must_equal @list
     end
   end
-  
+
   describe "fetch" do
     it "must find matching dependencies by name" do
       @list.add @dependency
       @list.fetch("listen").must_equal @dependency
     end
-    
+
     it "must always return a dependency" do
       @list.fetch("example").must_be_kind_of Doubleshot::Dependencies::Dependency
     end

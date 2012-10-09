@@ -4,7 +4,7 @@ class Pathname
     file.open("w+") { nil } unless file.exist?
     file
   end
-  
+
   def child_of?(p2)
     expand_path.to_s.include?(p2.expand_path.to_s)
   end

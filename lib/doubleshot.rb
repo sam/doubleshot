@@ -36,7 +36,7 @@ class Doubleshot
   def self.current
     @current ||= load
   end
-  
+
   def self.load
     eval(Pathname("Doubleshot").read)
   end
