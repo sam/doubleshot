@@ -17,37 +17,37 @@
     <dependency>
       <groupId>org.sonatype.aether</groupId>
       <artifactId>aether-api</artifactId>
-      <version>1.13</version>
+      <version>1.13.1</version>
       <type>jar</type>
     </dependency>
     <dependency>
       <groupId>org.sonatype.aether</groupId>
       <artifactId>aether-util</artifactId>
-      <version>1.13</version>
+      <version>1.13.1</version>
       <type>jar</type>
     </dependency>
     <dependency>
       <groupId>org.sonatype.aether</groupId>
       <artifactId>aether-impl</artifactId>
-      <version>1.13</version>
+      <version>1.13.1</version>
       <type>jar</type>
     </dependency>
     <dependency>
       <groupId>org.sonatype.aether</groupId>
       <artifactId>aether-connector-file</artifactId>
-      <version>1.13</version>
+      <version>1.13.1</version>
       <type>jar</type>
     </dependency>
     <dependency>
       <groupId>org.sonatype.aether</groupId>
       <artifactId>aether-connector-asynchttpclient</artifactId>
-      <version>1.13</version>
+      <version>1.13.1</version>
       <type>jar</type>
     </dependency>
     <dependency>
       <groupId>org.sonatype.aether</groupId>
       <artifactId>aether-connector-wagon</artifactId>
-      <version>1.13</version>
+      <version>1.13.1</version>
       <type>jar</type>
     </dependency>
     <dependency>
@@ -67,6 +67,11 @@
       <artifactId>wagon-http</artifactId>
       <version>2.2</version>
       <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-provider-api</artifactId>
+      <version>2.2</version>
     </dependency>
   </dependencies>
 </project>
