@@ -7,10 +7,40 @@ class Doubleshot
 
       def initialize(*repositories)
         super
-        @aether = Aether.new(Pathname("~/.m2").to_s, false, false)
+        # Change the second argument to "true" to get verbose output.
+        @aether = Aether.new(Pathname("~/.m2").expand_path.to_s, false, false)
+        @repositories.each do |repository|
+          @aether.add_repository repository.host, repository.to_s
+        end
+      end
+
+      def artifacts
+        @aether.artifacts
+      end
+
+      def resolved_coordinates
+        if artifacts.empty?
+          []
+        else
+          @aether.resolved_coordinates
+        end
       end
 
       def fetch(dependencies)
+        dependencies.each do |dependency|
+          @aether.add_artifact dependency.to_s
+        end
+
+        @aether.resolve
+        classpath_map = @aether.classpath_map
+        
+        @aether.resolved_coordinates.each do |coordinate|
+          dependencies.add Dependencies::JarDependency.new coordinate
+        end
+
+        dependencies.each do |dependency|
+          dependency.path = classpath_map[dependency.to_s]
+        end
         dependencies
       end
     end

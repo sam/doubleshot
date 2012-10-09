@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.HashMap;
 
 import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.apache.maven.repository.internal.MavenServiceLocator;
@@ -137,6 +138,26 @@ public class Aether {
         }
 
         return buffer.toString();
+    }
+
+    public HashMap getClasspathMap() {
+        PreorderNodeListGenerator nlg = new PreorderNodeListGenerator();
+        node.accept( nlg );
+
+        HashMap map = new HashMap();
+
+        for ( Iterator<DependencyNode> it = nlg.getNodes().iterator(); it.hasNext(); ) {
+            DependencyNode node = it.next();
+            if ( node.getDependency() != null ) {
+                Artifact artifact = node.getDependency().getArtifact();
+                // skip pom artifacts
+                if ( artifact.getFile() != null && !"pom".equals(artifact.getExtension())) {
+                    map.put(artifact.toString(), artifact.getFile().getAbsolutePath());
+                }
+            }
+        }
+
+        return map;
     }
 
     public List<String> getResolvedCoordinates() {

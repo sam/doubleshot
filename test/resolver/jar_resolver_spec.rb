@@ -26,5 +26,9 @@ describe Doubleshot::Resolver::JarResolver do
         dependency.path.wont_be_nil
       end
     end
+
+    it "must populate transitive dependencies" do
+      @resolver.fetch(@dependencies).size.must_equal 16
+    end
   end
 end
