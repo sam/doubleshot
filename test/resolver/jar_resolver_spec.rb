@@ -18,17 +18,17 @@ describe Doubleshot::Resolver::JarResolver do
     end
 
     it "must return the same JarDependencyList" do
-      @resolver.fetch(@dependencies).must_be_same_as @dependencies
+      @resolver.resolve!(@dependencies).must_be_same_as @dependencies
     end
 
     it "must take a JarDependencyList and populate the path of each JarDependency" do
-      @resolver.fetch(@dependencies).each do |dependency|
+      @resolver.resolve!(@dependencies).each do |dependency|
         dependency.path.wont_be_nil
       end
     end
 
     it "must populate transitive dependencies" do
-      @resolver.fetch(@dependencies).size.must_equal 16
+      @resolver.resolve!(@dependencies).size.must_equal 16
     end
   end
 end

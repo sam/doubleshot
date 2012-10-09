@@ -8,6 +8,43 @@ describe Doubleshot::Configuration do
     @config = Doubleshot::Configuration.new
   end
 
+  describe "project" do
+    it "must accept a project name" do
+      @config.project = "doubleshot"
+      @config.project.must_equal "doubleshot"
+    end
+
+    it "must default the gem name to the project name" do
+      @config.project = "doubleshot"
+      @config.gemspec.name.must_equal "doubleshot"
+    end
+  end
+
+  describe "group" do
+    it "must allow you to set a group (for JAR packaging)" do
+      @config.group = "org.sam.doubleshot"
+      @config.group.must_equal "org.sam.doubleshot"
+    end
+
+    it "must default to the project name if none is provided" do
+      @config.project = "doubleshot"
+      @config.group.must_equal "doubleshot"
+    end
+  end
+
+  describe "version" do
+    it "must allow you to set the version" do
+      @config.version = "1.0"
+      @config.version.must_equal "1.0"
+    end
+
+    it "must default the gem version to the project version" do
+      @config.version = "1.0"
+      @config.gemspec.version.to_s.must_equal "1.0"
+    end
+
+  end
+
   describe "gem" do
     it "must accept a gem name" do
       @config.gem "listen"
@@ -19,7 +56,18 @@ describe Doubleshot::Configuration do
     end
 
     it "must return a dependency" do
-      @config.gem("listen").must_be_kind_of Doubleshot::Dependencies::Dependency
+      @config.gem("listen").must_be_kind_of Doubleshot::Dependencies::GemDependency
+    end
+  end
+
+  describe "jar" do
+    it "must accept a Buildr style JAR dependency string" do
+      @config.jar "org.sonatype.aether:aether-api:jar:1.13.1"
+      @config.runtime.jars.must_include "org.sonatype.aether:aether-api:jar:1.13.1"
+    end
+
+    it "must return a dependency" do
+      @config.jar("org.sonatype.aether:aether-api:jar:1.13.1").must_be_kind_of Doubleshot::Dependencies::JarDependency
     end
   end
 

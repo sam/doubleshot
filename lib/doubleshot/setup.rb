@@ -29,6 +29,8 @@ if config.gemspec.name == "doubleshot"
   end
 
   require classpath
+else
+
 end
 
 # gemfile = Pathname "Gemfile"

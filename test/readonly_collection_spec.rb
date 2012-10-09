@@ -10,10 +10,17 @@ describe Doubleshot::ReadonlyCollection do
     @readonly_collection = Doubleshot::ReadonlyCollection.new(@test_set)
   end
 
-  it "should accept only Enumerables during initialization" do
+  it "must accept only Enumerables during initialization" do
     assert_raises(ArgumentError) do
       Doubleshot::ReadonlyCollection.new(Object.new)
     end
+  end
+
+  it "must allow you to concatenate two collections" do
+    one = Doubleshot::ReadonlyCollection.new [ 1, 2, 3 ]
+    two = Doubleshot::ReadonlyCollection.new [ 4, 5, 6 ]
+
+    (one + two).entries.must_equal [ 1, 2, 3, 4, 5, 6 ]
   end
 
   describe "empty?" do

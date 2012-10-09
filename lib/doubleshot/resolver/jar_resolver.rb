@@ -14,26 +14,14 @@ class Doubleshot
         end
       end
 
-      def artifacts
-        @aether.artifacts
-      end
-
-      def resolved_coordinates
-        if artifacts.empty?
-          []
-        else
-          @aether.resolved_coordinates
-        end
-      end
-
-      def fetch(dependencies)
+      def resolve!(dependencies)
         dependencies.each do |dependency|
           @aether.add_artifact dependency.to_s
         end
 
         @aether.resolve
         classpath_map = @aether.classpath_map
-        
+
         @aether.resolved_coordinates.each do |coordinate|
           dependencies.add Dependencies::JarDependency.new coordinate
         end

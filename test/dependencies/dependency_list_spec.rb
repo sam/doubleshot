@@ -13,6 +13,28 @@ describe Doubleshot::Dependencies::DependencyList do
     @list.must_be_kind_of Enumerable
   end
 
+  describe "+" do
+    it "must allow you to concatenate two collections" do
+      one = Doubleshot::Dependencies::DependencyList.new
+      two = Doubleshot::Dependencies::DependencyList.new
+
+      listen    = one.fetch "listen"
+      minitest  = two.fetch "minitest"
+
+      (one + two).entries.must_equal [ listen, minitest ]
+    end
+
+    it "must raise an ArgumentError if the lists are not the same type" do
+      one = Doubleshot::Dependencies::DependencyList.new
+      two = Doubleshot::Dependencies::GemDependencyList.new
+
+      listen    = one.fetch "listen"
+      minitest  = two.fetch "minitest"
+
+      -> { one + two }.must_raise ArgumentError
+    end
+  end
+
   describe "add" do
     it "must only accept Dependency instances" do
       assert_raises(ArgumentError) do

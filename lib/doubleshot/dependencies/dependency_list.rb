@@ -16,6 +16,17 @@ class Doubleshot
       end
       alias :== :eql?
 
+      def +(other)
+        if other.class == self.class
+          list = self.class.new
+          (entries + other.entries).each { |item| list.add item }
+          list
+        else
+          raise ArgumentError.new("Only DependencyLists of the same type may be concatenated." +
+            "Expected +other+ to be a #{self.class.inspect} but was a #{other.class.inspect}.")
+        end
+      end
+
       def add(dependency)
         unless dependency.is_a? Dependency
           raise ArgumentError.new("+dependency+ must be a Doubleshot::Dependencies::Dependency")

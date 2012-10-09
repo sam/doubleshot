@@ -27,6 +27,10 @@ class Doubleshot
       other.is_a?(self.class) && entries == other.entries
     end
     alias :== :eql?
+
+    def +(other)
+      ReadonlyCollection.new(entries + other.entries)
+    end
   end
 
 end

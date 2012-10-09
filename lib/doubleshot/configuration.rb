@@ -102,6 +102,32 @@ class Doubleshot
       @classpath                   = default :classpath, []
     end
 
+    def group
+      @group || @project
+    end
+
+    def group=(name)
+      @group = name
+    end
+
+    def project
+      @project || @gemspec.name
+    end
+
+    def project=(name)
+      @gemspec.name ||= name
+      @project = name
+    end
+
+    def version
+      @version
+    end
+
+    def version=(version)
+      @gemspec.version ||= version
+      @version = version
+    end
+
     def source
       @source
     end
@@ -147,6 +173,17 @@ class Doubleshot
       requirements.each do |requirement|
         dependency.add_requirement(requirement)
       end
+
+      dependency
+    end
+
+    def jar(coordinate)
+      dependencies = @development_environment ?
+        @development_dependencies :
+        @runtime_dependencies
+
+      dependency = dependencies.jars.fetch(coordinate)
+      dependencies.jars.add(dependency)
 
       dependency
     end
