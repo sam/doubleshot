@@ -118,6 +118,7 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
   end
 
   def run_all_specs
+    exit_status = false
     duration = Time::measure do
 
       puts "\n --- Running all tests ---\n\n"
@@ -135,10 +136,11 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
         end
       RUBY
       # puts "SCRIPT:", script
-      org.jruby.Ruby.newInstance.executeScript script, "all-specs"
+      exit_status = org.jruby.Ruby.newInstance.executeScript script, "all-specs"
     end
 
     puts "Completed in #{duration}s"
+    return exit_status
   end
 
 end # class Doubleshot::CLI::Commands::Test < Doubleshot::CLI

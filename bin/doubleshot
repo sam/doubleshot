@@ -6,4 +6,10 @@ require "pathname"
 require Pathname(__FILE__).dirname.parent + "lib/doubleshot"
 require Pathname(__FILE__).dirname.parent + "lib/doubleshot/cli"
 
-exit Doubleshot::CLI::start ? 0 : 1
+result = Doubleshot::CLI::start
+
+case result
+  when Numeric  then exit result
+  when nil      then exit 0
+  else               puts(result.inspect) and exit 1
+end
