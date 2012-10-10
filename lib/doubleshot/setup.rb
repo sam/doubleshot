@@ -8,9 +8,6 @@ if config.target.exist?
   $CLASSPATH << config.target.to_url
 end
 
-# TODO:
-#   config.jars.each { |jar| require jar.path }
-
 # This is for bootstrapping Doubleshot itself only!
 if config.gemspec.name == "doubleshot"
   # Caching the generated classpath is an optimization
@@ -31,6 +28,9 @@ if config.gemspec.name == "doubleshot"
   require classpath
 else
 
+# TODO:
+#   config.jars.each { |jar| require jar.path }
+0
 end
 
 # gemfile = Pathname "Gemfile"
