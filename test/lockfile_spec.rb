@@ -8,7 +8,9 @@ describe Doubleshot::Lockfile do
 
   def lockfile(name = "test.lock")
     Helper::tmp do |tmp|
-      tmp.touch name
+      (tmp + name).open("w+") do |file|
+        file << {}.to_yaml
+      end
       yield Doubleshot::Lockfile.new(tmp + name)
     end
   end

@@ -20,8 +20,10 @@ class Doubleshot
   attr_accessor :path
   attr_reader   :config
   attr_reader   :lockfile
+  attr_reader   :classpath
 
   def initialize
+    @classpath = Set.new
     @config = Doubleshot::Configuration.new
     @lockfile = Doubleshot::Lockfile.new
     yield @config if block_given?
@@ -97,17 +99,19 @@ class Doubleshot
         # Caching the generated classpath is an optimization
         # for continuous testing performance, so we're not
         # shelling out to 'mvn' on every test run.
-        classpath = Pathname(".classpath.rb")
-        if !classpath.exist? || Pathname("pom.xml").mtime > classpath.mtime
-          classpath.open("w+") do |file|
+        classpath_rb = Pathname(".classpath.rb")
+        if !classpath_rb.exist? || Pathname("pom.xml").mtime > classpath_rb.mtime
+          classpath_rb.open("w+") do |file|
+            file.puts "classpath = Doubleshot::current.classpath"
             out = `mvn dependency:build-classpath`.split($/)
             out[out.index(out.grep(/Dependencies classpath\:/).first) + 1].split(":").each do |jar|
-              file.puts "require #{jar.to_s.inspect}"
+              file.puts "classpath << #{jar.to_s.inspect}"
             end
+            file.puts "classpath.each { |jar| require jar }"
           end
         end
 
-        require classpath
+        require classpath_rb
       else
         require "doubleshot/resolver"
 
@@ -119,12 +123,18 @@ class Doubleshot
         jars = nil
 
         if lockfile.exist?
-          jars = lockfile.jars
+          jars = JarDependencyList.new
+          lockfile.jars.each do |jar|
+            jars.add jar
+          end
         else
           jars = @config.runtime.jars + @config.development.jars
         end
 
         resolver.resolve! jars
+
+        jars.each { |jar| lockfile.add jar }
+        # lockfile.flush!
 
         cache = {}
         jars.each do |jar|
