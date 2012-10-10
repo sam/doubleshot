@@ -31,10 +31,9 @@ class Doubleshot
             </dependency>
                 JAR
               end.join("\n            ") +
-              "\n          </dependencies>"
+              "\n          </dependencies>\n"
             end
-          }
-        </project>
+          }        </project>
       EOS
     end
   end

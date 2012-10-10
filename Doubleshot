@@ -2,9 +2,13 @@
 
 Doubleshot.new do |config|
 
+  config.project = "doubleshot"
+  config.group   = "org.sam.doubleshot"
+  config.version = "0.1.0"
+
   config.gem "bundler", ">= 0"
   config.gem "jbundler", ">= 0"
-  
+
   config.gem "rdoc", ">= 2.4.2"
   config.gem "perfer", ">= 0"
   config.gem "minitest", ">= 3.0.1"
@@ -13,11 +17,19 @@ Doubleshot.new do |config|
   config.gem "rb-fsevent", ">= 0.9.1"
   config.gem "simplecov", ">= 0"
 
-  # config.jar "ch.qos.logback:logback-core:jar:1.0.6"
-  
+  config.jar "org.jruby:jruby-complete:jar:1.7.0.RC1"
+  config.jar "org.sonatype.aether:aether-api:jar:1.13.1"
+  config.jar "org.sonatype.aether:aether-util:jar:1.13.1"
+  config.jar "org.sonatype.aether:aether-impl:jar:1.13.1"
+  config.jar "org.sonatype.aether:aether-connector-file:jar:1.13.1"
+  config.jar "org.sonatype.aether:aether-connector-asynchttpclient:jar:1.13.1"
+  config.jar "org.sonatype.aether:aether-connector-wagon:jar:1.13.1"
+  config.jar "org.apache.maven:maven-aether-provider:jar:3.0.4"
+  config.jar "org.apache.maven.wagon:wagon-file:jar:2.2"
+  config.jar "org.apache.maven.wagon:wagon-http:jar:2.2"
+  config.jar "org.apache.maven.wagon:wagon-provider-api:jar:2.2"
+
   config.gemspec do |spec|
-    spec.name           = "doubleshot"
-    spec.version        = "0.1.0"
     spec.summary        = "Doubleshot is a build and dependency tool for mixed Java and Ruby projects"
     spec.description    = <<-DESCRIPTION
 Doubleshot will download dependencies on demand, compile your Java sources and

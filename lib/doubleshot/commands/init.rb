@@ -1,3 +1,5 @@
+require 'rexml/document'
+
 class Doubleshot::CLI::Commands::Init < Doubleshot::CLI
 
   def self.summary
@@ -19,6 +21,7 @@ class Doubleshot::CLI::Commands::Init < Doubleshot::CLI
 
   def self.start(args)
     session = new(args)
+
     if session.doubleshot_file.exist?
       return puts <<-EOS.margin
         ERROR: A Doubleshot file already exists.
@@ -27,6 +30,9 @@ class Doubleshot::CLI::Commands::Init < Doubleshot::CLI
     end
     session.import_gemspec!
     session.mark_gemspec_for_deletion!
+
+    session.import_pom! if session.pom_file.exist?
+
     session.generate_doubleshot_file!
 
     puts <<-EOS.margin
@@ -35,7 +41,7 @@ class Doubleshot::CLI::Commands::Init < Doubleshot::CLI
       Please review it and make changes as you see fit. It will
       be used for all the things.
     EOS
-    return true
+    return 0
   end
 
   def initialize(args)
@@ -47,6 +53,10 @@ class Doubleshot::CLI::Commands::Init < Doubleshot::CLI
     Pathname(@path + "Doubleshot")
   end
 
+  def pom_file
+    Pathname(@path + "pom.xml")
+  end
+
   def gemspec
     @gemspec ||= Pathname::glob(@path + "*.gemspec").first
   end
@@ -54,16 +64,17 @@ class Doubleshot::CLI::Commands::Init < Doubleshot::CLI
   def import_gemspec!
     original = gemspec ? eval_gemspec(gemspec.read) : ::Gem::Specification.new
 
+    @config.project = default original.name,    "THE PROJECT NAME"
+    @config.version = default original.version, "9000.1"
+
     @config.gemspec do |spec|
-      spec.name         = default original.name,        "THE PROJECT NAME"
-      spec.summary      = default original.summary,     "SUMMARIZE ME"
-      spec.description  = default original.description, "A VERY DETAILED DESCRIPTION"
-      spec.author       = default original.author,      "WHOAMI"
-      spec.homepage     = default original.homepage,    "I AM FROM THE INTERNET"
-      spec.email        = default original.email,       "ME@EXAMPLE.COM"
-      spec.version      = default original.version,     "9000.1"
-      spec.license      = default original.license,     "MIT-LICENSE"
-      spec.executables  = original.executables
+      spec.summary     = default original.summary,     "SUMMARIZE ME"
+      spec.description = default original.description, "A VERY DETAILED DESCRIPTION"
+      spec.author      = default original.author,      "WHOAMI"
+      spec.homepage    = default original.homepage,    "I AM FROM THE INTERNET"
+      spec.email       = default original.email,       "ME@EXAMPLE.COM"
+      spec.license     = default original.license,     "MIT-LICENSE"
+      spec.executables = original.executables
     end
 
     original.runtime_dependencies.each do |dependency|
@@ -74,6 +85,26 @@ class Doubleshot::CLI::Commands::Init < Doubleshot::CLI
       original.development_dependencies.each do |dependency|
         @config.gem dependency.name, *dependency.requirements_list
       end
+    end
+  end
+
+  def import_pom!
+    pom_document = REXML::Document.new pom_file.open
+
+    project = pom_document.get_text("project/artifactId")
+    @config.project = project if (@config.project.nil? or @config.project == "THE PROJECT NAME") and not project.nil?
+
+    @config.group = pom_document.get_text("project/groupId")
+
+    version = pom_document.get_text("project/version")
+    @config.version = version if (@config.version.nil? or @config.version == "9000.1") and not version.nil?
+
+    pom_document.elements.each("project/dependencies/dependency") do |pom_dependency|
+      group_id = pom_dependency.get_text("groupId")
+      artifact_id = pom_dependency.get_text("artifactId")
+      version = pom_dependency.get_text("version")
+
+      @config.jar "#{group_id}:#{artifact_id}:jar:#{version}"
     end
   end
 
