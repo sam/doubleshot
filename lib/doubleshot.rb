@@ -134,7 +134,7 @@ class Doubleshot
         resolver.resolve! jars
 
         jars.each { |jar| lockfile.add jar }
-        # lockfile.flush!
+        lockfile.flush!
 
         cache = {}
         jars.each do |jar|

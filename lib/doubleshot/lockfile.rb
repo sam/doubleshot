@@ -78,6 +78,22 @@ class Doubleshot
       @loaded = true
     end
 
+    def flush!
+      output = { "JARS" => [], "GEMS" => [] }
+
+      jars.each do |jar|
+        output["JARS"] << jar.to_s(true)
+      end
+
+      gems.each do |gem|
+        output["GEMS"] << gem.to_s(true)
+      end
+
+      @path.open("w+") do |file|
+        file << output.to_yaml
+      end
+    end
+
     private
 
     def data

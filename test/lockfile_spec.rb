@@ -35,6 +35,16 @@ describe Doubleshot::Lockfile do
     end
   end
 
+  describe "flush!" do
+    it "must write the JarDependencyList to the lockfile on disk such that an equal JarDependencyList will be loaded from that lockfile" do
+      lockfile do |lockfile|
+        lockfile.add Doubleshot::Dependencies::JarDependency.new("ch.qos.logback:logback-core:jar:1.0.6")
+        lockfile.flush!
+        Doubleshot::Lockfile.new(lockfile.path).jars.must_equal lockfile.jars
+      end
+    end
+  end
+
   describe "path" do
     it "must default to 'Doubleshot.lock'" do
       Doubleshot::Lockfile.new.path.must_equal Pathname("Doubleshot.lock")
