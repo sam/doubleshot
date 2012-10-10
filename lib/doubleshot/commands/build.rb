@@ -47,6 +47,6 @@ class Doubleshot::CLI::Commands::Build < Doubleshot::CLI
     # download Gem dependencies
     # exit
 
-    return true
+    return 0
   end
 end

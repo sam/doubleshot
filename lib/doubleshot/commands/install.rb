@@ -30,6 +30,6 @@ class Doubleshot::CLI::Commands::Install < Doubleshot::CLI
     installer = ::Gem::DependencyInstaller.new
     installer.install Doubleshot::current.config.gemspec.file_name
 
-    return true
+    return 0
   end
 end

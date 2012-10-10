@@ -1,5 +1,3 @@
-require "doubleshot/setup"
-
 class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
   def self.summary
     <<-EOS.margin
@@ -13,7 +11,7 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
 
   def self.options
     Options.new do |options|
-      options.banner = "Usage: doubleshot test"
+      options.banner = "Usage: doubleshot test [options]"
 
       options.separator ""
       options.separator "Options:"
@@ -35,11 +33,13 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
   end
 
   def self.start(args)
+    require "doubleshot/setup"
+    require "listen"
+
     options = self.options.parse!(args)
 
     Doubleshot::CLI::Commands::Build.start([]) if options.build
 
-    require "listen"
     watcher = new(Doubleshot::current.config, options.ci_test)
     watcher.run
   end
