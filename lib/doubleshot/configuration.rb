@@ -111,11 +111,11 @@ class Doubleshot
     end
 
     def project
-      @project || @gemspec.name
+      @project
     end
 
     def project=(name)
-      @gemspec.name ||= name
+      @gemspec.name = name
       @project = name
     end
 
@@ -124,7 +124,7 @@ class Doubleshot
     end
 
     def version=(version)
-      @gemspec.version ||= version
+      @gemspec.version = version
       @version = version
     end
 
@@ -295,6 +295,9 @@ class Doubleshot
       source_changes = @source.__changes__
 
       <<-EOS.margin
+        config.project = #{@project.inspect}
+        config.version = #{@version.to_s.inspect}
+
         #{Doubleshot::Configuration::SOURCE_RUBY_MESSAGE}
         #{"#   " unless source_changes.include? :ruby}config.source.ruby    = #{@source.ruby.to_s.inspect}
 
@@ -368,8 +371,6 @@ class Doubleshot
 
         #{Doubleshot::Configuration::GEMSPEC_MESSAGE}
         config.gemspec do |spec|
-          spec.name           = #{spec.name.inspect}
-          spec.version        = #{spec.version.to_s.inspect}
           spec.summary        = #{spec.summary.inspect}
           spec.description    = <<-DESCRIPTION
         #{spec.description.strip}

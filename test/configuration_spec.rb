@@ -117,7 +117,7 @@ describe Doubleshot::Configuration do
     end
 
     it "must provide sane defaults for rdoc" do
-      @config.gemspec.name = "Doubleshot"
+      @config.project = "Doubleshot"
       @config.gemspec.rdoc_options.must_equal([
                                               "--line-numbers",
                                               "--main", "README.textile",
@@ -240,8 +240,9 @@ describe Doubleshot::Configuration do
 
   describe "to_ruby" do
     before do
+      @config.project = "doubleshot"
+      @config.version = "9000.1"
       @config.gemspec do |spec|
-        spec.name          = "doubleshot"
         spec.summary       = "This is my summary."
         spec.description   = <<-DESCRIPTION.margin
         A very detailed description.
@@ -250,7 +251,6 @@ describe Doubleshot::Configuration do
         spec.author        = "Sam Smoot"
         spec.homepage      = "http://example.com/doubleshot"
         spec.email         = "ssmoot@gmail.com"
-        spec.version       = "9000.1"
         spec.license       = "MIT-LICENSE"
         spec.executables   = [ "doubleshot" ]
       end
@@ -263,6 +263,9 @@ describe Doubleshot::Configuration do
     describe "to_ruby_body" do
       before do
         @output = <<-EOS.margin
+          config.project = "doubleshot"
+          config.version = "9000.1"
+
           #{Doubleshot::Configuration::SOURCE_RUBY_MESSAGE}
           #   config.source.ruby    = "lib"
 
@@ -292,8 +295,6 @@ describe Doubleshot::Configuration do
 
           #{Doubleshot::Configuration::GEMSPEC_MESSAGE}
           config.gemspec do |spec|
-            spec.name           = "doubleshot"
-            spec.version        = "9000.1"
             spec.summary        = "This is my summary."
             spec.description    = <<-DESCRIPTION
           A very detailed description.
