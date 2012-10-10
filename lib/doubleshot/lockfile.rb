@@ -65,7 +65,6 @@ class Doubleshot
 
     def load
       unless @loaded
-        data["JARS"]
         (data["JARS"] || []).each do |buildr_string|
           @jars.add Dependencies::JarDependency.new(buildr_string)
         end
@@ -82,13 +81,7 @@ class Doubleshot
     private
 
     def data
-      @data ||= begin
-        if @path.exist?
-          YAML.load @path.read
-        else
-          {}
-        end
-      end
+      @data ||= (@path.exist? ? YAML.load(@path.read) : {})
     end
 
   end # class Lockfile
