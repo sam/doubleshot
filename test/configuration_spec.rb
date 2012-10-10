@@ -60,6 +60,28 @@ describe Doubleshot::Configuration do
     end
   end
 
+  describe "repositories" do
+    it "must add Maven repositories" do
+      @config.mvn_repository "http://repository.jboss.com/maven2/"
+      @config.mvn_repositories.must_include "http://repository.jboss.com/maven2/"
+    end
+
+    it "must return the passed value from mvn_repository" do
+      example = "http://repository.jboss.com/maven2/"
+      @config.mvn_repository(example).must_be_same_as example
+    end
+
+    it "must add Rubygems repositories" do
+      @config.gem_repository "http://rubyforge.org"
+      @config.gem_repositories.must_include "http://rubyforge.org"
+    end
+
+    it "must return the passed value from gem_repository" do
+      example = "http://rubyforge.org"
+      @config.gem_repository(example).must_be_same_as example
+    end
+  end
+
   describe "jar" do
     it "must accept a Buildr style JAR dependency string" do
       @config.jar "org.sonatype.aether:aether-api:jar:1.13.1"
@@ -125,13 +147,13 @@ describe Doubleshot::Configuration do
                                               "lib", "README.textile" ])
     end
 
-    it "require_paths must default to the ruby source location" do
-      @config.gemspec.require_paths.must_equal [ "lib" ]
+    it "require_paths must include the ruby source location" do
+      @config.gemspec.require_paths.must_include "lib"
     end
 
     it "require_paths must be updated when ruby source location is modified" do
       @config.source.ruby = "test"
-      @config.gemspec.require_paths.must_equal [ "test" ]
+      @config.gemspec.require_paths.must_equal [ "test", "target" ]
     end
 
     it "should include test_files if present" do
@@ -263,8 +285,24 @@ describe Doubleshot::Configuration do
     describe "to_ruby_body" do
       before do
         @output = <<-EOS.margin
+          #{Doubleshot::Configuration::PROJECT_MESSAGE}
           config.project = "doubleshot"
+
+          #{Doubleshot::Configuration::GROUP_MESSAGE}
+          #   config.group = "doubleshot"
+
+          #{Doubleshot::Configuration::VERSION_MESSAGE}
           config.version = "9000.1"
+
+
+          #{Doubleshot::Configuration::GEM_REPOSITORY_MESSAGE}
+          #   config.gem_repository "https://rubygems.org"
+          #   config.gem_repository "http://gems.example.com"
+
+          #{Doubleshot::Configuration::MVN_REPOSITORY_MESSAGE}
+          #   config.mvn_repository "http://repo1.maven.org/maven2"
+          #   config.mvn_repository "http://repository.jboss.com/maven2"
+
 
           #{Doubleshot::Configuration::SOURCE_RUBY_MESSAGE}
           #   config.source.ruby    = "lib"
@@ -340,32 +378,4 @@ describe Doubleshot::Configuration do
       end
     end
   end
-
-  describe "classpath" do
-    it "must return a set of paths" do
-      skip
-      @config.classpath.must_be_kind_of Set
-    end
-
-    it "must include all runtime dependencies" do
-      skip "until after jar_dependency_spec is implemented"
-      @config.jar "foo"
-      @config.jar "bar"
-      @config.classpath.must_include Pathname("foo")
-      @config.classpath.must_include Pathname("bar")
-    end
-
-    it "must include all development dependencies" do
-      skip "until after jar_dependency_spec is implemented"
-
-      @config.development do
-        @config.jar "foo"
-        @config.jar "bar"
-      end
-
-      @config.classpath.must_include Pathname("foo")
-      @config.classpath.must_include Pathname("bar")
-    end
-  end
-
 end

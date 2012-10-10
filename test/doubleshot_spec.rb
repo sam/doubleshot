@@ -4,6 +4,12 @@ require_relative "helper.rb"
 
 describe Doubleshot do
 
+  describe "classpath_cache" do
+    it "must be a Pathname" do
+      Doubleshot.new.classpath_cache.must_be_kind_of Pathname
+    end
+  end
+
   describe "configuration" do
     it "must pass a Configuration object to the block" do
       called = false

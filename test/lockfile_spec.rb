@@ -19,6 +19,20 @@ describe Doubleshot::Lockfile do
     @gem.lock("0.5.3")
   end
 
+  describe "Pathname delegations" do
+    it "#exist?" do
+      lockfile do |lockfile|
+        lockfile.must :exist
+      end
+    end
+
+    it "#mtime" do
+      lockfile do |lockfile|
+        lockfile.mtime.must_be_kind_of Time
+      end
+    end
+  end
+
   describe "path" do
     it "must default to 'Doubleshot.lock'" do
       Doubleshot::Lockfile.new.path.must_equal Pathname("Doubleshot.lock")

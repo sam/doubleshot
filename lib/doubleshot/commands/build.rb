@@ -28,12 +28,13 @@ class Doubleshot::CLI::Commands::Build < Doubleshot::CLI
 
   def self.start(args)
     options = self.options.parse!(args)
-    config = Doubleshot::current.config
+    doubleshot = Doubleshot::current
+    doubleshot.setup!
 
-    compiler = Doubleshot::Compiler.new(config.source.java, config.target)
+    compiler = Doubleshot::Compiler.new(doubleshot.config.source.java, doubleshot.config.target)
 
     if options.classpath.empty?
-      config.classpath
+      doubleshot.lockfile.jars.map(&:path).compact
     else
       options.classpath
     end.each do |path|

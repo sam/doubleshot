@@ -1,5 +1,3 @@
-require "yaml"
-
 class Doubleshot
   class Lockfile
 
@@ -21,6 +19,14 @@ class Doubleshot
       @path = Pathname(path.to_s)
       @gems = Dependencies::GemDependencyList.new
       @jars = Dependencies::JarDependencyList.new
+    end
+
+    def exist?
+      @path.exist?
+    end
+
+    def mtime
+      @path.mtime
     end
 
     def gems

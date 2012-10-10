@@ -12,6 +12,36 @@ class Doubleshot
       .erb .haml .rxml .builder .html
     ]
 
+    PROJECT_MESSAGE       = <<-EOS.margin
+    # The project name will be used as your JAR's
+    # artifactId and your Gem's name.
+    EOS
+
+    GROUP_MESSAGE         = <<-EOS.margin
+    # The groupId of your JAR. This will default to
+    # the project name if not supplied.
+    #
+    # NOTE: You are strongly encouraged to set this
+    # to something meaningful if you are planning to
+    # package your project as a JAR.
+    EOS
+
+    VERSION_MESSAGE       = <<-EOS.margin
+    # Version number that obeys the constraints of
+    # Gem::Version:
+    #
+    #   If any part contains letters, then the version
+    #     is considered pre-release.
+    EOS
+
+    GEM_REPOSITORY_MESSAGE = <<-EOS.margin
+    # TODO
+    EOS
+
+    MVN_REPOSITORY_MESSAGE = <<-EOS.margin
+    # TODO
+    EOS
+
     SOURCE_RUBY_MESSAGE   = <<-EOS.margin
     # Relative path to the folder containing your
     # Ruby source code (.rb files).
@@ -84,7 +114,6 @@ class Doubleshot
     # NOTE: The above won't appear in your Doubleshot
     # file as it's added during the build process for you.
     EOS
-
     def initialize
       @defaults                    = {}
       @gemspec                     = Gem::Specification.new
@@ -99,7 +128,12 @@ class Doubleshot
       @paths                       = default :paths, DEFAULT_PATHS.dup
       @whitelist                   = default :whitelist, DEFAULT_WHITELIST.dup
 
-      @classpath                   = default :classpath, []
+      @project                     = default :project, "hello_world"
+      @group                       = default :group, "org.world.hello"
+      @version                     = default :version, "0.1"
+
+      @gem_repositories            = default :gem_repositories, Set.new
+      @mvn_repositories            = default :mvn_repositories, Set.new
     end
 
     def group
@@ -117,6 +151,8 @@ class Doubleshot
     def project=(name)
       @gemspec.name = name
       @project = name
+      @group = default :group, @project unless __changes__.include? :group
+      @project
     end
 
     def version
@@ -126,6 +162,24 @@ class Doubleshot
     def version=(version)
       @gemspec.version = version
       @version = version
+    end
+
+    def gem_repository(uri)
+      @gem_repositories << uri
+      uri
+    end
+
+    def gem_repositories
+      ReadonlyCollection.new(@gem_repositories)
+    end
+
+    def mvn_repository(uri)
+      @mvn_repositories << uri
+      uri
+    end
+
+    def mvn_repositories
+      ReadonlyCollection.new(@mvn_repositories)
     end
 
     def source
@@ -217,7 +271,7 @@ class Doubleshot
         yield @gemspec
       else
         @gemspec.rdoc_options = rdoc_options
-        @gemspec.require_paths = [ @source.ruby.to_s ]
+        @gemspec.require_paths = [ @source.ruby.to_s, @target.to_s ]
 
         test_files = []
         @source.tests.find do |path|
@@ -295,8 +349,40 @@ class Doubleshot
       source_changes = @source.__changes__
 
       <<-EOS.margin
-        config.project = #{@project.inspect}
-        config.version = #{@version.to_s.inspect}
+        #{Doubleshot::Configuration::PROJECT_MESSAGE}
+        #{"#   " unless config_changes.include? :project}config.project = #{@project.inspect}
+
+        #{Doubleshot::Configuration::GROUP_MESSAGE}
+        #{"#   " unless config_changes.include? :group}config.group = #{@group.inspect}
+
+        #{Doubleshot::Configuration::VERSION_MESSAGE}
+        #{"#   " unless config_changes.include? :version}config.version = #{@version.inspect}
+
+
+        #{Doubleshot::Configuration::GEM_REPOSITORY_MESSAGE}
+        #{
+          if config_changes.include? :gem_repositories
+            (@gem_repositories).map do |repository|
+              "config.gem_repository #{repository.inspect}"
+            end.join("\n        ")
+          else
+            "#   config.gem_repository \"https://rubygems.org\"\n" +
+            "#   config.gem_repository \"http://gems.example.com\""
+          end
+        }
+
+        #{Doubleshot::Configuration::MVN_REPOSITORY_MESSAGE}
+        #{
+          if config_changes.include? :mvn_repositories
+            (@mvn_repositories).map do |repository|
+              "config.mvn_repository #{repository.inspect}"
+            end.join("\n        ")
+          else
+            "#   config.mvn_repository \"http://repo1.maven.org/maven2\"\n" +
+            "#   config.mvn_repository \"http://repository.jboss.com/maven2\""
+          end
+        }
+
 
         #{Doubleshot::Configuration::SOURCE_RUBY_MESSAGE}
         #{"#   " unless source_changes.include? :ruby}config.source.ruby    = #{@source.ruby.to_s.inspect}

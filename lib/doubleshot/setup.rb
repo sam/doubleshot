@@ -1,37 +1,6 @@
 require_relative "../doubleshot"
 
-config = Doubleshot::current.config
-
-# This will add your compiled sources to $CLASSPATH so
-# you can reference your Java classes in Ruby.
-if config.target.exist?
-  $CLASSPATH << config.target.to_url
-end
-
-# This is for bootstrapping Doubleshot itself only!
-if config.gemspec.name == "doubleshot"
-  # Caching the generated classpath is an optimization
-  # for continuous testing performance, so we're not
-  # shelling out to 'mvn' on every test run.
-  classpath = Pathname(".classpath.rb")
-  if !classpath.exist? || Pathname("pom.xml").mtime > classpath.mtime
-    classpath.open("w+") do |file|
-      file.puts "config = Doubleshot::current.config"
-      out = `mvn dependency:build-classpath`.split($/)
-      out[out.index(out.grep(/Dependencies classpath\:/).first) + 1].split(":").each do |jar|
-        file.puts "config.classpath << #{jar.to_s.inspect}"
-      end
-      file.puts "config.classpath.each { |jar| require jar }"
-    end
-  end
-
-  require classpath
-else
-
-# TODO:
-#   config.jars.each { |jar| require jar.path }
-0
-end
+Doubleshot::current.setup!
 
 # gemfile = Pathname "Gemfile"
 # gemfile_lock = Pathname "Gemfile.lock"
