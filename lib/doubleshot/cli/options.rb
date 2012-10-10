@@ -13,7 +13,9 @@ class Doubleshot
         end
       end
 
-      __forward__ :banner, :separator, :on
+      OptionParser.instance_methods(false).each do |method_name|
+        __forward__ method_name
+      end
 
       def initialize
         super
