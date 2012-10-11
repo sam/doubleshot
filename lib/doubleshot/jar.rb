@@ -38,6 +38,13 @@ target = Pathname "target"
 target.mkdir unless target.exist?
 
 ant.path id: "classpath" do
+  fileset dir: "target"
+  ["ext/java"].each do |jar|
+    fileset dir: Pathname(jar).dirname
+  end
+end
+
+ant.path id: "classpath" do
   fileset dir: target.to_s
   JBUNDLER_CLASSPATH.each do |jar|
     fileset dir: Pathname(jar).dirname
@@ -48,4 +55,8 @@ ant.javac srcdir: source.to_s, destdir: target.to_s, debug: "yes", includeantrun
 
 $CLASSPATH << target.to_s
 
-ant.jar jarfile: "example.jar", basedir: target.to_s
+ant.jar jarfile: "example.jar", basedir: target.to_s do
+  @config.runtime.jars.each do |jar|
+    ant.zipgroupfileset dir:
+  end
+end
