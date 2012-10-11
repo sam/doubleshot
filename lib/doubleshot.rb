@@ -80,9 +80,6 @@ class Doubleshot
     end
     # END: Cleanup tasks
 
-    # This is for bootstrapping Doubleshot itself only!
-    bootstrap! if @config.project == "doubleshot"
-
     # BEGIN: JAR loading
     if classpath_cache.exist?
       # We survived the cleanup checks, go ahead and just load
@@ -90,12 +87,18 @@ class Doubleshot
       cached_paths = YAML::load(classpath_cache)
       lockfile.jars.each do |jar|
         jar.path = cached_paths[jar.to_s]
-        require jar.path
+        # TODO: This should never happen, but because of unknown munging
+        # by Aether.resolve!, Aether#classpath_map may return keys that
+        # don't match up to jar.to_s.
+        require jar.path unless jar.path.blank?
       end
     else
       # No classpath_cache exists, we must resolve the paths
       # to our dependencies, then store the results in
       # classpath_cache for future processes to use.
+
+      # This is for bootstrapping Doubleshot itself only!
+      bootstrap! if @config.project == "doubleshot"
 
       require "doubleshot/resolver"
 
@@ -123,7 +126,10 @@ class Doubleshot
       cache = {}
       jars.each do |jar|
         cache[jar.to_s] = jar.path
-        require jar.path
+        # TODO: This should never happen, but because of unknown munging
+        # by Aether.resolve!, Aether#classpath_map may return keys that
+        # don't match up to jar.to_s.
+        require jar.path unless jar.path.blank?
       end
 
       classpath_cache.open("w+") do |file|
@@ -141,11 +147,12 @@ class Doubleshot
   def bootstrap!
     if !classpath_cache.exist? || Pathname("pom.xml").mtime > classpath_cache.mtime
       classpath_cache.open("w+") do |file|
-        paths = `mvn dependency:build-classpath`.split($/).grep(/\.jar\b/)
+        paths = `mvn dependency:build-classpath`.split($/).grep(/\.jar\b/).map { |line| line.split(":") }.flatten
         artifacts = `mvn dependency:list`.split($/)
         # Get artifacts in same order here...
         # Match up paths and buildr-style strings into a hash.
-        file << Hash[*artifacts.zip(paths.first.split(":")).flatten].to_yaml
+        file << Hash[*artifacts.zip(paths).flatten].to_yaml
+        paths.each { |path| require path }
       end
     end
   end

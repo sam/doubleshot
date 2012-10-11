@@ -32,6 +32,4 @@ JARS:
 - org.apache.httpcomponents:httpclient:jar:4.1.2
 - commons-codec:commons-codec:jar:1.4
 - org.apache.httpcomponents:httpcore:jar:4.1.2
-- javax.inject:javax.inject:jar:1
-- aopalliance:aopalliance:jar:1.0
 GEMS: []
