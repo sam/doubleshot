@@ -3,4 +3,4 @@ target
 *.swp
 doubleshot-*.gem
 .DS_Store
-.classpath.rb
+.classpath.cache

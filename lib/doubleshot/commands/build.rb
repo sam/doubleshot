@@ -34,7 +34,7 @@ class Doubleshot::CLI::Commands::Build < Doubleshot::CLI
     compiler = Doubleshot::Compiler.new(doubleshot.config.source.java, doubleshot.config.target)
 
     if options.classpath.empty?
-      doubleshot.classpath
+      doubleshot.lockfile.jars.map(&:path)
     else
       options.classpath
     end.each do |path|

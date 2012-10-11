@@ -21,10 +21,8 @@ class Doubleshot
   attr_accessor :path
   attr_reader   :config
   attr_reader   :lockfile
-  attr_reader   :classpath
 
   def initialize
-    @classpath = Set.new
     @config = Doubleshot::Configuration.new
     @lockfile = Doubleshot::Lockfile.new
     yield @config if block_given?
@@ -82,55 +80,54 @@ class Doubleshot
     end
     # END: Cleanup tasks
 
+    # This is for bootstrapping Doubleshot itself only!
+    bootstrap! if @config.project == "doubleshot"
+
     # BEGIN: JAR loading
     if classpath_cache.exist?
       # We survived the cleanup checks, go ahead and just load
       # the cached version of your JARs.
-      YAML::load(classpath_cache).each_pair do |jar, path|
-        lockfile.jars.fetch(jar).path = path
-        require path
+      cached_paths = YAML::load(classpath_cache)
+      lockfile.jars.each do |jar|
+        jar.path = cached_paths[jar.to_s]
+        require jar.path
       end
     else
       # No classpath_cache exists, we must resolve the paths
       # to our dependencies, then store the results in
       # classpath_cache for future processes to use.
 
-      # This is for bootstrapping Doubleshot itself only!
-      if @config.project == "doubleshot"
-        bootstrap!
+      require "doubleshot/resolver"
+
+      if @config.mvn_repositories.empty?
+        @config.mvn_repository Resolver::JarResolver::DEFAULT_REPOSITORY
+      end
+
+      resolver = Resolver::JarResolver.new(*@config.mvn_repositories)
+      jars = nil
+
+      if lockfile.exist?
+        jars = Dependencies::JarDependencyList.new
+        lockfile.jars.each do |jar|
+          jars.add jar
+        end
       else
-        require "doubleshot/resolver"
+        jars = @config.runtime.jars + @config.development.jars
+      end
 
-        if @config.mvn_repositories.empty?
-          @config.mvn_repository Resolver::JarResolver::DEFAULT_REPOSITORY
-        end
+      resolver.resolve! jars
 
-        resolver = Resolver::JarResolver.new(*@config.mvn_repositories)
-        jars = nil
+      jars.each { |jar| lockfile.add jar }
+      lockfile.flush!
 
-        if lockfile.exist?
-          jars = JarDependencyList.new
-          lockfile.jars.each do |jar|
-            jars.add jar
-          end
-        else
-          jars = @config.runtime.jars + @config.development.jars
-        end
+      cache = {}
+      jars.each do |jar|
+        cache[jar.to_s] = jar.path
+        require jar.path
+      end
 
-        resolver.resolve! jars
-
-        jars.each { |jar| lockfile.add jar }
-        lockfile.flush!
-
-        cache = {}
-        jars.each do |jar|
-          cache[jar.to_s] = jar.path
-          require jar.path
-        end
-
-        classpath_cache.open("w+") do |file|
-          file << cache.to_yaml
-        end
+      classpath_cache.open("w+") do |file|
+        file << cache.to_yaml
       end
     end
     # END: JAR loading
@@ -142,21 +139,14 @@ class Doubleshot
 
   private
   def bootstrap!
-    # Caching the generated classpath is an optimization
-    # for continuous testing performance, so we're not
-    # shelling out to 'mvn' on every test run.
-    classpath_rb = Pathname(".classpath.rb")
-    if !classpath_rb.exist? || Pathname("pom.xml").mtime > classpath_rb.mtime
-      classpath_rb.open("w+") do |file|
-        file.puts "classpath = Doubleshot::current.classpath"
-        out = `mvn dependency:build-classpath`.split($/)
-        out[out.index(out.grep(/Dependencies classpath\:/).first) + 1].split(":").each do |jar|
-          file.puts "classpath << #{jar.to_s.inspect}"
-        end
-        file.puts "classpath.each { |jar| require jar }"
+    if !classpath_cache.exist? || Pathname("pom.xml").mtime > classpath_cache.mtime
+      classpath_cache.open("w+") do |file|
+        paths = `mvn dependency:build-classpath`.split($/).grep(/\.jar\b/)
+        artifacts = `mvn dependency:list`.split($/)
+        # Get artifacts in same order here...
+        # Match up paths and buildr-style strings into a hash.
+        file << Hash[*artifacts.zip(paths.first.split(":")).flatten].to_yaml
       end
     end
-
-    require classpath_rb
   end
 end
