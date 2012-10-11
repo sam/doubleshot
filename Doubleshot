@@ -41,7 +41,6 @@ DESCRIPTION
     spec.author         = "Sam Smoot"
     spec.email          = "ssmoot@gmail.com"
     spec.license        = "MIT-LICENSE"
-    spec.executables    = ["doubleshot"]
   end
 
 end

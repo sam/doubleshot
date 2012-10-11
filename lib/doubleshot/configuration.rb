@@ -297,7 +297,7 @@ class Doubleshot
 
         if @target.exist?
           @target.find do |path|
-            files << path.to_s if path.file?
+            files << path.to_s if path.file? && path.extname != ".class"
           end
         end
 
@@ -309,6 +309,13 @@ class Doubleshot
 
         @development_dependencies.gems.each do |dependency|
           @gemspec.add_development_dependency dependency.name, *dependency.requirements
+        end
+
+        bin = Pathname("bin").expand_path
+        if bin.directory?
+          bin.find do |path|
+            @gemspec.executables << path.relative_path_from(bin).to_s if path.file? && path.executable?
+          end
         end
 
         @gemspec.add_development_dependency "doubleshot"

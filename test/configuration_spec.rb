@@ -115,13 +115,16 @@ describe Doubleshot::Configuration do
           spec.email         = "ssmoot@gmail.com"
           spec.version       = "1.0"
           spec.license       = "MIT-LICENSE"
-          spec.executables   = [ "doubleshot" ]
         end
       rescue Exception => e
         fail e
       end
 
       @config.gemspec.must :validate
+    end
+
+    it "must include executables from your bin folder" do
+      @config.gemspec.executables.must_equal [ "doubleshot" ]
     end
 
     it "must add dependencies to the gemspec" do
@@ -192,6 +195,7 @@ describe Doubleshot::Configuration do
     it "files must contain Ruby sources, Java sources, Doubleshot, LICENSE, README and any build files" do
       @config.gemspec.files.sort.must_equal(
         Dir[
+          "bin/doubleshot",
           "lib/**/*.rb",
           "ext/java/**/*.java",
           "Doubleshot",
@@ -199,7 +203,10 @@ describe Doubleshot::Configuration do
           "README*",
           "target/**/*",
           "test/**/*"
-      ].select { |path| Pathname(path).file? }.sort
+      ].select do |path|
+          path = Pathname(path)
+          path.file? && path.extname != ".class"
+        end.sort
       )
     end
 
@@ -274,7 +281,6 @@ describe Doubleshot::Configuration do
         spec.homepage      = "http://example.com/doubleshot"
         spec.email         = "ssmoot@gmail.com"
         spec.license       = "MIT-LICENSE"
-        spec.executables   = [ "doubleshot" ]
       end
     end
 

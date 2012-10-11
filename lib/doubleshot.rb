@@ -1,3 +1,4 @@
+require "java"
 require "pathname"
 require "set"
 require "yaml"
@@ -96,22 +97,7 @@ class Doubleshot
 
       # This is for bootstrapping Doubleshot itself only!
       if @config.project == "doubleshot"
-        # Caching the generated classpath is an optimization
-        # for continuous testing performance, so we're not
-        # shelling out to 'mvn' on every test run.
-        classpath_rb = Pathname(".classpath.rb")
-        if !classpath_rb.exist? || Pathname("pom.xml").mtime > classpath_rb.mtime
-          classpath_rb.open("w+") do |file|
-            file.puts "classpath = Doubleshot::current.classpath"
-            out = `mvn dependency:build-classpath`.split($/)
-            out[out.index(out.grep(/Dependencies classpath\:/).first) + 1].split(":").each do |jar|
-              file.puts "classpath << #{jar.to_s.inspect}"
-            end
-            file.puts "classpath.each { |jar| require jar }"
-          end
-        end
-
-        require classpath_rb
+        bootstrap!
       else
         require "doubleshot/resolver"
 
@@ -152,5 +138,25 @@ class Doubleshot
 
   def classpath_cache
     @classpath_cache ||= Pathname(".classpath.cache")
+  end
+
+  private
+  def bootstrap!
+    # Caching the generated classpath is an optimization
+    # for continuous testing performance, so we're not
+    # shelling out to 'mvn' on every test run.
+    classpath_rb = Pathname(".classpath.rb")
+    if !classpath_rb.exist? || Pathname("pom.xml").mtime > classpath_rb.mtime
+      classpath_rb.open("w+") do |file|
+        file.puts "classpath = Doubleshot::current.classpath"
+        out = `mvn dependency:build-classpath`.split($/)
+        out[out.index(out.grep(/Dependencies classpath\:/).first) + 1].split(":").each do |jar|
+          file.puts "classpath << #{jar.to_s.inspect}"
+        end
+        file.puts "classpath.each { |jar| require jar }"
+      end
+    end
+
+    require classpath_rb
   end
 end

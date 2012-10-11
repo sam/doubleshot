@@ -1,4 +1,3 @@
-require "java"
 require "ant"
 require "doubleshot/compiler/classpath"
 
