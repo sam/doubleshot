@@ -12,6 +12,12 @@ class Doubleshot
 
     attr_reader :source, :target, :classpath
 
+    def pending?
+      sources = Pathname::glob(@source + "**/*.java")
+      targets = Pathname::glob(@target + "**/*.class")
+      !sources.empty? && (targets.empty? || sources.map(&:mtime).max > targets.map(&:mtime).max)
+    end
+
     def build!(add_target_to_current_classpath = false)
       @target.mkdir unless @target.exist?
 
@@ -37,7 +43,6 @@ class Doubleshot
       end
 
       $CLASSPATH << @target.to_url if add_target_to_current_classpath
-
       self
     end
 

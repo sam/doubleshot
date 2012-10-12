@@ -33,12 +33,15 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
   end
 
   def self.start(args)
-    require "doubleshot/setup"
-    require "listen"
-
     options = self.options.parse!(args)
 
-    Doubleshot::CLI::Commands::Build.start([]) if options.build
+    if options.build
+      Doubleshot::CLI::Commands::Build.start(options.build ? [] : [ "--conditional" ])
+    else
+      require "doubleshot/setup"
+    end
+
+    require "listen"
 
     watcher = new(Doubleshot::current.config, options.ci_test)
     watcher.run

@@ -21,6 +21,10 @@ class Doubleshot
       @jars = Dependencies::JarDependencyList.new
     end
 
+    def delete
+      @path.delete
+    end
+
     def exist?
       @path.exist?
     end

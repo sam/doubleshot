@@ -21,8 +21,10 @@ class Doubleshot
   attr_accessor :path
   attr_reader   :config
   attr_reader   :lockfile
+  attr_reader   :classpath
 
   def initialize
+    @classpath = Set.new
     @config = Doubleshot::Configuration.new
     @lockfile = Doubleshot::Lockfile.new
     yield @config if block_given?
@@ -62,8 +64,8 @@ class Doubleshot
     # SCENARIO: You will run into this if you've added a new dependency
     # (or made any other change) to your Doubleshot configuration file.
     if path.exist? && lockfile.exist? && path.mtime > lockfile.mtime
-      lockfile.rm
-      classpath_cache.rm if classpath_cache.exist?
+      lockfile.delete
+      classpath_cache.delete if classpath_cache.exist?
     end
 
     # If the above is not true, your Doubleshot file hasn't
@@ -76,7 +78,7 @@ class Doubleshot
     # have been committed to the repository, but you have not ever
     # started the project on your local machine.
     if lockfile.exist? && classpath_cache.exist? && lockfile.mtime > classpath_cache.mtime
-      classpath_cache.rm
+      classpath_cache.delete
     end
     # END: Cleanup tasks
 
@@ -85,21 +87,24 @@ class Doubleshot
       # We survived the cleanup checks, go ahead and just load
       # the cached version of your JARs.
       cached_paths = YAML::load(classpath_cache)
+
+      cached_paths.each_pair do |jar, path|
+        self.classpath << path
+      end
+
       lockfile.jars.each do |jar|
         jar.path = cached_paths[jar.to_s]
-        # TODO: This should never happen, but because of unknown munging
+        # TODO: This should never happen (a blank path), but because of unknown munging
         # by Aether.resolve!, Aether#classpath_map may return keys that
         # don't match up to jar.to_s.
-        require jar.path unless jar.path.blank?
+        unless jar.path.blank?
+          require jar.path
+        end
       end
     else
       # No classpath_cache exists, we must resolve the paths
       # to our dependencies, then store the results in
       # classpath_cache for future processes to use.
-
-      # This is for bootstrapping Doubleshot itself only!
-      bootstrap! if @config.project == "doubleshot"
-
       require "doubleshot/resolver"
 
       if @config.mvn_repositories.empty?
@@ -143,17 +148,31 @@ class Doubleshot
     @classpath_cache ||= Pathname(".classpath.cache")
   end
 
-  private
   def bootstrap!
-    if !classpath_cache.exist? || Pathname("pom.xml").mtime > classpath_cache.mtime
-      classpath_cache.open("w+") do |file|
-        paths = `mvn dependency:build-classpath`.split($/).grep(/\.jar\b/).map { |line| line.split(":") }.flatten
-        artifacts = `mvn dependency:list`.split($/).grep(/\bcompile$/).map { |line| line.split.last.sub /\:compile$/, "" }
-        # Get artifacts in same order here...
-        # Match up paths and buildr-style strings into a hash.
-        file << Hash[*artifacts.zip(paths).flatten].to_yaml
-        paths.each { |path| require path }
+    if !@config.target.exist? || !lockfile.exist? || !classpath_cache.exist? || Pathname("pom.xml").mtime > classpath_cache.mtime
+
+      paths = `mvn dependency:build-classpath`.split($/).grep(/\.jar\b/).map { |line| line.split(":") }.flatten
+      coordinates = `mvn dependency:list`.split($/).grep(/\bcompile$/).map do |line|
+        line.split.last.sub /\:compile$/, ""
       end
+
+      resolved = Hash[*coordinates.zip(paths).flatten]
+
+      resolved.each_pair do |coordinate, path|
+        require path
+        self.classpath << path
+        jar = Dependencies::JarDependency.new(coordinate)
+        jar.path = path
+        lockfile.add jar
+      end
+
+      lockfile.flush!
+
+      classpath_cache.open("w+") do |file|
+        file << resolved.to_yaml
+      end
+    else
+      setup!
     end
   end
 end

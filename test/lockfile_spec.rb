@@ -33,6 +33,14 @@ describe Doubleshot::Lockfile do
         lockfile.mtime.must_be_kind_of Time
       end
     end
+
+    it "#delete" do
+      lockfile do |lockfile|
+        lockfile.must :exist
+        lockfile.delete
+        lockfile.wont :exist
+      end
+    end
   end
 
   describe "flush!" do
@@ -64,7 +72,7 @@ describe Doubleshot::Lockfile do
     it "must not be empty after adding a dependency" do
       lockfile do |lockfile|
         lockfile.add @jar
-        lockfile.wont_be :empty?
+        lockfile.wont_be_empty
       end
     end
 

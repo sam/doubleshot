@@ -11,14 +11,14 @@ class Doubleshot
       end
 
       def add(path)
-        path = Pathname(path.to_s)
+        path = Pathname(path.to_s).expand_path
 
         if path.directory?
           @set << path
         elsif path.file?
           @set << path.dirname
         else
-          raise Errno::ENOENT.new(path.expand_path.to_s)
+          raise ArgumentError.new("+path+ must be a file or directory with read permission: #{path}")
         end
 
         self
@@ -36,6 +36,10 @@ class Doubleshot
 
       def each
         @set.each { |entry| yield entry }
+      end
+
+      def to_s
+        "CLASSPATH: #{@set.entries.sort.join(", ")}"
       end
     end
   end

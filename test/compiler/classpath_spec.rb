@@ -18,7 +18,7 @@ describe Doubleshot::Compiler::Classpath do
       Helper::tmp do |tmp|
         -> do
           @classpath.add(tmp + "asdf")
-        end.must_raise(Errno::ENOENT)
+        end.must_raise(ArgumentError)
       end
     end
 
@@ -67,8 +67,8 @@ describe Doubleshot::Compiler::Classpath do
       @classpath.add jar2
 
       @classpath.size.must_equal 2
-      @classpath.must_include(tmp + "dir1")
-      @classpath.must_include(tmp + "dir2")
+      @classpath.must_include(dir1.expand_path)
+      @classpath.must_include(dir2.expand_path)
     end
   end
 end

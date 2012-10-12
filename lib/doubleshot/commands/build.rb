@@ -21,6 +21,11 @@ class Doubleshot::CLI::Commands::Build < Doubleshot::CLI
         options.classpath = classpath.to_s.split(":")
       end
 
+      options.conditional = false
+      options.on "--conditional", "Perform a conditional build (determine if there are pending files)." do
+        options.conditional = true
+      end
+
       options.separator ""
       options.separator "Summary: #{summary}"
     end
@@ -29,24 +34,33 @@ class Doubleshot::CLI::Commands::Build < Doubleshot::CLI
   def self.start(args)
     options = self.options.parse!(args)
     doubleshot = Doubleshot::current
-    doubleshot.setup!
-
     compiler = Doubleshot::Compiler.new(doubleshot.config.source.java, doubleshot.config.target)
 
+    if doubleshot.config.project == "doubleshot"
+      puts "Bootstrapping Doubleshot build with Maven..."
+      doubleshot.bootstrap!
+    else
+      puts "Performing Doubleshot setup to resolve dependencies..."
+      doubleshot.setup!
+    end
+
     if options.classpath.empty?
-      doubleshot.lockfile.jars.map(&:path).compact
+      doubleshot.classpath
     else
       options.classpath
     end.each do |path|
       compiler.classpath << path
     end
 
-    compiler.build!
+    puts "[INFO] Using #{compiler.classpath}"
+    puts
 
-    # TODO:
-    # download JAR dependencies
-    # download Gem dependencies
-    # exit
+    if compiler.pending? || !options.conditional
+      puts "Compiling..."
+      compiler.build!
+    else
+      puts "Conditional build: No source changes."
+    end
 
     return 0
   end

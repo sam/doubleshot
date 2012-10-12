@@ -10,6 +10,26 @@ describe Doubleshot do
     end
   end
 
+  describe "classpath" do
+    before do
+      @doubleshot = Doubleshot.new do |config|
+        config.jar "ch.qos.logback:logback-core:1.0.6"
+      end
+      Helper::tmp do |tmp|
+        @doubleshot.path = tmp + "Doubleshot.test"
+      end
+    end
+
+    it "must be empty on instantiation" do
+      @doubleshot.classpath.must_be_empty
+    end
+
+    it "won't be empty after setup (if you have JAR dependencies)" do
+      @doubleshot.setup!
+      @doubleshot.classpath.wont_be_empty
+    end
+  end
+
   describe "configuration" do
     it "must pass a Configuration object to the block" do
       called = false
