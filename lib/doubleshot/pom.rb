@@ -26,8 +26,10 @@ class Doubleshot
             <dependency>
               <groupId>#{jar.group}</groupId>
               <artifactId>#{jar.artifact}</artifactId>
-              <version>#{jar.version}</version>
-              <type>#{jar.type}</type>
+              <type>#{jar.packaging}</type>
+              #{
+              "<classifier>#{jar.classifier}</classifier>" unless jar.classifier.blank?
+              }<version>#{jar.version}</version>
             </dependency>
                 JAR
               end.join("\n            ") +
