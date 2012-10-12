@@ -44,20 +44,20 @@ describe Doubleshot::Pom do
           <dependency>
             <groupId>org.jruby</groupId>
             <artifactId>jruby-complete</artifactId>
-            <version>1.7.0.RC1</version>
             <type>jar</type>
+            <version>1.7.0.RC1</version>
           </dependency>
           <dependency>
             <groupId>org.sonatype.aether</groupId>
             <artifactId>aether-api</artifactId>
-            <version>1.13.1</version>
             <type>jar</type>
+            <version>1.13.1</version>
           </dependency>
           <dependency>
             <groupId>org.sonatype.aether</groupId>
             <artifactId>aether-util</artifactId>
-            <version>1.13.1</version>
             <type>jar</type>
+            <version>1.13.1</version>
           </dependency>
         </dependencies>
       </project>

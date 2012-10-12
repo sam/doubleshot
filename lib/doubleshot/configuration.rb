@@ -363,7 +363,7 @@ class Doubleshot
         #{"#   " unless config_changes.include? :group}config.group = #{@group.inspect}
 
         #{Doubleshot::Configuration::VERSION_MESSAGE}
-        #{"#   " unless config_changes.include? :version}config.version = #{@version.inspect}
+        #{"#   " unless config_changes.include? :version}config.version = #{@version.to_s.inspect}
 
 
         #{Doubleshot::Configuration::GEM_REPOSITORY_MESSAGE}

@@ -61,7 +61,7 @@ class Doubleshot
     #
     # SCENARIO: You will run into this if you've added a new dependency
     # (or made any other change) to your Doubleshot configuration file.
-    if path.exist? and lockfile.exist? and path.mtime > lockfile.mtime
+    if path.exist? && lockfile.exist? && path.mtime > lockfile.mtime
       lockfile.rm
       classpath_cache.rm if classpath_cache.exist?
     end
@@ -75,7 +75,7 @@ class Doubleshot
     # a Doubleshotted project, where the Doubleshot file and Lockfile
     # have been committed to the repository, but you have not ever
     # started the project on your local machine.
-    if lockfile.exist? and classpath_cache.exist? and lockfile.mtime > classpath_cache.mtime
+    if lockfile.exist? && classpath_cache.exist? && lockfile.mtime > classpath_cache.mtime
       classpath_cache.rm
     end
     # END: Cleanup tasks
@@ -148,7 +148,7 @@ class Doubleshot
     if !classpath_cache.exist? || Pathname("pom.xml").mtime > classpath_cache.mtime
       classpath_cache.open("w+") do |file|
         paths = `mvn dependency:build-classpath`.split($/).grep(/\.jar\b/).map { |line| line.split(":") }.flatten
-        artifacts = `mvn dependency:list`.split($/)
+        artifacts = `mvn dependency:list`.split($/).grep(/\bcompile$/).map { |line| line.split.last.sub /\:compile$/, "" }
         # Get artifacts in same order here...
         # Match up paths and buildr-style strings into a hash.
         file << Hash[*artifacts.zip(paths).flatten].to_yaml
