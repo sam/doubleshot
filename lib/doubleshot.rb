@@ -94,12 +94,7 @@ class Doubleshot
 
       lockfile.jars.each do |jar|
         jar.path = cached_paths[jar.to_s]
-        # TODO: This should never happen (a blank path), but because of unknown munging
-        # by Aether.resolve!, Aether#classpath_map may return keys that
-        # don't match up to jar.to_s.
-        unless jar.path.blank?
-          require jar.path
-        end
+        require jar.path
       end
     else
       # No classpath_cache exists, we must resolve the paths
@@ -131,10 +126,7 @@ class Doubleshot
       cache = {}
       jars.each do |jar|
         cache[jar.to_s] = jar.path
-        # TODO: This should never happen, but because of unknown munging
-        # by Aether.resolve!, Aether#classpath_map may return keys that
-        # don't match up to jar.to_s.
-        require jar.path unless jar.path.blank?
+        require jar.path
       end
 
       classpath_cache.open("w+") do |file|
