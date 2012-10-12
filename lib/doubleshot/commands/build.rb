@@ -34,6 +34,11 @@ class Doubleshot::CLI::Commands::Build < Doubleshot::CLI
   def self.start(args)
     options = self.options.parse!(args)
     doubleshot = Doubleshot::current
+
+    if options.conditional && doubleshot.config.target.exist?
+      doubleshot.config.target.rmtree
+    end
+
     compiler = Doubleshot::Compiler.new(doubleshot.config.source.java, doubleshot.config.target)
 
     if doubleshot.config.project == "doubleshot"

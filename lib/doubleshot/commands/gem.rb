@@ -25,14 +25,26 @@ class Doubleshot::CLI::Commands::Gem < Doubleshot::CLI
 
   def self.start(args)
     options = self.options.parse!(args)
+    doubleshot = Doubleshot::current
 
-    # TODO:
-    # compile Java
-    # download Jars and add them to the gemspec require_paths (I THINK).
-    config = Doubleshot::current.config
+    Doubleshot::CLI::Commands::Build.start([])
 
-    # TODO: This is version specific since in HEAD they've changed this to Gem::Package::build.
-    ::Gem::Builder.new(config.gemspec).build
+    unless Pathname::glob(doubleshot.config.source.java + "**/*.java").empty?
+      target = doubleshot.config.target
+
+      jarfile = (target + "#{doubleshot.config.project}.jar")
+      jarfile.delete if jarfile.exist?
+
+      ant.jar jarfile: jarfile, basedir: target do
+        doubleshot.lockfile.jars.each do |jar|
+          puts jar.path.expand_path
+          ant.zipfileset src: jar.path.expand_path, excludes: "META-INF/*.SF"
+        end
+      end
+    end
+
+    # WARN: This is version specific since in HEAD they've changed this to Gem::Package::build.
+    ::Gem::Builder.new(doubleshot.config.gemspec).build
 
     return 0
   end

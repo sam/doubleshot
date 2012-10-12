@@ -57,6 +57,6 @@ $CLASSPATH << target.to_s
 
 ant.jar jarfile: "example.jar", basedir: target.to_s do
   @config.runtime.jars.each do |jar|
-    ant.zipgroupfileset dir:
+    ant.zipgroupfileset dir: jar.path.dirname, includes: jar.path.to_s
   end
 end

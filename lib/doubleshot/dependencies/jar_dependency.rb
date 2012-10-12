@@ -6,8 +6,7 @@ class Doubleshot
 
       PACKAGE_TYPES = [ "pom", "jar", "maven-plugin", "ejb", "war", "ear", "rar", "par", "bundle" ]
 
-      attr_reader :group, :artifact, :packaging, :classifier, :version
-      attr_accessor :path
+      attr_reader :group, :artifact, :packaging, :classifier, :version, :path
 
       def initialize(maven_coordinate)
         # This is Maven's default package type, if unspecified.
@@ -42,6 +41,10 @@ class Doubleshot
 
       def to_s(long_form = false)
         @name
+      end
+
+      def path=(path)
+        @path = Pathname(path.to_s)
       end
 
       private
