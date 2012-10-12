@@ -37,8 +37,7 @@ class Doubleshot::CLI::Commands::Gem < Doubleshot::CLI
 
       ant.jar jarfile: jarfile, basedir: target do
         doubleshot.lockfile.jars.each do |jar|
-          puts jar.path.expand_path
-          ant.zipfileset src: jar.path.expand_path, excludes: "META-INF/*.SF"
+          zipfileset src: jar.path.expand_path, excludes: "META-INF/*.SF"
         end
       end
     end
