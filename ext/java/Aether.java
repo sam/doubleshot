@@ -144,7 +144,7 @@ public class Aether {
         PreorderNodeListGenerator nlg = new PreorderNodeListGenerator();
         node.accept( nlg );
 
-        HashMap map = new HashMap();
+        HashMap<String,String> map = new HashMap<String,String>();
 
         for ( Iterator<DependencyNode> it = nlg.getNodes().iterator(); it.hasNext(); ) {
             DependencyNode node = it.next();
