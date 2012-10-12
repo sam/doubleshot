@@ -1,4 +1,8 @@
 language: ruby
 rvm:
   - jruby-head
-script: bundle exec bin/doubleshot test --ci-test
+jdk:
+  - openjdk6
+  - openjdk7
+  - oraclejdk7
+script: bundle exec bin/doubleshot test --ci
