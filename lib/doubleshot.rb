@@ -150,11 +150,9 @@ class Doubleshot
 
   def bootstrap!
     if !@config.target.exist? || !lockfile.exist? || !classpath_cache.exist? || Pathname("pom.xml").mtime > classpath_cache.mtime
-      out = `mvn dependency:build-classpath`
-      puts out
-
-      paths = out.split($/).grep(/\.jar\b/).map { |line| line.split(":") }.flatten
-      coordinates = `mvn dependency:list`.split($/).grep(/\bcompile$/).map do |line|
+      # Dependencies classpath:
+      paths = `mvn dependency:build-classpath`.split(/\bDependencies classpath\b/).last.split($/).grep(/\.jar\b/).map { |line| line.split(":") }.flatten
+      coordinates = `mvn dependency:list`.split(/\bfiles have been resolved\b/).last.split($/).grep(/\bcompile$/).map do |line|
         line.split.last.sub /\:compile$/, ""
       end
 

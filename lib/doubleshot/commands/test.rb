@@ -34,6 +34,24 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
 
   def self.start(args)
     options = self.options.parse!(args)
+    doubleshot = Doubleshot::current
+
+    if options.ci_test
+      if doubleshot.lockfile.exist?
+        puts "--ci: Removing lockfile"
+        doubleshot.lockfile.delete
+      end
+
+      if doubleshot.classpath_cache.exist?
+        puts "--ci: Removing .classpath.cache"
+        doubleshot.classpath_cache.delete
+      end
+
+      if doubleshot.config.target.exist?
+        puts "--ci: Removing target build directory"
+        doubleshot.config.target.rmtree
+      end
+    end
 
     if options.build
       Doubleshot::CLI::Commands::Build.start(options.build ? [] : [ "--conditional" ])
@@ -43,7 +61,7 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
 
     require "listen"
 
-    watcher = new(Doubleshot::current.config, options.ci_test)
+    watcher = new(doubleshot.config, options.ci_test)
     watcher.run
   end
 
