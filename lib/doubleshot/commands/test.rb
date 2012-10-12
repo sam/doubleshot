@@ -22,7 +22,7 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
       end
 
       options.ci_test = false
-      options.on "--ci-test", "Run all tests, then exit. (No continuous listening for file changes.)" do
+      options.on "--ci", "Run all tests, then exit. (No continuous listening for file changes.)" do
         options.ci_test = true
         options.build = true
       end
