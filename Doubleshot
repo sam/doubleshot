@@ -7,7 +7,6 @@ Doubleshot.new do |config|
   config.version = "0.1.0"
 
   config.gem "bundler", ">= 0"
-  config.gem "jbundler", ">= 0"
 
   config.gem "rdoc", ">= 2.4.2"
   config.gem "perfer", ">= 0"
