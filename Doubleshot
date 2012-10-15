@@ -16,7 +16,6 @@ Doubleshot.new do |config|
   config.gem "rb-fsevent", ">= 0.9.1"
   config.gem "simplecov", ">= 0"
 
-  config.jar "org.jruby:jruby-complete:jar:1.7.0.RC1"
   config.jar "org.sonatype.aether:aether-api:jar:1.13.1"
   config.jar "org.sonatype.aether:aether-util:jar:1.13.1"
   config.jar "org.sonatype.aether:aether-impl:jar:1.13.1"

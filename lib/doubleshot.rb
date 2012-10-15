@@ -4,6 +4,19 @@ require "set"
 require "yaml"
 
 $:.unshift(Pathname(__FILE__).dirname)
+$:.unshift(Pathname(__FILE__).dirname.parent + "target")
+
+begin
+  require "doubleshot.jar"
+rescue LoadError
+  warn <<-EOS
+WARN: doubleshot.jar not loaded
+This probably means you're bootstrapping
+a test. If you get this message from the
+doubleshot gem, then the distribution is
+broken.
+EOS
+end
 
 require "ruby/gem/requirement"
 require "ruby/string"
@@ -82,19 +95,24 @@ class Doubleshot
     end
     # END: Cleanup tasks
 
-    # BEGIN: JAR loading
+    load_jars! unless @config.runtime.jars.empty? && @config.development.jars.empty?
+  end
+
+  def load_jars!
     if classpath_cache.exist?
       # We survived the cleanup checks, go ahead and just load
       # the cached version of your JARs.
       cached_paths = YAML::load(classpath_cache)
 
-      cached_paths.each_pair do |jar, path|
-        self.classpath << path
-      end
-
       lockfile.jars.each do |jar|
         jar.path = cached_paths[jar.to_s]
-        require jar.path
+        begin
+          require jar.path
+          self.classpath << jar.path
+        rescue LoadError
+          warn "Could not load: #{jar.path.inspect}"
+          raise
+        end
       end
     else
       # No classpath_cache exists, we must resolve the paths
@@ -126,14 +144,19 @@ class Doubleshot
       cache = {}
       jars.each do |jar|
         cache[jar.to_s] = jar.path
-        require jar.path
+        begin
+          require jar.path
+          self.classpath << jar.path
+        rescue LoadError
+          warn "Could not load: #{jar.path.inspect}"
+          raise
+        end
       end
 
       classpath_cache.open("w+") do |file|
         file << cache.to_yaml
       end
     end
-    # END: JAR loading
   end
 
   def classpath_cache

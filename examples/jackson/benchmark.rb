@@ -1,6 +1,38 @@
 #!/usr/bin/env jruby
 
-require "doubleshot"
+# To run this example, just directly execute it:
+#   ./benchmark.rb
+
+# Since we don't intend to distribute this example
+# as it's own Gem, we'll just require doubleshot/setup
+# directly to ensure our dependencies are resolved,
+# and that our code is built and added to $CLASSPATH.
+# You wouldn't normally reference Doubleshot anywhere
+# except your tests if you want to be able to direct-
+# execute them. If you're using the `doubleshot test`
+# command exclusively, then not even that would be
+# necessary.
+require "doubleshot/setup"
+
+# If distributed as a Gem you would:
+# begin
+#   # "jackson" is our project-name, so our JAR's
+#   # name containing our compiled code and all
+#   # bundled dependencies is "jackson.jar":
+#   require "jackson.jar"
+# rescue LoadError
+#   # Rescue the LoadError if you want to be able
+#   # to run tests and what-not during development.
+#   # You don't need to do anything in particular here,
+#   # but we'll throw a warning just in case:
+#   warn <<-EOS
+# WARN: jackson.jar not loaded
+# This probably means you're executing directly,
+# without a Gem. If you get this message from your
+# gem, then the distribution is broken.
+# EOS
+# end
+
 require "perfer"
 require "json"
 java_import com.fasterxml.jackson.databind.ObjectMapper
@@ -24,7 +56,7 @@ Perfer::session "JSON Parsing" do |x|
   # implementation substituting for Ruby's JSON library.
   mapper = ObjectMapper.new
   target = java.util.Map.java_class
-  x.iterate("Jackson") do    
+  x.iterate("Jackson") do
     mapper.read_value SAMPLE, target
   end
 

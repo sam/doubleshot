@@ -1,10 +1,14 @@
 # encoding: utf-8
 
 Doubleshot.new do |config|
-  
+
+  config.project = "jackson"
+  config.version = "0.1.0"
+
+  config.jar "com.fasterxml.jackson.core:jackson-core:2.0.6"
+  config.jar "com.fasterxml.jackson.core:jackson-databind:2.0.6"
+
   config.gemspec do |spec|
-    spec.name           = "jackson"
-    spec.version        = "0.1.0"
     spec.summary        = "A simple Jackson vs json-jruby benchmark."
     spec.description    = <<-DESCRIPTION
 Jackson is a Java library for parsing/generating JSON.
@@ -18,5 +22,5 @@ DESCRIPTION
     spec.email          = "ssmoot@gmail.com"
     spec.license        = "MIT-LICENSE"
   end
-  
+
 end

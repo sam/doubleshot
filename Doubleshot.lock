@@ -19,7 +19,6 @@ JARS:
 - org.codehaus.plexus:plexus-interpolation:jar:1.14
 - org.codehaus.plexus:plexus-utils:jar:2.0.7
 - org.jboss.netty:netty:jar:3.2.5.Final
-- org.jruby:jruby-complete:jar:1.7.0.RC1
 - org.jsoup:jsoup:jar:1.6.1
 - org.slf4j:slf4j-api:jar:1.6.2
 - org.sonatype.aether:aether-api:jar:1.13.1

@@ -1,2 +1,0 @@
-jar "com.fasterxml.jackson.core:jackson-core", "2.0.6"
-jar "com.fasterxml.jackson.core:jackson-databind", "2.0.6"

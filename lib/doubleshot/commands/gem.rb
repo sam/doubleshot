@@ -45,6 +45,8 @@ class Doubleshot::CLI::Commands::Gem < Doubleshot::CLI
     # WARN: This is version specific since in HEAD they've changed this to Gem::Package::build.
     ::Gem::Builder.new(doubleshot.config.gemspec).build
 
+    puts("  Size: %.2fM" % (Pathname(doubleshot.config.gemspec.file_name).size.to_f / 1024 / 1024))
+
     return 0
   end
 end
