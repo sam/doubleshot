@@ -27,7 +27,10 @@ class Doubleshot::CLI::Commands::Gem < Doubleshot::CLI
     options = self.options.parse!(args)
     doubleshot = Doubleshot::current
 
-    Doubleshot::CLI::Commands::Build.start([])
+    if Doubleshot::CLI::Commands::Build.start(args) != 0
+      $stderr.puts "Test failed, aborting gem creation."
+      return 1
+    end
 
     unless Pathname::glob(doubleshot.config.source.java + "**/*.java").empty?
       target = doubleshot.config.target

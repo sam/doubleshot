@@ -54,7 +54,7 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
     end
 
     if options.build
-      Doubleshot::CLI::Commands::Build.start(options.build ? [] : [ "--conditional" ])
+      Doubleshot::CLI::Commands::Build.start(options.build ? [ "--no-test" ] : [ "--conditional", "--no-test" ])
     else
       require "doubleshot/setup"
     end
