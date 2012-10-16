@@ -70,6 +70,11 @@ class Doubleshot
     # The default is "target".
     EOS
 
+    JAVA_MAIN_MESSAGE     = <<-EOS.margin
+    # Class to use for Ant's Main-Class attribute for
+    # a manifest. The default is "org.jruby.Main".
+    EOS
+
     WHITELIST_MESSAGE     = <<-EOS.margin
     # List of file extensions within source folders
     # that will be included during packaging.
@@ -114,12 +119,16 @@ class Doubleshot
     # NOTE: The above won't appear in your Doubleshot
     # file as it's added during the build process for you.
     EOS
+
+    attr_accessor :java_main
+
     def initialize
       @defaults                    = {}
       @gemspec                     = Gem::Specification.new
       @gemspec.platform            = Gem::Platform.new("java")
       @source                      = SourceLocations.new
       @target                      = default :target, Pathname("target")
+      @java_main                   = default :java_main, "org.jruby.Main"
 
       @runtime_dependencies        = Dependencies.new
       @development_dependencies    = Dependencies.new

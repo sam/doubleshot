@@ -175,6 +175,12 @@ describe Doubleshot::Configuration do
       end
     end
 
+    describe "java_main" do
+      it 'must default to "org.jruby.Main"' do
+        @config.java_main.must_equal "org.jruby.Main"
+      end
+    end
+
     describe "paths" do
       it "must return a readonly collection of paths" do
         @config.paths.must_be_kind_of Doubleshot::ReadonlyCollection
