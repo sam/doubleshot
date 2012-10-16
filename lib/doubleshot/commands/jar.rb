@@ -17,6 +17,11 @@ class Doubleshot::CLI::Commands::Jar < Doubleshot::CLI
         options.test = false
       end
 
+      options.sparse = false
+      options.on "--sparse", "Don't include JAR dependencies in your JAR. (For example, if you want to use Maven.)" do
+        options.sparse = true
+      end
+
       options.separator ""
       options.separator "Summary: #{summary}"
     end
@@ -38,8 +43,10 @@ class Doubleshot::CLI::Commands::Jar < Doubleshot::CLI
         manifest{
           attribute(:name => "Main-Class", :value => doubleshot.config.java_main)
         }
-        doubleshot.lockfile.jars.each do |jar|
-          zipfileset src: jar.path.expand_path, excludes: "META-INF/*.SF"
+        unless options.sparse
+          doubleshot.lockfile.jars.each do |jar|
+            zipfileset src: jar.path.expand_path, excludes: "META-INF/*.SF"
+          end
         end
       end
     end
