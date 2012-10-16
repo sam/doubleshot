@@ -5,6 +5,8 @@ Doubleshot.new do |config|
   config.project = "hello_world"
   config.version = "0.1.0"
 
+  config.java_main = "org.sam.doubleshot.examples.hello_world.HelloWorld"
+
   config.gemspec do |spec|
     spec.summary        = "A simple Hello World sample."
     spec.description    = <<-DESCRIPTION
