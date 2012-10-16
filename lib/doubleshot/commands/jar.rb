@@ -43,6 +43,7 @@ class Doubleshot::CLI::Commands::Jar < Doubleshot::CLI
         manifest{
           attribute(:name => "Main-Class", :value => doubleshot.config.java_main)
         }
+        fileset dir: doubleshot.config.source.ruby.parent, includes: doubleshot.config.source.ruby.to_s + "/**/*"
         unless options.sparse
           doubleshot.lockfile.jars.each do |jar|
             zipfileset src: jar.path.expand_path, excludes: "META-INF/*.SF"
