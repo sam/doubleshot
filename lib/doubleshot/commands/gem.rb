@@ -14,7 +14,7 @@ class Doubleshot::CLI::Commands::Gem < Doubleshot::CLI
       options.separator "Options"
 
       options.test = true
-      options.on "--no-test", "Disable testing as a build prerequisite." do
+      options.on "--no-test", "Disable testing as a packaging prerequisite." do
         options.test = false
       end
 
@@ -27,9 +27,14 @@ class Doubleshot::CLI::Commands::Gem < Doubleshot::CLI
     options = self.options.parse!(args)
     doubleshot = Doubleshot::current
 
-    if Doubleshot::CLI::Commands::Build.start(args) != 0
-      $stderr.puts "Test failed, aborting gem creation."
-      return 1
+    if options.test
+      puts "Executing tests..."
+      if Doubleshot::CLI::Commands::Test.start([ "--ci" ]) != 0
+        STDERR.puts "Test failed, aborting Gem creation."
+        return 1
+      end
+    else
+      Doubleshot::CLI::Commands::Build.start(args)
     end
 
     unless Pathname::glob(doubleshot.config.source.java + "**/*.java").empty?

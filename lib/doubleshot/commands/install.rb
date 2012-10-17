@@ -13,7 +13,7 @@ class Doubleshot::CLI::Commands::Install < Doubleshot::CLI
       options.separator "Options"
 
       options.test = true
-      options.on "--no-test", "Disable testing as a build prerequisite." do
+      options.on "--no-test", "Disable testing as a packaging prerequisite." do
         options.test = false
       end
 

@@ -36,7 +36,17 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
     options = self.options.parse!(args)
     doubleshot = Doubleshot::current
 
+    if Pathname::glob(doubleshot.config.source.tests + "**/*_{spec,test}.rb").empty?
+      puts "No tests found"
+      return 0
+    end
+
     if options.ci_test
+      if doubleshot.config.target.exist?
+        puts "--ci: Removing target"
+        doubleshot.config.target.rmtree
+      end
+
       if doubleshot.lockfile.exist?
         puts "--ci: Removing lockfile"
         doubleshot.lockfile.delete
@@ -54,7 +64,7 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
     end
 
     if options.build
-      Doubleshot::CLI::Commands::Build.start(options.build ? [ "--no-test" ] : [ "--conditional", "--no-test" ])
+      Doubleshot::CLI::Commands::Build.start(options.build ? [] : [ "--conditional" ])
     else
       require "doubleshot/setup"
     end
@@ -141,7 +151,6 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
   def run_all_specs
     exit_status = false
     duration = Time::measure do
-
       puts "\n --- Running all tests ---\n\n"
 
       script = <<-RUBY

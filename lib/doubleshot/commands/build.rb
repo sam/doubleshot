@@ -26,11 +26,6 @@ class Doubleshot::CLI::Commands::Build < Doubleshot::CLI
         options.conditional = true
       end
 
-      options.test = true
-      options.on "--no-test", "Do not perform a test after the build." do
-        options.test = false
-      end
-
       options.separator ""
       options.separator "Summary: #{summary}"
     end
@@ -72,7 +67,6 @@ class Doubleshot::CLI::Commands::Build < Doubleshot::CLI
       puts "Conditional build: No source changes."
     end
 
-    return Doubleshot::CLI::Commands::Test.new(doubleshot.config, true).run if options.test
     return 0
   end
 end

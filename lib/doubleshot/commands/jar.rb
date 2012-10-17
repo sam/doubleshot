@@ -13,7 +13,7 @@ class Doubleshot::CLI::Commands::Jar < Doubleshot::CLI
       options.separator "Options"
 
       options.test = true
-      options.on "--no-test", "Disable testing as a build prerequisite." do
+      options.on "--no-test", "Disable testing as a packaging prerequisite." do
         options.test = false
       end
 
@@ -31,7 +31,15 @@ class Doubleshot::CLI::Commands::Jar < Doubleshot::CLI
     options = self.options.parse!(args)
     doubleshot = Doubleshot::current
 
-    Doubleshot::CLI::Commands::Build.start([])
+    if options.test
+      puts "Executing tests..."
+      if Doubleshot::CLI::Commands::Test.start([ "--ci" ]) != 0
+        STDERR.puts "Test failed, aborting JAR creation."
+        return 1
+      end
+    else
+      Doubleshot::CLI::Commands::Build.start(args)
+    end
 
     unless Pathname::glob(doubleshot.config.source.java + "**/*.java").empty?
       target = doubleshot.config.target

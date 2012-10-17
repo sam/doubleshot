@@ -4,18 +4,24 @@ require "set"
 require "yaml"
 
 $:.unshift(Pathname(__FILE__).dirname)
-$:.unshift(Pathname(__FILE__).dirname.parent + "target")
 
-begin
-  require "doubleshot.jar"
-rescue LoadError
-  warn <<-EOS
+unless Pathname($0).basename == "doubleshot" &&
+  ARGV.first &&
+  [ "install", "jar", "gem", "test" ].include?(ARGV.first)
+
+  $:.unshift(Pathname(__FILE__).dirname.parent + "target")
+
+  begin
+    require "doubleshot.jar"
+  rescue LoadError
+    warn <<-EOS
 WARN: doubleshot.jar not loaded
 This probably means you're bootstrapping
 a test. If you get this message from the
 doubleshot gem, then the distribution is
 broken.
 EOS
+  end
 end
 
 require "ruby/gem/requirement"
