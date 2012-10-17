@@ -157,6 +157,8 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
     duration = Time::measure do
       puts "\n --- Running all tests ---\n\n"
 
+      Doubleshot::CLI::Commands::Build.start([])
+
       script = <<-RUBY
         begin
           #{
