@@ -7,7 +7,7 @@ package org.ckrailo.doubleshot.examples.hello_ruby_world;
 
 public class HelloRubyWorld {
   public static void main(String[] args) {
-    System.out.println("Hello World!");
+    System.out.println("Hello World! (Java)");
     org.jruby.Ruby.newInstance().executeScript("require 'lib/hello_ruby_world.rb'", "lib/hello_ruby_world.rb");
   }
 }
