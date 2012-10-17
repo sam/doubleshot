@@ -42,11 +42,6 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
     end
 
     if options.ci_test
-      if doubleshot.config.target.exist?
-        puts "--ci: Removing target"
-        doubleshot.config.target.rmtree
-      end
-
       if doubleshot.lockfile.exist?
         puts "--ci: Removing lockfile"
         doubleshot.lockfile.delete

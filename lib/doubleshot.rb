@@ -4,12 +4,10 @@ require "set"
 require "yaml"
 
 $:.unshift(Pathname(__FILE__).dirname)
+$:.unshift(Pathname(__FILE__).dirname.parent + "target")
 
-unless Pathname($0).basename == "doubleshot" &&
-  ARGV.first &&
-  [ "install", "jar", "gem", "test" ].include?(ARGV.first)
-
-  $:.unshift(Pathname(__FILE__).dirname.parent + "target")
+# unless Pathname($0).basename == "doubleshot" &&
+#   [ "install", "jar", "gem", "test" ].include?(ARGV.first)
 
   begin
     require "doubleshot.jar"
@@ -22,7 +20,7 @@ doubleshot gem, then the distribution is
 broken.
 EOS
   end
-end
+# end
 
 require "ruby/gem/requirement"
 require "ruby/string"
