@@ -16,11 +16,6 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
       options.separator ""
       options.separator "Options:"
 
-      options.build = false
-      options.on "--build", "Performs a Build before running the tests" do
-        options.build = true
-      end
-
       options.ci_test = false
       options.on "--ci", "Run all tests, then exit. (No continuous listening for file changes.)" do
         options.ci_test = true
@@ -58,12 +53,6 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
       end
     end
 
-    if options.build
-      Doubleshot::CLI::Commands::Build.start(options.build ? [] : [ "--conditional" ])
-    else
-      require "doubleshot/setup"
-    end
-
     require "listen"
 
     watcher = new(doubleshot.config, options.ci_test)
@@ -92,6 +81,7 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
     if @ci_test
       run_all_specs
     else
+      Doubleshot::CLI::Commands::Build.start([ "--conditional" ])
       # Output here just so you know when changes will be
       # picked up after you start the program.
       puts "Listening for changes..."
@@ -157,7 +147,7 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
     duration = Time::measure do
       puts "\n --- Running all tests ---\n\n"
 
-      Doubleshot::CLI::Commands::Build.start([])
+      Doubleshot::CLI::Commands::Build.start([ "--conditional" ])
 
       script = <<-RUBY
         begin

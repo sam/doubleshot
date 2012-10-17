@@ -4,23 +4,8 @@ require "set"
 require "yaml"
 
 $:.unshift(Pathname(__FILE__).dirname)
-$:.unshift(Pathname(__FILE__).dirname.parent + "target")
 
-# unless Pathname($0).basename == "doubleshot" &&
-#   [ "install", "jar", "gem", "test" ].include?(ARGV.first)
-
-  begin
-    require "doubleshot.jar"
-  rescue LoadError
-    warn <<-EOS
-WARN: doubleshot.jar not loaded
-This probably means you're bootstrapping
-a test. If you get this message from the
-doubleshot gem, then the distribution is
-broken.
-EOS
-  end
-# end
+require("doubleshot.jar") if Pathname("target/doubleshot.jar").exist?
 
 require "ruby/gem/requirement"
 require "ruby/string"
