@@ -5,7 +5,8 @@ require "yaml"
 
 $:.unshift(Pathname(__FILE__).dirname)
 
-require("doubleshot.jar") if Pathname("target/doubleshot.jar").exist?
+doubleshot_jar = Pathname(__FILE__).dirname.parent + "target/doubleshot.jar"
+require doubleshot_jar if doubleshot_jar.exist?
 
 require "ruby/gem/requirement"
 require "ruby/string"
