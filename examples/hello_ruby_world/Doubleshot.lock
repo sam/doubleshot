@@ -1,0 +1,4 @@
+---
+JARS:
+- org.jruby:jruby:jar:1.7.0.RC1
+GEMS: []
