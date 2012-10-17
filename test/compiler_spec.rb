@@ -4,12 +4,12 @@ require_relative "helper"
 
 describe Doubleshot::Compiler do
 
-  def compile
+  def compile(source = "java", target = "target")
     Helper::tmp do |tmp|
-      source = tmp + "java"
+      source = tmp + source
       source.mkdir
 
-      target = tmp + "target"
+      target = tmp + target
       target.mkdir
 
       (source + "Cow.java").open("w+") do |cow|
@@ -42,6 +42,34 @@ describe Doubleshot::Compiler do
   end
 
   describe "#pending?" do
+
+    it "must be pending if the target doesn't exist" do
+      Helper::tmp do |tmp|
+        source = tmp + "java"
+        source.mkdir
+
+        target = tmp + "notarget"
+        # We're testing that target doesn't exist so:
+        # target.mkdir
+
+        (source + "Cow.java").open("w+") do |cow|
+          cow << <<-EOS.margin
+          package org.sam.doubleshot;
+
+          public class Cow {
+            public Cow() {}
+
+            public String moo() {
+              return "MOO!";
+            }
+          }
+          EOS
+        end
+
+        compiler = Doubleshot::Compiler.new(source, target)
+        compiler.must_be :pending
+      end
+    end
 
     it "wont be pending after a build" do
       compile do |compiler|
