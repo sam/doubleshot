@@ -102,16 +102,21 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
   private
   def listener
     # This creates a MultiListener
-    Listen.to(@config.source.tests.to_s, @config.source.ruby.to_s).change do |modified, added, removed|
+    Listen.to(@config.source.tests.to_s, @config.source.ruby.to_s, @config.source.java.to_s).change do |modified, added, removed|
       modified.each do |location|
         path = Pathname(location)
-        next unless path.extname == ".rb"
+
+        next unless path.extname == ".rb" or path.extname == ".java"
 
         test = if path.basename.to_s =~ /_(spec|test).rb/ && path.child_of?(@config.source.tests)
           path
         else
-          relative_path = path.relative_path_from(@config.source.ruby.expand_path)
-          matcher = relative_path.sub(/(\w+)\.rb/, "\\1_{spec,test}.rb")
+          relative_path = if path.extname == ".rb"
+                            path.relative_path_from(@config.source.ruby.expand_path)
+                          else
+                            path.relative_path_from(@config.source.java.expand_path)
+                          end
+          matcher = relative_path.sub(/(\w+)\.(rb|java)/, "\\1_{spec,test}.rb")
           matchers = [ matcher, Pathname(matcher.to_s.split("/")[1..-1].join("/")) ]
 
           match = matchers.detect do |matcher|
@@ -122,6 +127,10 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
         end
 
         if test && test.exist?
+          if path.extname == ".java"
+            Doubleshot::CLI::Commands::Build.start([])
+          end
+
           duration = Time::measure do
             puts "\n --- Running test for #{test.to_s} ---\n\n"
 
