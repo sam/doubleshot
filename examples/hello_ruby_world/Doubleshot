@@ -1,0 +1,29 @@
+# encoding: utf-8
+
+Doubleshot.new do |config|
+
+  config.project = "hello_ruby_world"
+  config.version = "0.1.0"
+
+  config.java_main = "org.ckrailo.doubleshot.examples.hello_ruby_world.HelloRubyWorld"
+
+  config.jar "org.jruby:jruby:jar:1.7.0.RC1"
+
+  config.gemspec do |spec|
+    spec.summary        = "A simple Hello World sample mixing Java and Ruby."
+    spec.description    = <<-DESCRIPTION
+This sample demonstrates compiling Java sources with
+no dependencies.
+
+Just run "doubleshot build", then you can run the
+generated Java Class with:
+
+  java -cp target org.sam.doubleshot.examples.hello_world.HelloWorld
+DESCRIPTION
+    spec.homepage       = "https://github.com/sam/doubleshot/blob/master/examples/hello_ruby_world"
+    spec.author         = "Christopher Krailo"
+    spec.email          = "ckrailo@gmail.com"
+    spec.license        = "MIT-LICENSE"
+  end
+
+end
