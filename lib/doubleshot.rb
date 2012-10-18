@@ -91,6 +91,7 @@ class Doubleshot
 
   def load_gems!
     if lockfile.gems.empty?
+      # TODO: Resolve gems from @config.runtime.gems && @config.development.gems
       puts "NO GEMS IN LOCKFILE"
     else
       missing_dependencies = []
@@ -103,7 +104,10 @@ class Doubleshot
       end
 
       unless missing_dependencies.empty?
-        installer = Gem::DependencyInstaller.new
+        # TODO: Figure out how to use #gem_repositories here
+        require "rubygems/dependency_installer"
+        Gem::sources = @config.gem_repositories
+        installer = Gem::DependencyInstaller.new domain: :both
 
         missing_dependencies.each do |dependency|
           installer.install dependency.name, dependency.version

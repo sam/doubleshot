@@ -80,6 +80,14 @@ describe Doubleshot::Configuration do
       example = "http://rubyforge.org"
       @config.gem_repository(example).must_be_same_as example
     end
+
+    it "must default to rubygems.org if no other gem repositories are specified" do
+      @config.gem_repositories.must_include "http://rubygems.org"
+    end
+
+    it "must default to central if no other maven repositories are specified" do
+      @config.mvn_repositories.must_include "http://repo1.maven.org/maven2/"
+    end
   end
 
   describe "jar" do
