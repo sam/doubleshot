@@ -69,14 +69,17 @@ class Doubleshot
 
     def load
       unless @loaded
-        (data["JARS"] || []).each do |buildr_string|
-          @jars.add Dependencies::JarDependency.new(buildr_string)
+        (data["JARS"] || []).each do |coordinate|
+          @jars.add Dependencies::JarDependency.new(coordinate)
         end
 
-        # TODO: add gems to this method
-        # (data["GEMS"] || []).each do |gem_string|
-        #   @gems.add Dependencies::GemDependency.new(gem_string)
-        # end
+        (data["GEMS"] || []).each do |spec|
+          name, version = *spec.split(":")
+          dependency = Dependencies::GemDependency.new(name)
+          dependency.lock(version)
+
+          @gems.add dependency
+        end
       end
 
       @loaded = true
