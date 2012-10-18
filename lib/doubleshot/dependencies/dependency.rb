@@ -1,7 +1,7 @@
 class Doubleshot
   class Dependencies
     class Dependency
-      attr_reader :name
+      attr_reader :name, :version
 
       def initialize(name)
         @name = name.dup.freeze

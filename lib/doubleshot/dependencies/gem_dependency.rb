@@ -24,20 +24,12 @@ class Doubleshot
       end
 
       def to_s(long_form = false)
-        if long_form && !@requirements.empty?
-          "#{name} (#{@requirements.sort.map(&:to_s).join(", ")})"
+        if long_form && @version
+          "#{name}:#{version}"
         else
           @name
         end
       end
-
-      # def gemspec
-      # end
-
-      # def dependencies
-      #   #gemspec.runtime_dependencies
-      # end
-
     end
   end
 end

@@ -85,7 +85,32 @@ class Doubleshot
     end
     # END: Cleanup tasks
 
+    load_gems! unless @config.runtime.gems.empty? && @config.development.gems.empty?
     load_jars! unless @config.runtime.jars.empty? && @config.development.jars.empty?
+  end
+
+  def load_gems!
+    if lockfile.gems.empty?
+      puts "NO GEMS IN LOCKFILE"
+    else
+      missing_dependencies = []
+      lockfile.gems.each do |dependency|
+        begin
+          gem dependency.name, dependency.version
+        rescue LoadError
+          missing_dependencies << dependency
+        end
+      end
+
+      unless missing_dependencies.empty?
+        installer = Gem::DependencyInstaller.new
+
+        missing_dependencies.each do |dependency|
+          installer.install dependency.name, dependency.version
+          gem dependency.name, dependency.version
+        end
+      end
+    end
   end
 
   def load_jars!
