@@ -1,7 +1,9 @@
 class Doubleshot
   class Resolver
-    class GemResolver
+    class GemResolver < Resolver
       DEFAULT_REPOSITORY = "http://rubygems.org"
+
+
     end
   end
 end
