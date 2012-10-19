@@ -16,7 +16,7 @@ Before Doubleshot you might have a @Buildfile@ (using Buildr), @Jarfile@ and @Ge
 
 Doubleshot simplifies all that. You have one Doubleshot file that defines your Gem dependencies, your JAR dependencies, and declares how to either test or package it all up as a Gem or a JAR. Once you have a Doubleshot file (take a look at the examples folder for some basics), then you have a few simple commands you can run to do what you need. Here's the output of @doubleshot help@:
 
-bq.. Usage: doubleshot COMMAND [ OPTIONS ]
+bc.. Usage: doubleshot COMMAND [ OPTIONS ]
 
 Summary: Command line tool for creating and managing doubleshot projects.
 
@@ -48,7 +48,7 @@ p. To get a descriptive @Doubleshot@ that comments all the options, just run @do
 
 Pro-Tip: Similarly to a @Gem::Specification@, a @Doubleshot::Configuration@ provides a @#to_ruby@ method, so that example was generated in IRB from the actual project configuration (the existing @Doubleshot@ file in the project) like this:
 
-bq.. require "lib/doubleshot"
+bc.. require "lib/doubleshot"
 Pathname("Doubleshot.example").open("w+") do |example|
   example << Doubleshot::current.config.to_ruby
 end
@@ -57,16 +57,16 @@ h2. Development
 
 Here's how to get Doubleshot running locally yourself. You'll need Java, Maven, JRuby (1.7.x or -head) and Bundler installed. Then, clone the repo:
 
-bq. git clone git://github.com/sam/doubleshot.git
+bc. git clone git://github.com/sam/doubleshot.git
 
 The last milestone we're currently working on is Gem resolution. For right now, you'll need to bootstrap the build with Bundler:
 
-bq. bundle install
+bc. bundle install
 
 Doubleshot bootstraps it's own build using a slightly different process than used for projects actually using it. It's a chicken and egg situation. Since Doubleshot depends on some Java code to resolve JAR dependencies, and we can't compile without our dependencies, we can't use Doubleshot's normal code to resolve it's own JAR dependencies. That's why Doubleshot has a @pom.xml@ (generated with the @doubleshot pom@ command). We shell out to the Maven command line while bootstrapping the build.
 
 All that just to clarify the process. Once you've installed your Gem dependencies with Bundler, the only thing left you actually need to do at this point is run one of the @doubleshot@ commands to package or test. The internal bootstrapping will take care of the rest:
 
-bq. doubleshot test --ci
+bc. bin/doubleshot test --ci
 
 Happy coding!
