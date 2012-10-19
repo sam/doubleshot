@@ -8,7 +8,7 @@ h2. Overview
 
 Doubleshot is for Developers using JRuby.
 
-It let's you write Java and Ruby, perform Continuous Testing, and package it all up as a Gem or JAR.
+It let's you write Java and Ruby, perform Continuous Testing (meaning whenever a file changes, both Java and Ruby code is sandboxed and reloaded and the appropriate tests run), and package it all up as a Gem or JAR.
 
 It's a substitute for writing your own Maven tasks, declaring Maven Dependencies, having Ruby dependencies managed by Bundler, and a Rakefile for packaging everything up as a Gem.
 
