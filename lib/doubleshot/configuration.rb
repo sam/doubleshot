@@ -179,7 +179,7 @@ class Doubleshot
     end
 
     def gem_repositories
-      ReadonlyCollection.new(@gem_repositories.empty? ? [ "http://rubygems.org" ] : @gem_repositories)
+      ReadonlyCollection.new(@gem_repositories.empty? ? [ Resolver::GemResolver::DEFAULT_REPOSITORY ] : @gem_repositories)
     end
 
     def mvn_repository(uri)
@@ -188,7 +188,7 @@ class Doubleshot
     end
 
     def mvn_repositories
-      ReadonlyCollection.new(@mvn_repositories.empty? ? [ "http://repo1.maven.org/maven2/" ] : @mvn_repositories)
+      ReadonlyCollection.new(@mvn_repositories.empty? ? [ Resolver::JarResolver::DEFAULT_REPOSITORY ] : @mvn_repositories)
     end
 
     def source

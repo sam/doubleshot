@@ -62,12 +62,12 @@ describe Doubleshot::Configuration do
 
   describe "repositories" do
     it "must add Maven repositories" do
-      @config.mvn_repository "http://repository.jboss.com/maven2/"
-      @config.mvn_repositories.must_include "http://repository.jboss.com/maven2/"
+      @config.mvn_repository "http://repository.jboss.com/maven2"
+      @config.mvn_repositories.must_include "http://repository.jboss.com/maven2"
     end
 
     it "must return the passed value from mvn_repository" do
-      example = "http://repository.jboss.com/maven2/"
+      example = "http://repository.jboss.com/maven2"
       @config.mvn_repository(example).must_be_same_as example
     end
 
@@ -86,7 +86,7 @@ describe Doubleshot::Configuration do
     end
 
     it "must default to central if no other maven repositories are specified" do
-      @config.mvn_repositories.must_include "http://repo1.maven.org/maven2/"
+      @config.mvn_repositories.must_include "http://repo1.maven.org/maven2"
     end
   end
 

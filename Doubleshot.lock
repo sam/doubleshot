@@ -31,15 +31,4 @@ JARS:
 - org.sonatype.sisu:sisu-guice:jar:no_aop:3.0.3
 - org.sonatype.sisu:sisu-inject-bean:jar:2.2.3
 - org.sonatype.sisu:sisu-inject-plexus:jar:2.2.3
-- org.sonatype.sisu:sisu-guice:jar:3.0.3
-- javax.inject:javax.inject:jar:1
-- aopalliance:aopalliance:jar:1.0
-GEMS:
-- backports:2.6.4
-- ffi:1.0.11
-- hitimes:1.1.1
-- minitest:3.4.0
-- minitest-wscolor:0.0.3
-- multi_json:1.3.6
-- path:1.3.1
-- perfer:0.2.0
+GEMS: []

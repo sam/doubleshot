@@ -1,5 +1,3 @@
-java_import "org.sam.doubleshot.Aether"
-
 class Doubleshot
   class Resolver
     class JarResolver < Resolver
@@ -8,7 +6,7 @@ class Doubleshot
       def initialize(*repositories)
         super
         # Change the second argument to "true" to get verbose output.
-        @aether = Aether.new(Pathname("~/.m2").expand_path.to_s, false, false)
+        @aether = org.sam.doubleshot.Aether.new(Pathname("~/.m2").expand_path.to_s, false, false)
         @repositories.each do |repository|
           @aether.add_repository repository.host, repository.to_s
         end

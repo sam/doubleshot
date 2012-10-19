@@ -18,6 +18,7 @@ require "doubleshot/readonly_collection"
 require "doubleshot/configuration"
 require "doubleshot/compiler"
 require "doubleshot/lockfile"
+require "doubleshot/resolver"
 
 class Doubleshot
 
@@ -129,7 +130,7 @@ class Doubleshot
           require jar.path
           self.classpath << jar.path
         rescue LoadError
-          warn "Could not load: #{jar.path.inspect}"
+          warn "Could not load: #{jar.to_s.inspect}"
           raise
         end
       end
@@ -137,12 +138,6 @@ class Doubleshot
       # No classpath_cache exists, we must resolve the paths
       # to our dependencies, then store the results in
       # classpath_cache for future processes to use.
-      require "doubleshot/resolver"
-
-      if @config.mvn_repositories.empty?
-        @config.mvn_repository Resolver::JarResolver::DEFAULT_REPOSITORY
-      end
-
       resolver = Resolver::JarResolver.new(*@config.mvn_repositories)
       jars = nil
 
@@ -162,12 +157,12 @@ class Doubleshot
 
       cache = {}
       jars.each do |jar|
-        cache[jar.to_s] = jar.path
+        cache[jar.to_s] = jar.path.to_s
         begin
           require jar.path
           self.classpath << jar.path
         rescue LoadError
-          warn "Could not load: #{jar.path.inspect}"
+          warn "Could not load: #{jar.to_s.inspect}"
           raise
         end
       end
@@ -198,6 +193,7 @@ class Doubleshot
         jar = Dependencies::JarDependency.new(coordinate)
         jar.path = path
         lockfile.add jar
+        # puts "Added coordinate: #{coordinate.inspect} as #{jar.to_s.inspect}"
       end
 
       lockfile.flush!
@@ -206,6 +202,7 @@ class Doubleshot
         file << resolved.to_yaml
       end
     else
+      # TODO: This is problematic since Maven and Aether resolve different dependencies...
       setup!
     end
   end

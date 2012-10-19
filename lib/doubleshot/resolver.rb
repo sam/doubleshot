@@ -19,4 +19,5 @@ class Doubleshot
   end
 end
 
+require "doubleshot/resolver/gem_resolver"
 require "doubleshot/resolver/jar_resolver"
