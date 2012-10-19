@@ -1,0 +1,216 @@
+h1. Doubleshot
+
+Latest test results:
+
+!https://secure.travis-ci.org/sam/doubleshot.png(Build Status)!:http://travis-ci.org/sam/doubleshot
+
+Doubleshot aims to let you write Java, and Ruby in the same project, and streamline the dependency, testing and build process.
+
+You can have dependencies on both Gems and JARs, and easily package it all up in a redistributable Gem or Unified JAR when you're ready to ship.
+
+When you clone a Doubleshot project, you can run it just like any other Ruby script. There's no external tool you have to call. There's no setup or installation process for dependencies. That all happens on-demand. You only need to use the provided @doubleshot@ command if you want to run the (optional) testing sandbox, or prepare a package for release. If you'd rather directly execute your test files, use a @RakeTestTask@, or whatever, you're free to do that.
+
+Happy coding!
+
+* "Overview":#overview
+* "Usage":#usage
+** "Requirements":#requirements
+** "Installation":#installation
+** "Project Layout":#project-layout
+** "Testing":#testing-two-ways
+*** "Direct Execution":#direct-execution
+*** "Sandbox Execution":#sandbox-execution
+** "Packaging":#packaging
+* "Tips":#tips
+** "Nailgun Usage":#use-doubleshot-with-nailgun-for-great-success
+* "FAQ":#faq
+
+h2. Overview
+
+*JRuby is amazing.*
+
+Unfortunately there's no simple standard way to create a Ruby Gem that contains both Java and Ruby sources, with both JAR and Gem dependencies.
+
+Before Doubleshot you'd probably use "Bundler":https://github.com/carlhuda/bundler to manage your Gem dependencies, "JBundler":https://github.com/mkristian/jbundler to manage your JAR dependencies and "Buildr":https://github.com/apache/buildr (which is built on top of Rake) to compile and package your project. That's _really_ cumbersome. Especially since Buildr wasn't built for this, (it's focus is _Java_ projects, as a substitute for Maven) and there really is very little documentation on how to accomplish your goals.
+
+On top of that, you're now forced to run Rake and load these massive libraries even just to execute a single @TestCase@. And you'll have to run it every time. If you're a fan of TDD, you can realistically spend a substantial portion of your day just waiting for the JVM to load Maven, Bundler and Rake. Over. And Over. And Over.
+
+It's *painful* is what it is.
+
+You have a JRuby project with both Java and Ruby source files. You need to:
+
+* Compile your Java
+* Download JAR dependencies from a "Maven repository":http://mvnrepository.com/
+* Download Gem dependencies from a "Rubygems server":https://github.com/sam/geminaboxplus
+* Java Classes and Dependencies should be added to the @$CLASSPATH@ at runtime
+* Write your tests in a single language (Ruby) using "Minitest":https://github.com/seattlerb/minitest
+* Execute your Ruby normally, without the need for wrappers like Rake or @bundle exec@
+* Automatically compile and reload Java sources on update, then execute the appropriate tests
+* Reload your testing sandbox after updating Ruby sources without side-effects from previous versions code
+* Package your mixed-language project and it's JAR dependencies into a Gem you can release
+* Package a project and all it's dependencies up as a JAR so all you need on your server is Java
+
+Here's what tools Doubleshot replaces in your workflow:
+
+* Bundler
+* JBundler
+* GemPackageTask
+* RakeTestTask
+* Maven Dependencies
+* Maven Assemblies
+* Build tools like Ant or Buildr
+
+h1. Usage
+
+h2. Requirements
+
+* Java 6 or later
+* Maven
+* JRuby 1.7 or later
+* Ruby 1.9 syntax only
+
+h2. Installation
+
+bc. gem install doubleshot
+
+h2. Project Layout
+
+The *default* project using Doubleshot as it's build-tool will have the following layout:
+
+bc.. ext/
+    java/
+        Hello.java   # Java sources appear under the ext/java folder.
+lib/
+    world.rb         # Ruby sources go in the standard location.
+test/
+    helper.rb
+    hello_spec.rb    # specs match up to lib/**/*.rb or ext/java/**/*.java
+    world_spec.rb
+Doubleshot           # Your Doubleshot file replaces your project's gemspec
+                     # and JBundler's Jarfile.
+
+p. Your tests should be executable and look something like this:
+
+bc.. #!/usr/local/env jruby
+
+require_relative "helper.rb"
+
+java_import org.sam.doubleshot.example.Hello
+
+describe Hello do
+  it "must rock you" do
+    Hello.rock(:you).must_equal true
+  end
+end
+
+p. ...and @helper.rb@ would look something like this:
+
+bc.. require "doubleshot"
+require "minitest/autorun"
+
+h2. Testing Two Ways
+
+h3. Direct Execution
+
+p. Now you can execute your spec file directly and Doubleshot will:
+
+# Ensure that the dependencies defined in the @Doubleshot@ file are met by resolving their versions, downloading them, and adding them to your environment.
+# Compile any code found in @ext/java@ that's not already compiled.
+
+Then Minitest will run your test and exit when it's done.
+
+h3. Sandbox Execution
+
+Doubleshot also provides a @doubleshot@ bin file. Running @doubleshot test@ in your project's home directory will setup monitors for @lib/@ and @test/@ and wait for changes, applying the rules below to it's execution:
+
+* When source under @ext/java/@ changes, it will be recompiled, reloaded, and matching tests searched for to execute
+* When Ruby source under @lib/@ changes, your Ruby VM will be reloaded, and matching tests executed
+* If any tests change, the sandbox will be reloaded (since tests are written in Ruby), and the test file executed
+* If a @SIGINT@ (@^C@) is received, all tests will be loaded and executed
+* If a second @SIGINT@ is received before execution of the full test-suite is finished, the monitor will exit cleanly
+
+This is the typical use-case for day to day development of new projects/features when using Doubleshot to manage your build process. It allows you to write and test new code, without ever having to restart your Java VM, saving you ten seconds or so for every run, encouraging continuous testing so you can spend more time writing code, and less time waiting for processes to load.
+
+For your continuous testing/integration (CI) environment, you can also run all your tests just once by using the --ci-test option:
+
+bc. doubleshot test --ci-test
+
+h2. Packaging
+
+# TODO: This is all out of date...
+
+Given a project named _Example_, then @example.gemspec@ would include your Gem dependencies (including "doubleshot") and your @Doubleshot@ file would include your JAR dependencies as well as pulling in your Gem dependencies from your gemspec. This way your project is backwards compatible with Rubygems and Bundler. When packaging your project, your JAR dependencies will be "vendored" into the gem you've built.
+
+Within your project (ie: @lib/example.rb@) you'll @require "doubleshot"@. This will ensure any dependencies for your Gem are satisfied at runtime. If a dependency is already loaded, (an upstream project called @require "bundler/setup"@ for example) then Doubleshot will skip it.
+
+If you're running inside of a @doubleshot/setup@ then requiring @doublehsot/setup@ will have no effect to avoid doubling up on the work.
+
+To build a gem, run the @doubleshot build@ command on the command line. Doubleshot will ensure all dependencies are satisfied, compile your code, vendor any JAR dependencies and finally create a gem for you based on your @example.gemspec@ file.
+
+If you want your build to be conditional upon passing tests, add the @test :minitest@ directive to your @Doubleshot@ file. If you need to temporarily skip the tests to build a gem with this option enabled, use @NOTEST=true doubleshot build@ to package your gem.
+
+h1. Tips
+
+h2. Use Doubleshot with Nailgun for Great Success!
+
+Open a terminal window and navigate to the root of your project (to make sure you're using the right JRuby if you have an @.rvmrc@). Then run:
+
+bc. jruby --ng-server &
+
+Now run your code (any JRuby code, not just Doubleshot) as usual, but add the @--ng@ option to JRuby:
+
+bc. jruby --ng -r lib/doubleshot/setup.rb -e "puts org.foo.Bar.baz"
+
+It may take a few cycles while things warm up, but you should see this cut your process load-time by several seconds. It's especially handy if you're running lots of test cases directly as detailed in the first testing scenario. It could easily cut your testing time in half (or more).
+
+When you're done for the day, just foreground the server with the @fg@ command, and @SIGINT@ it (@^C@) to quit.
+
+h1. FAQ
+
+h2. What's in a Name?
+
+A shot each of JRuby and Java. Doubleshot.
+
+h2. Where is @doubleshot show@?
+
+Bundler includes a @bundle show some_gem@ command that shows you the path where a dependency was unpacked after running @bundle install@. I've only ever used that in two cases:
+
+*View the source of some library to try to trace a bug:* Write a test to trace your bug. View the source online or clone it and view it locally. It's a minor inconvenience sure, but it's a lot less prone to abuse.
+
+*Hack in a quick "hot-fix" for a production issue:* You shouldn't be making changes outside of source-control. That's an obvious development anti-pattern.
+
+It's our opinion that you don't _need_ this functionality, and it opens the window to abuse, so we're not implementing it.
+
+h2. I just ran @doubleshot install@ and I'm not sure what happened?
+
+With Bundler it's common to:
+
+# @bundle install@ to inspect your Gemfile and download/install any missing dependencies
+# @require "bundler/setup"@ to check/require dependencies at runtime
+
+With Doubleshot you'll just:
+
+bc. require "doubleshot"
+
+In your @test/helper.rb@ (or whatever common file you use for test bootstrapping). Or you can run @doubleshot test@.
+
+Doubleshot will first see if all it's dependencies are available, and if not, install any that are missing. So you don't have to manually run an installation step.
+
+If you run @doubleshot help@ you'll see that the @install@ command actually packages up your project as a Gem and installs it locally. So @doubleshot install@ is analogous to @gem install@, *not* @bundle install@.
+
+bq.. But I just want to install my Gem dependencies on a remote server and not actually attempt to run any code!
+*-- Said No One Ever*
+
+p. If you _really_ want to pre-download your dependencies just run @doubleshot build@ in your project's home-directory. Dependencies will be installed as part of the build process.
+
+h2. What if I want to create a unified JAR containing all my dependencies?
+
+Use @doubleshot jar [main-class]@. By default the main-class will use JRuby's bootstrapping mechanism @org.jruby.JarBootstrapMain@, where you add your own @jar-bootstrap.rb@ file to be required.
+
+All gems will be unpacked and copied in. All JAR dependencies will be copied in as well.
+
+This will leave you with an @example.jar@ you can just copy up to a server, and as long as a compatible version of Java is installed (typically Java6 or later), you have everything you need to run your application bundled in. Now you just need to run @java -jar example.jar@ and you're off to the races!
+
+h2. Does Doubleshot support Ruby 1.8.x syntax?
+
+No.

@@ -1,0 +1,127 @@
+# encoding: utf-8
+
+Doubleshot.new do |config|
+  # The project name will be used as your JAR's
+  # artifactId and your Gem's name.
+  config.project = "doubleshot"
+  
+  # The groupId of your JAR. This will default to
+  # the project name if not supplied.
+  #
+  # NOTE: You are strongly encouraged to set this
+  # to something meaningful if you are planning to
+  # package your project as a JAR.
+  config.group = "org.sam.doubleshot"
+  
+  # Version number that obeys the constraints of
+  # Gem::Version:
+  #
+  #   If any part contains letters, then the version
+  #     is considered pre-release.
+  config.version = "0.2.0"
+  
+  
+  # TODO
+  #   config.gem_repository "https://rubygems.org"
+  #   config.gem_repository "http://gems.example.com"
+  
+  # TODO
+  #   config.mvn_repository "http://repo1.maven.org/maven2"
+  #   config.mvn_repository "http://repository.jboss.com/maven2"
+  
+  
+  # Relative path to the folder containing your
+  # Ruby source code (.rb files).
+  # The default is "lib".
+  #   config.source.ruby    = "lib"
+  
+  # Relative path to the folder containing your
+  # Java source code (.java files).
+  # The default is "ext/java".
+  #   config.source.java    = "ext/java"
+  
+  # Relative path to the folder containing your
+  # tests. This feature is used when running
+  #   doubleshot test
+  # Tests are assumed to be written in Ruby
+  # exclusively. Java test frameworks are not
+  # supported.
+  # This value is optional. The default is "test".
+  #   config.source.tests   = "test"
+  
+  
+  # Relative path to the folder containing the
+  # compiled Java files (.class files).
+  # The default is "target".
+  #   config.target = "target"
+  
+  
+  # List of file extensions within source folders
+  # that will be included during packaging.
+  # Does NOT override defaults, but adds to them.
+  # The default list can be found in
+  # Doubleshot::Configuration::DEFAULT_WHITELIST.
+  #   config.whitelist ".ext"
+  
+  
+  # Add your Gem dependencies here using similar
+  # syntax to a gemspec, except your method is
+  # "gem" instead of "add_runtime_dependency".
+  config.gem "bundler", ">= 0"
+  config.gem "rdoc", ">= 2.4.2"
+  config.gem "perfer", ">= 0"
+  config.gem "minitest", ">= 3.0.1"
+  config.gem "minitest-wscolor", ">= 0"
+  config.gem "listen", ">= 0.5.3"
+  config.gem "rb-fsevent", ">= 0.9.1"
+  config.gem "simplecov", ">= 0"
+  
+  # Add your JAR dependencies using Buildr
+  # dependency formatting (available as a
+  # copy-and-paste option on most Maven search
+  # repositories).
+  config.jar "org.sonatype.aether:aether-api:jar:1.13.1"
+  config.jar "org.sonatype.aether:aether-util:jar:1.13.1"
+  config.jar "org.sonatype.aether:aether-impl:jar:1.13.1"
+  config.jar "org.sonatype.aether:aether-connector-file:jar:1.13.1"
+  config.jar "org.sonatype.aether:aether-connector-asynchttpclient:jar:1.13.1"
+  config.jar "org.sonatype.aether:aether-connector-wagon:jar:1.13.1"
+  config.jar "org.apache.maven:maven-aether-provider:jar:3.0.4"
+  config.jar "org.apache.maven.wagon:wagon-file:jar:2.2"
+  config.jar "org.apache.maven.wagon:wagon-http:jar:2.2"
+  config.jar "org.apache.maven.wagon:wagon-provider-api:jar:2.2"
+  
+  # Add your Gem and JAR development dependencies
+  # similar to above. By default "doubleshot" is
+  # added as a development dependency to your gemspec.
+  # That's the equivalent of:
+  #
+  #   config.development do
+  #     config.gem "doubleshot"
+  #   end
+  #
+  # NOTE: The above won't appear in your Doubleshot
+  # file as it's added during the build process for you.
+  
+  
+  # A subset of Gem::Specification compatible
+  # with Doubleshot. Since Doubleshot manages
+  # your Rubygems dependencies, and what files
+  # are included in your build, those options
+  # are not applicable (and will be discarded if
+  # provided).
+  config.gemspec do |spec|
+    spec.summary        = "Doubleshot is a build and dependency tool for mixed Java and Ruby projects"
+    spec.description    = <<-DESCRIPTION
+Doubleshot will download dependencies on demand, compile your Java sources and
+let you spend most of your time in Ruby without having to juggle two different
+dependency management tools, different build tools and being forced to execute
+your code through Rake or Maven based tools.
+DESCRIPTION
+    spec.homepage       = "https://github.com/sam/doubleshot"
+    spec.author         = "Sam Smoot"
+    spec.email          = "ssmoot@gmail.com"
+    spec.license        = "MIT-LICENSE"
+    spec.executables    = ["doubleshot", "doubleshot"]
+  end
+end
