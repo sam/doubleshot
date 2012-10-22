@@ -6,29 +6,36 @@ require_relative "../helper"
 
 describe Doubleshot::Resolver::GemResolver do
   before do
-    # @resolver = Doubleshot::Resolver::JarResolver.new(Doubleshot::Resolver::JarResolver::DEFAULT_REPOSITORY)
+    @resolver = Doubleshot::Resolver::GemResolver.new(Doubleshot::Resolver::GemResolver::DEFAULT_REPOSITORY)
   end
 
   describe "fetch" do
     before do
-      # @dependencies = Doubleshot::Dependencies::JarDependencyList.new
-      # @dependencies.fetch("com.pyx4j:maven-plugin-log4j:jar:1.0.1")
-      # @dependencies.fetch("org.springframework:spring-core:jar:3.1.2.RELEASE")
-      # @dependencies.fetch("org.hibernate:hibernate-core:jar:4.1.7.Final")
+      @dependencies = Doubleshot::Dependencies::GemDependencyList.new
+      @dependencies.fetch("rdoc")
     end
 
-    # it "must return the same JarDependencyList" do
-    #   @resolver.resolve!(@dependencies).must_be_same_as @dependencies
-    # end
+    it "must return the same GemDependencyList" do
+      @resolver.resolve!(@dependencies).must_be_same_as @dependencies
+    end
 
-    # it "must take a JarDependencyList and populate the path of each JarDependency" do
-    #   @resolver.resolve!(@dependencies).each do |dependency|
-    #     dependency.path.wont_be_nil
-    #   end
-    # end
+    it "must take a GemDependencyList and populate nested dependencies" do
+      @resolver.resolve! @dependencies
+      @dependencies.size.must_equal 2
+    end
 
-    # it "must populate transitive dependencies" do
-    #   @resolver.resolve!(@dependencies).size.must_equal 16
-    # end
+    it "must raise a MissingGemError if a dependency can't be resolved" do
+      rdoc = @dependencies.fetch("rdoc")
+      rdoc.add_requirement "> 9000" # IT'S OVER 9000!!! (this version doesn't exist)
+      -> { @resolver.resolve! @dependencies }.must_raise(Doubleshot::Resolver::GemResolver::MissingGemError)
+    end
+
+    it "must only add dependencies that meet requirements" do
+      rdoc = @dependencies.fetch("rdoc")
+      rdoc.add_requirement "~> 3.9.0"
+      @resolver.resolve! @dependencies
+      # This previous version of the rdoc gem doesn't have the json dependency:
+      @dependencies.size.must_equal 1
+    end
   end
 end

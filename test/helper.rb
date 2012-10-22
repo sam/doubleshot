@@ -51,3 +51,5 @@ module Helper
     dir.rmtree if dir.exist?
   end
 end
+
+require(Pathname(__FILE__).dirname + "helpers/stub_source")
