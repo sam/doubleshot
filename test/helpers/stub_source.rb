@@ -66,7 +66,7 @@ module Helper
       "hello" => {
         "4.0" => { "harbor" => "~>0.16.10", "json" => "~>1.7.0", "minitest-wscolor" => "=0.0.3" },
         "3.9" => { "harbor" => ">=0", "json" => ">=0", "minitest-wscolor" => ">=0", "minitest" => "~>2.3" },
-        "3.8" => { "harbor" => ">=0", "erbuis" => "~>2.6.5" },
+        "3.8" => { "harbor" => ">=0", "erubis" => "~>2.6.5" },
         "2.2" => { "harbor" => ">=0" }
       }
     )

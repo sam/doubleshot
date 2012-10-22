@@ -12,14 +12,15 @@ describe Doubleshot::Resolver::GemResolver do
   describe "fetch" do
     before do
       @dependencies = Doubleshot::Dependencies::GemDependencyList.new
-      @dependencies.fetch("rdoc")
     end
 
     it "must return the same GemDependencyList" do
+      @dependencies.fetch("rdoc")
       @resolver.resolve!(@dependencies).must_be_same_as @dependencies
     end
 
     it "must take a GemDependencyList and populate nested dependencies" do
+      @dependencies.fetch("rdoc")
       @resolver.resolve! @dependencies
       @dependencies.size.must_equal 2
     end
@@ -36,6 +37,10 @@ describe Doubleshot::Resolver::GemResolver do
       @resolver.resolve! @dependencies
       # This previous version of the rdoc gem doesn't have the json dependency:
       @dependencies.size.must_equal 1
+    end
+
+    describe "scenarios" do
+
     end
   end
 end
