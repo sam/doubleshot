@@ -6,7 +6,7 @@ require_relative "../helper"
 
 describe Doubleshot::Resolver::GemResolver do
   before do
-    @resolver = Doubleshot::Resolver::GemResolver.new(Doubleshot::Resolver::GemResolver::DEFAULT_REPOSITORY)
+    @resolver = Doubleshot::Resolver::GemResolver.new "stub://example.org"
   end
 
   describe "fetch" do
