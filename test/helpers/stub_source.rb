@@ -75,7 +75,7 @@ module Helper
         "1.0" => { "mid-level-1" => ">=0", "mid-level-2" => ">=0" }
       },
       "mid-level-1" => {
-        "2.0" => { "bottom-level" => ">=1.0" },
+        "2.0" => { "bottom-level" => [ ">=1.0", "<=3.0" ] },
         "1.0" => {}
       },
       "mid-level-2" => {

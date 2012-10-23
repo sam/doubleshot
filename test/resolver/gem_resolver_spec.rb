@@ -44,28 +44,30 @@ describe Doubleshot::Resolver::GemResolver do
       describe "success" do
         it "should succeed on independent gems" do
           skip
-          @dependencies.add Doubleshot::Dependencies::GemDependency.new "minitest"
-          @dependencies.add Doubleshot::Dependencies::GemDependency.new "rack"
-          json_dependency = Doubleshot::Dependencies::GemDependency.new "json"
-          json_dependency.add_requirement "= 1.7.4"
-          @dependencies.add json_dependency
+          @dependencies.fetch "minitest"
+          @dependencies.fetch "rack"
+          json = @dependencies.fetch "json"
+          json.add_requirement "=1.7.4"
+
           @resolver.resolve! @dependencies
           @dependencies.size.must_equal 3
         end
 
         it "should succeed on simple linear dependencies" do
           skip
-          rdoc_dependency = Doubleshot::Dependencies::GemDependency.new "rdoc"
-          rdoc_dependency.add_requirement "=3.8.3"
-          @dependencies.add rdoc_dependency
+          rdoc = @dependencies.fetch "rdoc"
+          rdoc.add_requirement "=3.8.3"
+
           @resolver.resolve! @dependencies
           @dependencies.size.must_equal 3
         end
 
         it "should find the latest possible dependencies" do
           skip
-          @dependencies.add Doubleshot::Dependencies::GemDependency.new "top-level"
+          @dependencies.fetch "top-level"
+
           @resolver.resolve! @dependencies
+
           @dependencies.size.must_equal 3
           @dependencies.fetch("top-level").version.must_equal "1.0"
           @dependencies.fetch("mid-level-1").version.must_equal "2.0"
@@ -75,8 +77,10 @@ describe Doubleshot::Resolver::GemResolver do
 
         it "should correctly resolve dependencies when one resolution exists but it is not the latest" do
           skip
-          @dependencies.add Doubleshot::Dependencies::GemDependency.new "get-the-old-one"
+          @dependencies.fetch "get-the-old-one"
+
           @resolver.resolve! @dependencies
+
           @dependencies.size.must_equal 3
           @dependencies.fetch("get-the-old-one").version.must_equal "1.0"
           @dependencies.fetch("locked-mid-1").version.must_equal "1.3"
@@ -89,14 +93,12 @@ describe Doubleshot::Resolver::GemResolver do
       describe "failure" do
         it "should fail on conflicting dependencies" do
           skip
-          locked_mid_1_dependency = Doubleshot::Dependencies::GemDependency.new "locked-mid-1"
-          locked_mid_1_dependency.add_requirement "2.0"
+          one = @dependencies.fetch "locked-mid-1"
+          one.add_requirement "2.0"
 
-          locked_mid_2_dependency = Doubleshot::Dependencies::GemDependency.new "locked-mid-2"
-          locked_mid_2_dependency.add_requirement "2.0"
+          two = @dependencies.fetch "locked-mid-2"
+          two.add_requirement "2.0"
 
-          @dependencies.add locked_mid_1_dependency
-          @dependencies.add locked_mid_2_dependency
           -> { @resolver.resolve! @dependencies }.must_raise(Doubleshot::Resolver::GemResolver::UnresolvableDependenciesError)
         end
 
