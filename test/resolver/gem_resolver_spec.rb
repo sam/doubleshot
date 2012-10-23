@@ -26,14 +26,13 @@ describe Doubleshot::Resolver::GemResolver do
     end
 
     it "must raise a MissingGemError if a dependency can't be resolved" do
-      rdoc = @dependencies.fetch("rdoc")
-      rdoc.add_requirement "> 9000" # IT'S OVER 9000!!! (this version doesn't exist)
+      # IT'S OVER 9000!!! (this version doesn't exist)
+      @dependencies.fetch("rdoc").add_requirement "> 9000"
       -> { @resolver.resolve! @dependencies }.must_raise(Doubleshot::Resolver::GemResolver::MissingGemError)
     end
 
     it "must only add dependencies that meet requirements" do
-      rdoc = @dependencies.fetch("rdoc")
-      rdoc.add_requirement "~> 3.9.0"
+      @dependencies.fetch("rdoc").add_requirement "~> 3.9.0"
       @resolver.resolve! @dependencies
       # This previous version of the rdoc gem doesn't have the json dependency:
       @dependencies.size.must_equal 1
@@ -46,8 +45,7 @@ describe Doubleshot::Resolver::GemResolver do
           skip
           @dependencies.fetch "minitest"
           @dependencies.fetch "rack"
-          json = @dependencies.fetch "json"
-          json.add_requirement "=1.7.4"
+          @dependencies.fetch("json").add_requirement "=1.7.4"
 
           @resolver.resolve! @dependencies
           @dependencies.size.must_equal 3
@@ -55,8 +53,7 @@ describe Doubleshot::Resolver::GemResolver do
 
         it "should succeed on simple linear dependencies" do
           skip
-          rdoc = @dependencies.fetch "rdoc"
-          rdoc.add_requirement "=3.8.3"
+          @dependencies.fetch("rdoc").add_requirement "=3.8.3"
 
           @resolver.resolve! @dependencies
           @dependencies.size.must_equal 3
@@ -93,11 +90,8 @@ describe Doubleshot::Resolver::GemResolver do
       describe "failure" do
         it "should fail on conflicting dependencies" do
           skip
-          one = @dependencies.fetch "locked-mid-1"
-          one.add_requirement "2.0"
-
-          two = @dependencies.fetch "locked-mid-2"
-          two.add_requirement "2.0"
+          @dependencies.fetch("locked-mid-1").add_requirement "2.0"
+          @dependencies.fetch("locked-mid-2").add_requirement "2.0"
 
           -> { @resolver.resolve! @dependencies }.must_raise(Doubleshot::Resolver::GemResolver::UnresolvableDependenciesError)
         end
