@@ -16,6 +16,15 @@ class Doubleshot
         end
       end
 
+      class UnresolvableDependenciesError < StandardError
+        def initialize(*unresolvable_dependencies)
+          dependency_list_string = unresolvable_dependencies.map do |dependency|
+            dependency.name + (dependency.version.nil? ? '' : " #{dependency.version.to_s}")
+          end.join(", ")
+          super "Cannot resolve the following dependencies: #{dependency_list_string}"
+        end
+      end
+
       def resolve!(dependencies)
 
         graph = Set.new
