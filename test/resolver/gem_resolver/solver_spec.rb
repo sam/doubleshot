@@ -336,6 +336,34 @@ describe Doubleshot::Resolver::GemResolver::Solver do
                          "D" => "2.1.0"})
     end
 
+    it "must correctly resolve when one resolution exists but it is not the latest" do
+      @graph.artifacts("get-the-old-one", "1.0")
+        .depends("locked-mid-1", ">= 0")
+        .depends("locked-mid-2", ">= 0")
+      @graph.artifacts("get-the-old-one", "0.5")
+
+      @graph.artifacts("locked-mid-1", "2.0").depends("old-bottom", "= 2.0")
+      @graph.artifacts("locked-mid-1", "1.3").depends("old-bottom", "= 0.5")
+      @graph.artifacts("locked-mid-1", "1.0")
+
+      @graph.artifacts("locked-mid-2", "2.0").depends("old-bottom", "= 2.1")
+      @graph.artifacts("locked-mid-2", "1.4").depends("old-bottom", "= 0.5")
+      @graph.artifacts("locked-mid-2", "1.0")
+
+      @graph.artifacts("old-bottom", "2.1")
+      @graph.artifacts("old-bottom", "2.0")
+      @graph.artifacts("old-bottom", "1.0")
+      @graph.artifacts("old-bottom", "0.5")
+
+      Doubleshot::Resolver::GemResolver::Solver.new(@graph, ["get-the-old-one"]).resolve.must_equal(
+        {
+          "get-the-old-one" => "1.0",
+          "locked-mid-1" => "1.3",
+          "locked-mid-2" => "1.4",
+          "old-bottom" => "0.5"
+        })
+    end
+
     it "finds the correct solution when there is a circular dependency" do
       @graph.artifacts("A", "1.0.0").depends("B", "1.0.0")
       @graph.artifacts("B", "1.0.0").depends("C", "1.0.0")

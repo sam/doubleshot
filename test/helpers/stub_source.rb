@@ -7,7 +7,7 @@ module Helper
       gems.each_pair do |name, versions|
         specs = @@index[name] ||= {}
         versions.each_pair do |version, dependencies|
-          spec = specs[version] = Gem::Specification.new
+          spec = specs[Gem::Version.new(version)] = Gem::Specification.new
           spec.name = name
           spec.version = version
           dependencies.each_pair do |name, versions|
@@ -22,7 +22,7 @@ module Helper
     end
 
     def spec(name, version)
-      @@index[name.to_s][version.to_s]
+      @@index[name.to_s][version]
     end
 
     index(

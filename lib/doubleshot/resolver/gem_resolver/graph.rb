@@ -40,7 +40,11 @@ class Doubleshot
           "#{name}-#{constraint}".to_sym
         end
 
-        def initialize
+        def initialize(*repositories)
+          @sources   = repositories.map do |repository|
+            Source.new(repository)
+          end
+          @versions  = Hash.new
           @artifacts = Hash.new
         end
 
@@ -83,8 +87,19 @@ class Doubleshot
         def versions(name, constraint = ">= 0.0.0")
           constraint = constraint.is_a?(Gem::Requirement) ? constraint : Gem::Requirement.new(constraint)
 
-          artifacts.select do |artifact|
-            artifact.name == name && constraint.satisfied_by?(artifact.version)
+          if @sources.empty?
+            # ORIGINAL CODE FROM Solve PROJECT. DO NOT TOUCH!
+            artifacts.select do |artifact|
+              artifact.name == name && constraint.satisfied_by?(artifact.version)
+            end
+          else
+            @sources.map do |source|
+              source.versions(name).select do |version|
+                constraint.satisfied_by?(version)
+              end.map do |version|
+                Artifact.new(self, name, version)
+              end
+            end.flatten
           end
         end
 
@@ -110,7 +125,23 @@ class Doubleshot
         #
         # @return [Doubleshot::Resolver::GemResolver::Artifact, nil]
         def get_artifact(name, version)
-          @artifacts.fetch(self.class.artifact_key(name, version.to_s), nil)
+          if @sources.empty?
+            @artifacts.fetch(self.class.artifact_key(name, version.to_s), nil)
+          else
+            artifact = nil
+            @sources.any? do |source|
+              if spec = source.spec(name, version)
+                artifact = Artifact.new(self, name, version)
+                spec.runtime_dependencies.each do |dependency|
+                  dependency.requirements_list.each do |requirement|
+                    artifact.depends(dependency.name, requirement.to_s)
+                  end
+                end
+                true
+              end
+            end
+            artifact
+          end
         end
 
         # Remove the given instance of artifact from the graph
