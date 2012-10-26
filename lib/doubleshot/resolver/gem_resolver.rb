@@ -26,6 +26,7 @@ class Doubleshot
       end
 
       def resolve!(dependencies)
+        # Solver.new(graph, demands, ui).resolve
 
         graph = Set.new
 
@@ -70,3 +71,9 @@ class Doubleshot
 end
 
 require "doubleshot/resolver/gem_resolver/source"
+require "doubleshot/resolver/gem_resolver/artifact"
+require "doubleshot/resolver/gem_resolver/demand"
+require "doubleshot/resolver/gem_resolver/dependency"
+require "doubleshot/resolver/gem_resolver/errors"
+require "doubleshot/resolver/gem_resolver/graph"
+require "doubleshot/resolver/gem_resolver/solver"
