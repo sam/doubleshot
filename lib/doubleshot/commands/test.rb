@@ -22,6 +22,11 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
         options.build = true
       end
 
+      options.force_tests = false
+      options.on "--force", "Run tests, even if doubleshot_test.pid exists." do
+        options.force_tests = true
+      end
+
       options.separator ""
       options.separator "Summary: #{summary}"
     end
@@ -29,6 +34,19 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
 
   def self.start(args)
     options = self.options.parse!(args)
+
+    @@pid_file = Pathname::pwd + "doubleshot_test.pid"
+    if !@@pid_file.nil? && @@pid_file.exist? && !options.force_tests
+      puts "doubleshot_test.pid exists: Are you running tests elsewhere? (Use --force to override.)"
+      exit 1
+    end
+
+    unless options.force_tests
+      @@pid_file.open("w") do |file|
+        file << $$
+      end
+    end
+
     doubleshot = Doubleshot::current
 
     if Pathname::glob(doubleshot.config.source.tests + "**/*_{spec,test}.rb").empty?
@@ -55,19 +73,25 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
 
     require "listen"
 
-    watcher = new(doubleshot.config, options.ci_test)
+    watcher = new(doubleshot.config, options.ci_test, options.force_tests)
     watcher.run
   end
 
-  def initialize(config, ci_test)
+  def initialize(config, ci_test, force_tests)
     @config = config
     @interrupted = false
     @ci_test = ci_test
+    @force_tests = force_tests
 
     # Hit Ctrl-C once to re-run all specs; twice to exit the program.
     Signal.trap("INT") do
       if @interrupted
         puts "\nShutting down..."
+
+        unless @force_tests
+          @@pid_file.delete if !@@pid_file.nil? && @@pid_file.exist?
+        end
+
         exit 0
       else
         @interrupted = true
