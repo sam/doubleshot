@@ -37,7 +37,7 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
 
     @@pid_file = Pathname::pwd + ".doubleshot_test.pid"
     if !@@pid_file.nil? && @@pid_file.exist? && !options.force_tests
-      puts "doubleshot_test.pid exists: Are you running tests elsewhere? (Use --force to override.)"
+      puts ".doubleshot_test.pid exists: Are you running tests elsewhere? (Use --force to override.)"
       exit 1
     end
 
