@@ -6,15 +6,10 @@ Doubleshot.new do |config|
   config.group   = "org.sam.doubleshot"
   config.version = "0.2.0"
 
-  config.gem "bundler", ">= 0"
-
-  config.gem "rdoc", ">= 2.4.2"
-  config.gem "perfer", ">= 0"
   config.gem "minitest", ">= 3.0.1"
   config.gem "minitest-wscolor", ">= 0"
   config.gem "listen", ">= 0.5.3"
   config.gem "rb-fsevent", ">= 0.9.1"
-  config.gem "simplecov", ">= 0"
 
   config.jar "org.sonatype.aether:aether-api:jar:1.13.1"
   config.jar "org.sonatype.aether:aether-util:jar:1.13.1"

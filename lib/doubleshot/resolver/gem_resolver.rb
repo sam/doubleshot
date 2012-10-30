@@ -17,11 +17,11 @@ class Doubleshot
           end
         end
 
-        # ui = Class.new do
-        #   def say(*args)
-        #     STDOUT.puts *args
-        #   end
-        # end.new
+        ui = Class.new do
+          def say(*args)
+            STDERR.puts *args
+          end
+        end.new
         ui = nil
         results = Solver.new(@graph, demands, ui).resolve
 
