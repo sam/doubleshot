@@ -70,6 +70,7 @@ describe Doubleshot::Resolver::GemResolver do
         end
 
         it "should correctly resolve dependencies when one resolution exists but it is not the latest" do
+          skip "pending: https://github.com/reset/solve/pull/7"
           @dependencies.fetch "get-the-old-one"
 
           @resolver.resolve! @dependencies
