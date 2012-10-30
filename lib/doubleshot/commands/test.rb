@@ -103,7 +103,11 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
 
   def run
     if @ci_test
-      run_all_specs
+      exit_status = run_all_specs
+      unless @force_tests
+        @@pid_file.delete if !@@pid_file.nil? && @@pid_file.exist?
+      end
+      exit_status
     else
       Doubleshot::CLI::Commands::Build.start([ "--conditional" ])
       # Output here just so you know when changes will be
