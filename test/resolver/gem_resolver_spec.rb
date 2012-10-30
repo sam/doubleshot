@@ -22,13 +22,13 @@ describe Doubleshot::Resolver::GemResolver do
     it "must take a GemDependencyList and populate nested dependencies" do
       @dependencies.fetch("rdoc")
       @resolver.resolve! @dependencies
-      @dependencies.size.must_equal 2
+      @dependencies.size.must_equal 3
     end
 
-    it "must raise a MissingGemError if a dependency can't be resolved" do
+    it "must raise a NoSolutionError if a dependency can't be resolved" do
       # IT'S OVER 9000!!! (this version doesn't exist)
       @dependencies.fetch("rdoc").add_requirement "> 9000"
-      -> { @resolver.resolve! @dependencies }.must_raise(Doubleshot::Resolver::GemResolver::MissingGemError)
+      -> { @resolver.resolve! @dependencies }.must_raise(Doubleshot::Resolver::GemResolver::Errors::NoSolutionError)
     end
 
     it "must only add dependencies that meet requirements" do
@@ -42,7 +42,6 @@ describe Doubleshot::Resolver::GemResolver do
       # list of scenarios we expect to be resolvable
       describe "success" do
         it "should succeed on independent gems" do
-          skip
           @dependencies.fetch "minitest"
           @dependencies.fetch "rack"
           @dependencies.fetch("json").add_requirement "=1.7.4"
@@ -52,7 +51,6 @@ describe Doubleshot::Resolver::GemResolver do
         end
 
         it "should succeed on simple linear dependencies" do
-          skip
           @dependencies.fetch("rdoc").add_requirement "=3.8.3"
 
           @resolver.resolve! @dependencies
@@ -60,12 +58,11 @@ describe Doubleshot::Resolver::GemResolver do
         end
 
         it "should find the latest possible dependencies" do
-          skip
           @dependencies.fetch "top-level"
 
           @resolver.resolve! @dependencies
 
-          @dependencies.size.must_equal 3
+          @dependencies.size.must_equal 4
           @dependencies.fetch("top-level").version.must_equal "1.0"
           @dependencies.fetch("mid-level-1").version.must_equal "2.0"
           @dependencies.fetch("mid-level-2").version.must_equal "2.0"
@@ -73,12 +70,12 @@ describe Doubleshot::Resolver::GemResolver do
         end
 
         it "should correctly resolve dependencies when one resolution exists but it is not the latest" do
-          skip
+          skip "pending: https://github.com/reset/solve/pull/7"
           @dependencies.fetch "get-the-old-one"
 
           @resolver.resolve! @dependencies
 
-          @dependencies.size.must_equal 3
+          @dependencies.size.must_equal 4
           @dependencies.fetch("get-the-old-one").version.must_equal "1.0"
           @dependencies.fetch("locked-mid-1").version.must_equal "1.3"
           @dependencies.fetch("locked-mid-2").version.must_equal "1.4"
@@ -89,17 +86,15 @@ describe Doubleshot::Resolver::GemResolver do
       # list of scenarios we expect to be unresolvable
       describe "failure" do
         it "should fail on conflicting dependencies" do
-          skip
           @dependencies.fetch("locked-mid-1").add_requirement "2.0"
           @dependencies.fetch("locked-mid-2").add_requirement "2.0"
 
-          -> { @resolver.resolve! @dependencies }.must_raise(Doubleshot::Resolver::GemResolver::UnresolvableDependenciesError)
+          -> { @resolver.resolve! @dependencies }.must_raise(Doubleshot::Resolver::GemResolver::Errors::NoSolutionError)
         end
 
         it "should fail when no possible version dependency exists in the source(s)" do
-          skip
           @dependencies.fetch "oops"
-          -> { @resolver.resolve! @dependencies }.must_raise(Doubleshot::Resolver::GemResolver::MissingGemError)
+          -> { @resolver.resolve! @dependencies }.must_raise(Doubleshot::Resolver::GemResolver::Errors::NoSolutionError)
         end
       end
     end
