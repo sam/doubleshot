@@ -14,7 +14,7 @@ describe Doubleshot::Resolver::GemResolver::Source do
     it "must return a list of available versions for a gem name" do
       versions = @source.versions("rack")
       versions.size.must_be :>, 10
-      versions.must_include "1.2.0"
+      versions.must_include Gem::Version.new "1.2.0"
     end
   end
 

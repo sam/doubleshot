@@ -92,8 +92,42 @@ class Doubleshot
 
   def load_gems!
     if lockfile.gems.empty?
-      # TODO: Resolve gems from @config.runtime.gems && @config.development.gems
-      puts "NO GEMS IN LOCKFILE"
+      dependencies = @config.runtime.gems + @config.development.gems
+      
+      puts "Dependencies not locked. Resolving the following:"
+      dependencies.each do |dependency|
+        puts "  #{dependency.name}: #{dependency.requirements.map(&:to_s).join(", ")}"  
+      end
+      
+      unless dependencies.empty?
+        resolver = Resolver::GemResolver.new *@config.gem_repositories
+        puts "Using repositories: #{@config.gem_repositories.map(&:to_s).join(",")}"
+        
+        resolver.resolve! dependencies
+      
+        puts "Resolved dependencies:"
+        dependencies.each do |dependency|
+          puts "  #{dependency.name}: #{dependency.version}"  
+        end
+        
+        require "rubygems/dependency_installer"
+        Gem::sources = @config.gem_repositories.entries
+        installer = Gem::DependencyInstaller.new domain: :both
+        dependencies.each do |dependency|
+          begin
+            puts "Activating: #{dependency.name} #{dependency.version}"
+            gem dependency.name, dependency.version
+          rescue LoadError
+            puts "Gem not installed! Installing: #{dependency.name} #{dependency.version}"
+            installer.install dependency.name, dependency.version
+            gem dependency.name, dependency.version
+          end
+          lockfile.add dependency
+        end
+        
+        dependencies.each { |dependency| lockfile.add dependency }
+        lockfile.flush!
+      end
     else
       missing_dependencies = []
       lockfile.gems.each do |dependency|
@@ -107,7 +141,7 @@ class Doubleshot
       unless missing_dependencies.empty?
         # TODO: Figure out how to use #gem_repositories here
         require "rubygems/dependency_installer"
-        Gem::sources = @config.gem_repositories
+        Gem::sources = @config.gem_repositories.entries
         installer = Gem::DependencyInstaller.new domain: :both
 
         missing_dependencies.each do |dependency|

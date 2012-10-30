@@ -8,6 +8,9 @@ Doubleshot.new do |config|
   config.jar "com.fasterxml.jackson.core:jackson-core:2.0.6"
   config.jar "com.fasterxml.jackson.core:jackson-databind:2.0.6"
 
+  config.gem "perfer", ">= 0"
+  config.gem "json"
+  
   config.gemspec do |spec|
     spec.summary        = "A simple Jackson vs json-jruby benchmark."
     spec.description    = <<-DESCRIPTION

@@ -24,8 +24,12 @@ class Doubleshot
             Hash.new do |h,name|
               h[name] = Hash.new do |h2,version|
                 begin
-                  Marshal.load(Gem.inflate(open("#{@uri}/quick/Marshal.4.8/#{name}-#{version}.gemspec.rz").read))
+                  puts "Loading Gem::Specification for #{name}:#{version}..."
+                  Marshal.load(Gem.inflate(open(
+                    "#{@uri.to_s.ensure_ends_with("/")}quick/Marshal.4.8/#{name}-#{version}.gemspec.rz"
+                    ).read))
                 rescue
+                  puts "Gem::Specification for #{name}:#{version} not found!"
                   nil
                 end
               end
@@ -34,18 +38,20 @@ class Doubleshot
         end
 
         def __versions__
-          @versions ||= begin
-            versions = Hash.new { |h,k| h[k] = [] }
-
-            Marshal::load(Zlib::GzipReader.new(open("#{@uri}/specs.4.8.gz")).read).each do |entry|
-              if SUPPORTED_PLATFORMS.any? { |platform| entry.last =~ platform }
-                versions[entry[0]] << entry[1].to_s
-              end
-            end
-
+          @versions ||= Hash.new do |h,k|
+            versions = h[k] = []
+            dep = Gem::Dependency.new(k, Gem::Requirement::default)
+            puts "Fetching list of versions for #{k.inspect}"
+            Gem::SpecFetcher::fetcher.find_matching(dep, true, false, false).map do |entry|
+              if tuple = entry.first
+                if SUPPORTED_PLATFORMS.any? { |platform| tuple.last =~ platform }
+                  versions << tuple[1]
+                end # if SUPPORTED_PLATFORMS
+              end # if tuple = entry.first
+            end # Gem::SpecFetcher::fetcher.find_matching
             versions
-          end
-        end
+          end # Hash.new
+        end # __versions__
       end
     end
   end
