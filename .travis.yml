@@ -1,7 +1,7 @@
 language: ruby
 rvm:
   - jruby-head
-install: gem install minitest minitest-wscolor listen rb-fsevent
+# install: gem install minitest minitest-wscolor listen rb-fsevent
 jdk:
   - openjdk6
   - openjdk7

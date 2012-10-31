@@ -71,8 +71,6 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
       end
     end
 
-    require "listen"
-
     watcher = new(doubleshot.config, options.ci_test, options.force_tests)
     watcher.run
   end
@@ -119,6 +117,8 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
 
   private
   def listener
+    require "listen"
+    
     # This creates a MultiListener
     Listen.to(@config.source.tests.to_s, @config.source.ruby.to_s, @config.source.java.to_s).change do |modified, added, removed|
       modified.each do |location|
