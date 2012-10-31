@@ -1,9 +1,11 @@
 ---
 JARS:
+- aopalliance:aopalliance:jar:1.0
 - com.ning:async-http-client:jar:1.6.5
 - commons-codec:commons-codec:jar:1.4
 - commons-io:commons-io:jar:2.0.1
 - commons-logging:commons-logging:jar:1.1.1
+- javax.inject:javax.inject:jar:1
 - org.apache.httpcomponents:httpclient:jar:4.1.2
 - org.apache.httpcomponents:httpcore:jar:4.1.2
 - org.apache.maven:maven-aether-provider:jar:3.0.4
@@ -28,7 +30,7 @@ JARS:
 - org.sonatype.aether:aether-impl:jar:1.13.1
 - org.sonatype.aether:aether-spi:jar:1.13.1
 - org.sonatype.aether:aether-util:jar:1.13.1
-- org.sonatype.sisu:sisu-guice:jar:no_aop:3.0.3
+- org.sonatype.sisu:sisu-guice:jar:3.0.3
 - org.sonatype.sisu:sisu-inject-bean:jar:2.2.3
 - org.sonatype.sisu:sisu-inject-plexus:jar:2.2.3
 - org.sonatype.sisu:sisu-guice:jar:3.0.3

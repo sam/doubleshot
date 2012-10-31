@@ -21,6 +21,7 @@ Doubleshot.new do |config|
   config.jar "org.apache.maven.wagon:wagon-file:jar:2.2"
   config.jar "org.apache.maven.wagon:wagon-http:jar:2.2"
   config.jar "org.apache.maven.wagon:wagon-provider-api:jar:2.2"
+  config.jar "org.sonatype.sisu:sisu-guice:jar:3.0.3"
 
   config.gemspec do |spec|
     spec.summary        = "Doubleshot is a build and dependency tool for mixed Java and Ruby projects"
