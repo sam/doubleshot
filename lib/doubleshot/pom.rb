@@ -29,7 +29,20 @@ class Doubleshot
               <type>#{jar.packaging}</type>
               #{
               "<classifier>#{jar.classifier}</classifier>" unless jar.classifier.blank?
-              }<version>#{jar.version}</version>
+              }<version>#{jar.version}</version>#{
+              unless jar.exclusions.empty?
+                "\n              <exclusions>\n                " +
+                  jar.exclusions.map do |exclusion|
+                  groupId, artifactId = exclusion.split(":")
+                <<-EXCLUSION.strip
+                <exclusion>
+                  <groupId>#{groupId}</groupId>
+                  <artifactId>#{artifactId}</artifactId>
+                </exclusion>
+                EXCLUSION
+                  end.join("\n                ") +
+                "\n              </exclusions>"
+              end}
             </dependency>
                 JAR
               end.join("\n            ") +

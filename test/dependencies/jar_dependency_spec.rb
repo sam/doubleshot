@@ -65,4 +65,24 @@ describe Doubleshot::Dependencies::JarDependency do
     Doubleshot::Dependencies::JarDependency.new("ch.qos.logback:logback-core:1.0.6")
       .to_s(true).must_equal "ch.qos.logback:logback-core:jar:1.0.6"
   end
+
+  describe "exclude" do
+    before do
+      @jar_dependency = Doubleshot::Dependencies::JarDependency.new "org.sonatype.aether:aether-connector-wagon:1.13.1"
+    end
+
+    it "allows you to exclude a groupId:artifactId for use in POM-file dependency exclusions" do
+      @jar_dependency.exclude("org.sonatype.sisu:sisu-guice")
+      @jar_dependency.exclusions.must_equal [ "org.sonatype.sisu:sisu-guice" ]
+    end
+
+    it "should verify that your exclusion string contains one and only one colon" do
+      -> { @jar_dependency.exclude "missing-colon" }.must_raise(ArgumentError)
+      -> { @jar_dependency.exclude "too:many:colons" }.must_raise(ArgumentError)
+    end
+
+    it "should return self so you can chain exclusions" do
+      @jar_dependency.exclude("org.sonatype.sisu:sisu-guice").must_equal @jar_dependency
+    end
+  end
 end
