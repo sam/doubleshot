@@ -1,8 +1,9 @@
 language: ruby
 rvm:
   - jruby-head
+install: gem install minitest minitest-wscolor listen rb-fsevent
 jdk:
   - openjdk6
   - openjdk7
   - oraclejdk7
-script: bundle exec bin/doubleshot test --ci
+script: bin/doubleshot test --ci
