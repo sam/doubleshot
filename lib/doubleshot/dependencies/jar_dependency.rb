@@ -6,7 +6,7 @@ class Doubleshot
 
       PACKAGE_TYPES = [ "pom", "jar", "maven-plugin", "ejb", "war", "ear", "rar", "par", "bundle" ]
 
-      attr_reader :group, :artifact, :packaging, :classifier, :version, :path
+      attr_reader :group, :artifact, :packaging, :classifier, :version, :path, :exclusions
 
       def initialize(maven_coordinate)
         # This is Maven's default package type, if unspecified.
@@ -32,11 +32,13 @@ class Doubleshot
           @classifier = classifier
         end
 
-        @name = "#{@group}:#{@artifact}:#{@packaging}#{":#{@classifier}" if @classifier}:#{@version}"
+        @name = "#{@group}:#{@artifact}:#{@packaging}:#{@version}"
 
         if [ @group, @artifact, @packaging, @version ].any? &:blank?
           raise ArgumentError.new("Invalid coordinate: #{@name}")
         end
+
+        @exclusions = []
       end
 
       def to_s(long_form = false)
@@ -45,6 +47,14 @@ class Doubleshot
 
       def path=(path)
         @path = Pathname(path.to_s)
+      end
+
+      def exclude(coordinate)
+        if coordinate.split(":").size != 2
+          raise ArgumentError.new("JarDependency#exclude takes a string of format \"groupId:artifactId\", you provided #{coordinate.inspect}")
+        end
+        @exclusions << coordinate
+        self
       end
 
       private
