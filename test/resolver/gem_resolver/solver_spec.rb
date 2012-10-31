@@ -337,8 +337,6 @@ describe Doubleshot::Resolver::GemResolver::Solver do
     end
 
     it "must correctly resolve when one resolution exists but it is not the latest" do
-      skip "pending: https://github.com/reset/solve/pull/7"
-      
       @graph.artifacts("get-the-old-one", "1.0")
         .depends("locked-mid-1", ">= 0")
         .depends("locked-mid-2", ">= 0")
@@ -360,9 +358,9 @@ describe Doubleshot::Resolver::GemResolver::Solver do
       Doubleshot::Resolver::GemResolver::Solver.new(@graph, ["get-the-old-one"]).resolve.must_equal(
         {
           "get-the-old-one" => "1.0",
-          "locked-mid-1" => "1.3",
-          "locked-mid-2" => "1.4",
-          "old-bottom" => "0.5"
+          "locked-mid-1" => "2.0",
+          "locked-mid-2" => "1.0",
+          "old-bottom" => "2.0"
         })
     end
 
