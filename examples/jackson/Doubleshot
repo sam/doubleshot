@@ -20,6 +20,7 @@ faster than the "json" Rubygem.
 
 To run the benchmark, just execute "benchmark.rb".
 DESCRIPTION
+
     spec.homepage       = "https://github.com/sam/doubleshot/blob/master/examples/jackson"
     spec.author         = "Sam Smoot"
     spec.email          = "ssmoot@gmail.com"
