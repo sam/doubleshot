@@ -35,16 +35,21 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
   def self.start(args)
     options = self.options.parse!(args)
 
-    @@pid_file = Pathname::pwd + ".doubleshot_test.pid"
-    if !@@pid_file.nil? && @@pid_file.exist? && !options.force_tests
-      puts ".doubleshot_test.pid exists: Are you running tests elsewhere? (Use --force to override.)"
-      exit 1
+    @@pid_file = Pathname(".doubleshot_test.pid")
+    if @@pid_file.exist? && !options.force_tests
+      
+      begin
+        if Process.getpgid(@@pid_file.read.to_i)
+          puts ".doubleshot_test.pid exists: Are you running tests elsewhere? (Use --force to override.)"
+          exit 1
+        end
+      rescue Errno::ESRCH
+        @@pid_file.delete
+      end
     end
 
-    unless options.force_tests
-      @@pid_file.open("w") do |file|
-        file << $$
-      end
+    @@pid_file.open("w") do |pid|
+      pid << $$
     end
 
     doubleshot = Doubleshot::current
@@ -87,7 +92,7 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
         puts "\nShutting down..."
 
         unless @force_tests
-          @@pid_file.delete if !@@pid_file.nil? && @@pid_file.exist?
+          @@pid_file.delete if @@pid_file.exist?
         end
 
         exit 0
@@ -103,7 +108,7 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
     if @ci_test
       exit_status = run_all_specs
       unless @force_tests
-        @@pid_file.delete if !@@pid_file.nil? && @@pid_file.exist?
+        @@pid_file.delete if @@pid_file.exist?
       end
       exit_status
     else
