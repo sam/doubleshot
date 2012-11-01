@@ -4,3 +4,4 @@ target
 doubleshot-*.gem
 .DS_Store
 .classpath.cache
+.doubleshot_test.pid
