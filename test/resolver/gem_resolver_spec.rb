@@ -70,16 +70,15 @@ describe Doubleshot::Resolver::GemResolver do
         end
 
         it "should correctly resolve dependencies when one resolution exists but it is not the latest" do
-          skip "pending: https://github.com/reset/solve/pull/7"
           @dependencies.fetch "get-the-old-one"
 
           @resolver.resolve! @dependencies
 
           @dependencies.size.must_equal 4
           @dependencies.fetch("get-the-old-one").version.must_equal "1.0"
-          @dependencies.fetch("locked-mid-1").version.must_equal "1.3"
-          @dependencies.fetch("locked-mid-2").version.must_equal "1.4"
-          @dependencies.fetch("old-bottom").version.must_equal "0.5"
+          @dependencies.fetch("locked-mid-1").version.must_equal "2.0"
+          @dependencies.fetch("locked-mid-2").version.must_equal "1.0"
+          @dependencies.fetch("old-bottom").version.must_equal "2.0"
         end
       end
 
