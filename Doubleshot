@@ -4,13 +4,27 @@ Doubleshot.new do |config|
 
   config.project = "doubleshot"
   config.group   = "org.sam.doubleshot"
-  config.version = "0.2.0"
+  config.version = "0.3.0"
 
   config.gem "minitest", ">= 3.0.1"
   config.gem "minitest-wscolor", ">= 0"
   config.gem "listen", ">= 0.5.3"
   config.gem "rb-fsevent", ">= 0.9.1"
 
+  if ENV["TRAVIS"]
+    config.mvn_repository "http://maven.mirrors.travis-ci.org/nexus/content/groups/public/"
+    config.mvn_repository "http://maven.mirrors.travis-ci.org/nexus/content/repositories/apache/"
+    config.mvn_repository "http://maven.mirrors.travis-ci.org/nexus/content/repositories/sonatype/"
+    config.mvn_repository "http://maven.mirrors.travis-ci.org/nexus/content/repositories/codehaus-snapshots/"
+    config.mvn_repository "http://maven.mirrors.travis-ci.org/nexus/content/shadows/central-m1/"
+    config.mvn_repository "http://maven.mirrors.travis-ci.org/nexus/content/repositories/central/"
+  else
+    config.mvn_repository "https://nexus.codehaus.org/content/groups/public/"
+    config.mvn_repository "https://oss.sonatype.org/content/groups/public/"
+    config.mvn_repository "http://mirrors.ibiblio.org/pub/mirrors/maven2"
+    config.mvn_repository "http://repo1.maven.org/maven2"
+  end
+  
   config.jar "org.sonatype.aether:aether-api:jar:1.13.1"
   config.jar "org.sonatype.aether:aether-util:jar:1.13.1"
   config.jar "org.sonatype.aether:aether-impl:jar:1.13.1"

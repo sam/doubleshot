@@ -37,21 +37,24 @@ class Doubleshot::CLI::Commands::Gem < Doubleshot::CLI
       Doubleshot::CLI::Commands::Build.start(args)
     end
 
-    unless Pathname::glob(doubleshot.config.source.java + "**/*.java").empty?
-      target = doubleshot.config.target
-
-      jarfile = (target + "#{doubleshot.config.project}.jar")
-      jarfile.delete if jarfile.exist?
-
-      ant.jar jarfile: jarfile, basedir: target do
-        doubleshot.lockfile.jars.each do |jar|
-          zipfileset src: jar.path.expand_path, excludes: "META-INF/*.SF"
+    target = doubleshot.config.target
+    jarfile = target + "#{doubleshot.config.project}.jar"
+    jarfile.delete if jarfile.exist?
+    
+    begin
+      unless Pathname::glob(doubleshot.config.source.java + "**/*.java").empty?
+        ant.jar jarfile: jarfile, basedir: target do
+          doubleshot.lockfile.jars.each do |jar|
+            zipfileset src: jar.path.expand_path, excludes: "META-INF/*.SF"
+          end
         end
       end
+  
+      # WARN: This is version specific since in HEAD they've changed this to Gem::Package::build.
+      ::Gem::Builder.new(doubleshot.config.gemspec).build
+    ensure
+      jarfile.delete if jarfile.exist?
     end
-
-    # WARN: This is version specific since in HEAD they've changed this to Gem::Package::build.
-    ::Gem::Builder.new(doubleshot.config.gemspec).build
 
     puts("  Size: %.2fM" % (Pathname(doubleshot.config.gemspec.file_name).size.to_f / 1024 / 1024))
 

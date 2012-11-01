@@ -55,17 +55,13 @@ end
 
 h2. Development
 
-Here's how to get Doubleshot running locally yourself. You'll need Java, Maven, JRuby (1.7.x or -head) and Bundler installed. Then, clone the repo:
+Here's how to get Doubleshot running locally yourself. You'll need Java, Maven and JRuby (1.7.x or -head) installed. Then, clone the repo:
 
 bc. git clone git://github.com/sam/doubleshot.git
 
-The last milestone we're currently working on is Gem resolution. For right now, you'll need to bootstrap the build with Bundler:
-
-bc. bundle install
-
 Doubleshot bootstraps it's own build using a slightly different process than used for projects actually using it. It's a chicken and egg situation. Since Doubleshot depends on some Java code to resolve JAR dependencies, and we can't compile without our dependencies, we can't use Doubleshot's normal code to resolve it's own JAR dependencies. That's why Doubleshot has a @pom.xml@ (generated with the @doubleshot pom@ command). We shell out to the Maven command line while bootstrapping the build.
 
-All that just to clarify the process. Once you've installed your Gem dependencies with Bundler, the only thing left you actually need to do at this point is run one of the @doubleshot@ commands to package or test. The internal bootstrapping will take care of the rest:
+All that just to clarify the process. The only thing left you actually need to do at this point is run one of the @doubleshot@ commands to package or test. The internal bootstrapping will take care of the rest:
 
 bc. bin/doubleshot test --ci
 

@@ -8,7 +8,7 @@ Doubleshot.new do |config|
   config.jar "com.fasterxml.jackson.core:jackson-core:2.0.6"
   config.jar "com.fasterxml.jackson.core:jackson-databind:2.0.6"
 
-  config.gem "perfer", ">= 0"
+  config.gem "perfer", "= 0.2.0"
   config.gem "json"
   
   config.gemspec do |spec|
@@ -20,6 +20,7 @@ faster than the "json" Rubygem.
 
 To run the benchmark, just execute "benchmark.rb".
 DESCRIPTION
+
     spec.homepage       = "https://github.com/sam/doubleshot/blob/master/examples/jackson"
     spec.author         = "Sam Smoot"
     spec.email          = "ssmoot@gmail.com"

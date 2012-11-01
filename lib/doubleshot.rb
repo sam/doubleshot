@@ -5,7 +5,7 @@ require "yaml"
 
 $:.unshift(Pathname(__FILE__).dirname)
 
-doubleshot_jar = Pathname(__FILE__).dirname.parent + "doubleshot.jar"
+doubleshot_jar = Pathname(__FILE__).dirname.parent + "target/doubleshot.jar"
 require doubleshot_jar if doubleshot_jar.exist?
 
 require "ruby/gem/requirement"
@@ -96,7 +96,7 @@ class Doubleshot
       
       puts "Dependencies not locked. Resolving the following:"
       dependencies.each do |dependency|
-        puts "  #{dependency.name}: #{dependency.requirements.map(&:to_s).join(", ")}"  
+        puts "  #{dependency.name}: #{dependency.requirements.map(&:to_s).join(", ")}"
       end
       
       unless dependencies.empty?
@@ -107,7 +107,7 @@ class Doubleshot
       
         puts "Resolved dependencies:"
         dependencies.each do |dependency|
-          puts "  #{dependency.name}: #{dependency.version}"  
+          puts "  #{dependency.name}: #{dependency.version}"
         end
         
         require "rubygems/dependency_installer"
@@ -172,40 +172,41 @@ class Doubleshot
       # No classpath_cache exists, we must resolve the paths
       # to our dependencies, then store the results in
       # classpath_cache for future processes to use.
-      resolver = Resolver::JarResolver.new(*@config.mvn_repositories)
-      jars = nil
-
-      if lockfile.exist?
-        jars = Dependencies::JarDependencyList.new
-        lockfile.jars.each do |jar|
-          jars.add jar
+      jars = @config.runtime.jars + @config.development.jars
+      unless jars.empty?
+      
+        resolver = Resolver::JarResolver.new(*@config.mvn_repositories)
+  
+        if lockfile.exist? && !lockfile.jars.empty?
+          jars = Dependencies::JarDependencyList.new
+          lockfile.jars.each do |jar|
+            jars.add jar
+          end
         end
-      else
-        jars = @config.runtime.jars + @config.development.jars
-      end
-
-      resolver.resolve! jars
-
-      jars.each { |jar| lockfile.add jar }
-      lockfile.flush!
-
-      cache = {}
-      jars.each do |jar|
-        cache[jar.to_s] = jar.path.to_s
-        begin
-          require jar.path
-          self.classpath << jar.path
-        rescue LoadError
-          warn "Could not load: #{jar.to_s.inspect}"
-          raise
+  
+        resolver.resolve! jars
+  
+        jars.each { |jar| lockfile.add jar }
+        lockfile.flush!
+  
+        cache = {}
+        jars.each do |jar|
+          cache[jar.to_s] = jar.path.to_s
+          begin
+            require jar.path
+            self.classpath << jar.path
+          rescue LoadError
+            warn "Could not load: #{jar.to_s.inspect}"
+            raise
+          end
         end
-      end
-
-      classpath_cache.open("w+") do |file|
-        file << cache.to_yaml
-      end
-    end
-  end
+  
+        classpath_cache.open("w+") do |file|
+          file << cache.to_yaml
+        end
+      end # unless jars.empty?
+    end # if classpath_cache.exist?
+  end # def load_jars!
 
   def classpath_cache
     @classpath_cache ||= Pathname(".classpath.cache")
