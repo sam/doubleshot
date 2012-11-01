@@ -50,9 +50,6 @@ public class Aether {
         installer = locator.getService( Installer.class );
 
         session = newSession( repoSystem, localRepo, verbose, offline );
-
-        RemoteRepository central = new RemoteRepository( "central", "default", "http://repo1.maven.org/maven2/" );
-        repos.add(central);
     }
 
     private ServiceLocator newServiceLocator() {
