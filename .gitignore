@@ -2,6 +2,7 @@ target
 .jbundler
 *.swp
 doubleshot-*.gem
+doubleshot.jar
 .DS_Store
 .classpath.cache
 .doubleshot_test.pid
