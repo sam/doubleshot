@@ -24,7 +24,7 @@ Doubleshot.new do |config|
     config.mvn_repository "http://mirrors.ibiblio.org/pub/mirrors/maven2"
     config.mvn_repository "http://repo1.maven.org/maven2"
   end
-  
+
   config.jar "org.sonatype.aether:aether-api:jar:1.13.1"
   config.jar "org.sonatype.aether:aether-util:jar:1.13.1"
   config.jar "org.sonatype.aether:aether-impl:jar:1.13.1"
