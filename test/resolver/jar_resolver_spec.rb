@@ -6,7 +6,7 @@ require_relative "../helper"
 
 describe Doubleshot::Resolver::JarResolver do
   before do
-    @resolver = Doubleshot::Resolver::JarResolver.new(Doubleshot::Resolver::JarResolver::DEFAULT_REPOSITORY)
+    @resolver = Doubleshot::Resolver::JarResolver.new(*Doubleshot::current.config.mvn_repositories)
   end
 
   describe "fetch" do
