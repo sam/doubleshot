@@ -19,7 +19,7 @@ Doubleshot.new do |config|
     config.mvn_repository "http://maven.mirrors.travis-ci.org/nexus/content/shadows/central-m1/"
     config.mvn_repository "http://maven.mirrors.travis-ci.org/nexus/content/repositories/central/"
   end
-  
+
   config.mvn_repository "https://nexus.codehaus.org/content/groups/public/"
   config.mvn_repository "https://oss.sonatype.org/content/groups/public/"
   config.mvn_repository "http://mirrors.ibiblio.org/pub/mirrors/maven2"
