@@ -10,7 +10,7 @@ Doubleshot.new do |config|
 
   config.gem "perfer", "= 0.2.0"
   config.gem "json"
-  
+
   config.gemspec do |spec|
     spec.summary        = "A simple Jackson vs json-jruby benchmark."
     spec.description    = <<-DESCRIPTION
