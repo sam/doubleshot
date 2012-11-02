@@ -1,0 +1,4 @@
+---
+JARS:
+- com.fasterxml.jackson.core:jackson-core:jar:2.0.6
+GEMS: []

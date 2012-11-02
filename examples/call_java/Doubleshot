@@ -1,0 +1,24 @@
+# encoding: utf-8
+
+Doubleshot.new do |config|
+
+  config.project = "call_java"
+  config.version = "0.1.0"
+
+  config.jar "com.fasterxml.jackson.core:jackson-core:2.0.6"
+
+  config.gemspec do |spec|
+    spec.summary        = "An example using Ruby to call a Java library."
+    spec.description    = <<-DESCRIPTION
+This example shows that you can use Doubleshot for managing
+your Java dependencies, even if you don't have any Java code
+of your own to compile.
+DESCRIPTION
+
+    spec.homepage       = "https://github.com/sam/doubleshot/blob/master/examples/call_java"
+    spec.author         = "Sam Smoot"
+    spec.email          = "ssmoot@gmail.com"
+    spec.license        = "MIT-LICENSE"
+  end
+
+end
