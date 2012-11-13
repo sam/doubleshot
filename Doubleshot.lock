@@ -34,7 +34,7 @@ JARS:
 - org.sonatype.sisu:sisu-inject-bean:jar:2.2.3
 - org.sonatype.sisu:sisu-inject-plexus:jar:2.2.3
 GEMS:
-- minitest:4.1.0
+- minitest:4.2.0
 - minitest-wscolor:0.0.3
 - listen:0.5.3
 - rb-fsevent:0.9.2

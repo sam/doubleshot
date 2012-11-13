@@ -283,8 +283,10 @@ class Doubleshot
         @gemspec.require_paths = [ @source.ruby.to_s, @target.to_s ]
 
         test_files = []
-        @source.tests.find do |path|
-          test_files << path.to_s if path.file? && @whitelist.include?(path.extname)
+        if @source.tests.exist?
+          @source.tests.find do |path|
+            test_files << path.to_s if path.file? && @whitelist.include?(path.extname)
+          end
         end
         @gemspec.test_files = test_files
 
@@ -296,12 +298,16 @@ class Doubleshot
           end
         end
 
-        @source.ruby.find do |path|
-          files << path.to_s if path.file? && @whitelist.include?(path.extname)
+        if @source.ruby.exist?
+          @source.ruby.find do |path|
+            files << path.to_s if path.file? && @whitelist.include?(path.extname)
+          end
         end
 
-        @source.java.find do |path|
-          files << path.to_s if path.file? && @whitelist.include?(path.extname)
+        if @source.java.exist?
+          @source.java.find do |path|
+            files << path.to_s if path.file? && @whitelist.include?(path.extname)
+          end
         end
 
         if @target.exist?

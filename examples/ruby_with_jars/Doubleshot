@@ -2,7 +2,7 @@
 
 Doubleshot.new do |config|
 
-  config.project = "call_java"
+  config.project = "ruby_with_jars"
   config.version = "0.1.0"
 
   config.jar "com.fasterxml.jackson.core:jackson-core:2.0.6"
