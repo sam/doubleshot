@@ -487,7 +487,6 @@ class Doubleshot
           spec.author         = #{spec.author.inspect}
           spec.email          = #{spec.email.inspect}
           spec.license        = #{spec.license.inspect}
-          spec.executables    = #{spec.executables.inspect}
         end
       EOS
     end
