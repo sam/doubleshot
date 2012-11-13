@@ -35,11 +35,17 @@ class Doubleshot
     EOS
 
     GEM_REPOSITORY_MESSAGE = <<-EOS.margin
-    # TODO
+    # Add your custom ruby gem repositories here.
+    #
+    # Default is http://rubygems.org
+    # (defined in Resolver::GemResolver::DEFAULT_REPOSITORY)
     EOS
 
     MVN_REPOSITORY_MESSAGE = <<-EOS.margin
-    # TODO
+    # Add your custom Maven repositories here.
+    #
+    # Default is http://repo1.maven.org/maven2
+    # (defined in Resolver::JarResolver::DEFAULT_REPOSITORY)
     EOS
 
     SOURCE_RUBY_MESSAGE   = <<-EOS.margin
