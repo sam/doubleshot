@@ -34,7 +34,8 @@ class Doubleshot::CLI::Commands::Gem < Doubleshot::CLI
         return 1
       end
     else
-      Doubleshot::CLI::Commands::Build.start(args)
+      doubleshot.setup!
+      doubleshot.build! false
     end
 
     target = doubleshot.config.target

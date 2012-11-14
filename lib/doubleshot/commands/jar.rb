@@ -38,7 +38,8 @@ class Doubleshot::CLI::Commands::Jar < Doubleshot::CLI
         return 1
       end
     else
-      Doubleshot::CLI::Commands::Build.start(args)
+      doubleshot.setup!
+      doubleshot.build!
     end
 
     unless Pathname::glob(doubleshot.config.source.java + "**/*.java").empty?

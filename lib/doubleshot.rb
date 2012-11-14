@@ -89,6 +89,27 @@ class Doubleshot
     load_gems! unless @config.runtime.gems.empty? && @config.development.gems.empty?
     load_jars! unless @config.runtime.jars.empty? && @config.development.jars.empty?
   end
+  
+  def build!(conditional = true)
+    if !conditional && @config.target.exist?
+      @config.target.rmtree
+    end
+    
+    return unless @config.source.java.exist?
+    
+    compiler = Doubleshot::Compiler.new(@config.source.java, @config.target)
+    
+    lockfile.jars.each do |jar|
+      compiler.classpath << jar.path
+    end
+    
+    if !conditional || compiler.pending?
+      puts "Compiling..."
+      compiler.build! true
+    else
+      puts "Conditional build: No source changes."
+    end
+  end
 
   def load_gems!
     if lockfile.gems.empty?

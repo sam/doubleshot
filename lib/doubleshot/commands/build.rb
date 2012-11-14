@@ -35,10 +35,6 @@ class Doubleshot::CLI::Commands::Build < Doubleshot::CLI
     options = self.options.parse!(args)
     doubleshot = Doubleshot::current
 
-    if options.conditional && doubleshot.config.target.exist?
-      doubleshot.config.target.rmtree
-    end
-
     if doubleshot.config.project == "doubleshot"
       puts "Bootstrapping Doubleshot build with Maven..."
       doubleshot.bootstrap!
@@ -47,28 +43,7 @@ class Doubleshot::CLI::Commands::Build < Doubleshot::CLI
       doubleshot.setup!
     end
 
-    if doubleshot.config.source.java.exist?
-      compiler = Doubleshot::Compiler.new(doubleshot.config.source.java, doubleshot.config.target)
-
-      if options.classpath.empty?
-        doubleshot.classpath
-      else
-        options.classpath
-      end.each do |path|
-        compiler.classpath << path
-      end
-
-      puts "[INFO] Using #{compiler.classpath}"
-      puts
-
-      if compiler.pending? || !options.conditional
-        puts "Compiling..."
-        compiler.build!
-      else
-        puts "Conditional build: No source changes."
-      end
-    end
-
+    doubleshot.build! options.conditional
     return 0
   end
 end

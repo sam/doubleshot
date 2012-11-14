@@ -1,3 +1,5 @@
 require_relative "../doubleshot"
 
-Doubleshot::current.setup!
+doubleshot = Doubleshot::current
+doubleshot.setup!
+doubleshot.build!

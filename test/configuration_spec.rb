@@ -362,7 +362,6 @@ describe Doubleshot::Configuration do
             spec.author         = "Sam Smoot"
             spec.email          = "ssmoot@gmail.com"
             spec.license        = "MIT-LICENSE"
-            spec.executables    = ["doubleshot"]
           end
         EOS
       end

@@ -1,8 +1,6 @@
 #!/usr/bin/env jruby
 
-# To run this example, first build the source:
-#   doubleshot build
-# Then directly execute it:
+# To run this example just directly execute it:
 #   ./benchmark.rb
 
 # Since we don't intend to distribute this example

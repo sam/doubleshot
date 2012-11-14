@@ -19,7 +19,6 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
       options.ci_test = false
       options.on "--ci", "Run all tests, then exit. (No continuous listening for file changes.)" do
         options.ci_test = true
-        options.build = true
       end
 
       options.force_tests = false
@@ -106,13 +105,16 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
 
   def run
     if @ci_test
+      if @config.project == "doubleshot"
+        Doubleshot::current.bootstrap!
+        Doubleshot::current.build! false
+      end
       exit_status = run_all_specs
       unless @force_tests
         @@pid_file.delete if @@pid_file.exist?
       end
       exit_status
     else
-      Doubleshot::CLI::Commands::Build.start([ "--conditional" ])
       # Output here just so you know when changes will be
       # picked up after you start the program.
       puts "Listening for changes..."
@@ -151,7 +153,8 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
 
         if test && test.exist?
           if path.extname == ".java"
-            Doubleshot::CLI::Commands::Build.start([])
+            Doubleshot::current.setup!
+            Doubleshot::current.build! false
           end
 
           duration = Time::measure do
@@ -179,8 +182,6 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
     exit_status = false
     duration = Time::measure do
       puts "\n --- Running all tests ---\n\n"
-
-      Doubleshot::CLI::Commands::Build.start([ "--conditional" ])
 
       script = <<-RUBY
         begin
