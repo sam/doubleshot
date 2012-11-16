@@ -6,3 +6,4 @@ doubleshot.jar
 .DS_Store
 .classpath.cache
 .doubleshot_test.pid
+examples/*/Doubleshot.lock
