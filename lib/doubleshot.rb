@@ -67,7 +67,7 @@ class Doubleshot
     #
     # SCENARIO: You will run into this if you've added a new dependency
     # (or made any other change) to your Doubleshot configuration file.
-    if path.exist? && lockfile.exist? && path.mtime > lockfile.mtime
+    if path && path.exist? && lockfile.exist? && path.mtime > lockfile.mtime
       lockfile.delete
       classpath_cache.delete if classpath_cache.exist?
     end
@@ -89,20 +89,20 @@ class Doubleshot
     load_gems! unless @config.runtime.gems.empty? && @config.development.gems.empty?
     load_jars! unless @config.runtime.jars.empty? && @config.development.jars.empty?
   end
-  
+
   def build!(conditional = true)
     if !conditional && @config.target.exist?
       @config.target.rmtree
     end
-    
+
     return unless @config.source.java.exist?
-    
+
     compiler = Doubleshot::Compiler.new(@config.source.java, @config.target)
-    
+
     lockfile.jars.each do |jar|
       compiler.classpath << jar.path
     end
-    
+
     if !conditional || compiler.pending?
       puts "Compiling..."
       compiler.build! true
@@ -114,23 +114,23 @@ class Doubleshot
   def load_gems!
     if lockfile.gems.empty?
       dependencies = @config.runtime.gems + @config.development.gems
-      
+
       puts "Dependencies not locked. Resolving the following:"
       dependencies.each do |dependency|
         puts "  #{dependency.name}: #{dependency.requirements.map(&:to_s).join(", ")}"
       end
-      
+
       unless dependencies.empty?
         resolver = Resolver::GemResolver.new *@config.gem_repositories
         puts "Using repositories: #{@config.gem_repositories.map(&:to_s).join(",")}"
-        
+
         resolver.resolve! dependencies
-      
+
         puts "Resolved dependencies:"
         dependencies.each do |dependency|
           puts "  #{dependency.name}: #{dependency.version}"
         end
-        
+
         require "rubygems/dependency_installer"
         Gem::sources = @config.gem_repositories.entries
         installer = Gem::DependencyInstaller.new domain: :both
@@ -145,7 +145,7 @@ class Doubleshot
           end
           lockfile.add dependency
         end
-        
+
         dependencies.each { |dependency| lockfile.add dependency }
         lockfile.flush!
       end
@@ -195,21 +195,21 @@ class Doubleshot
       # classpath_cache for future processes to use.
       jars = @config.runtime.jars + @config.development.jars
       unless jars.empty?
-      
+
         resolver = Resolver::JarResolver.new(*@config.mvn_repositories)
-  
+
         if lockfile.exist? && !lockfile.jars.empty?
           jars = Dependencies::JarDependencyList.new
           lockfile.jars.each do |jar|
             jars.add jar
           end
         end
-  
+
         resolver.resolve! jars
-  
+
         jars.each { |jar| lockfile.add jar }
         lockfile.flush!
-  
+
         cache = {}
         jars.each do |jar|
           cache[jar.to_s] = jar.path.to_s
@@ -221,7 +221,7 @@ class Doubleshot
             raise
           end
         end
-  
+
         classpath_cache.open("w+") do |file|
           file << cache.to_yaml
         end
