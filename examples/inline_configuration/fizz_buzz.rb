@@ -30,9 +30,23 @@ class Solutions
     @names[b] = name
   end
 
-  def benchmark!
+  def benchmark!(warmup_jruby = false)
     raise StandardError.new("Solutions do not match!") unless valid?
 
+    if warmup_jruby
+      @solutions.each do |solution|
+        puts "Warming up: #{@names[solution].inspect}"
+        # JRuby is going to try to optimize out
+        # a method after 10,050 iterations IIRC.
+        # These execute so quickly though, that
+        # we're just going to multiple that a bit.
+        (10_050 * 10).times do
+          solution.call StringIO.new
+        end
+      end
+      puts "Done warming up solutions."
+    end
+    
     Perfer::session "FizzBuzz" do |x|
       @solutions.each do |solution|
         x.iterate(@names[solution]) do
@@ -206,7 +220,7 @@ solution "Precalculated Array" do |out|
   end
 end
 
-Solutions.instance.benchmark!
+Solutions.instance.benchmark! !!ARGV[0]
 
 __END__
 

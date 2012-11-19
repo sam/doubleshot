@@ -88,6 +88,8 @@ class Doubleshot
 
     load_gems! unless @config.runtime.gems.empty? && @config.development.gems.empty?
     load_jars! unless @config.runtime.jars.empty? && @config.development.jars.empty?
+    
+    self
   end
 
   def build!(conditional = true)
@@ -109,6 +111,8 @@ class Doubleshot
     else
       puts "Conditional build: No source changes."
     end
+    
+    self
   end
 
   def load_gems!
@@ -261,5 +265,7 @@ class Doubleshot
       # TODO: This is problematic since Maven and Aether resolve different dependencies...
       setup!
     end
+    
+    self
   end
 end
