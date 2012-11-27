@@ -5,8 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.sam.doubleshot</groupId>
   <artifactId>doubleshot</artifactId>
-  <version>0.1.0</version>
-  <packaging>pom</packaging>
+  <version>1.0</version>
   <name>doubleshot</name>
   <dependencies>
     <dependency>
@@ -83,4 +82,7 @@
       <type>jar</type>
     </dependency>
   </dependencies>
+  <build>
+    <sourceDirectory>ext/java</sourceDirectory>
+  </build>
 </project>

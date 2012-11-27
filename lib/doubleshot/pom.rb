@@ -16,7 +16,6 @@ class Doubleshot
           <groupId>#{@config.group}</groupId>
           <artifactId>#{@config.project}</artifactId>
           <version>#{@config.version}</version>
-          <packaging>pom</packaging>
           <name>#{@config.project}</name>
           #{
             unless jars.empty?
@@ -48,7 +47,10 @@ class Doubleshot
               end.join("\n            ") +
               "\n          </dependencies>\n"
             end
-          }        </project>
+          }          <build>
+            <sourceDirectory>#{@config.source.java}</sourceDirectory>
+          </build>
+        </project>
       EOS
     end
   end

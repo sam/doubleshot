@@ -40,7 +40,6 @@ describe Doubleshot::Pom do
         <groupId>org.sam.doubleshot</groupId>
         <artifactId>doubleshot</artifactId>
         <version>1.0</version>
-        <packaging>pom</packaging>
         <name>doubleshot</name>
         <dependencies>
           <dependency>
@@ -90,6 +89,9 @@ describe Doubleshot::Pom do
             </exclusions>
           </dependency>
         </dependencies>
+        <build>
+          <sourceDirectory>ext/java</sourceDirectory>
+        </build>
       </project>
     EOS
   end
