@@ -58,7 +58,7 @@ end
 ```
 
 ##Requirements
-* Java 6 or later
+* Java 7 or later
 * Maven
 * JRuby 1.7 or later
 * Ruby 1.9 syntax only
@@ -128,9 +128,25 @@ require "minitest/autorun"
 ...
 ```
 
-##FAQ
+## FAQ
 
-###Does Doubleshot support Ruby 1.8.x syntax?
+### Does Doubleshot support Ruby 1.8.x syntax?
+
 No.
+
+### I get an error about Aether?
+
+If after installing Doubleshot (`gem install doubleshot`) you get the following when trying to run it:
+
+```bash
+$ doubleshot build
+Performing Doubleshot setup to resolve dependencies...
+NameError: missing class or uppercase package name (`org.sam.doubleshot.Aether')
+...STACKTRACE_INFORMATION_HERE...
+```
+
+Then there's a good change you don't have Java7 installed (the default on OSX is Java6).
+
+Download and install the current version here: http://jdk7.java.net/download.html
 
 ##Happy coding!
