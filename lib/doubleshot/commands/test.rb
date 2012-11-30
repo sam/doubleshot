@@ -36,7 +36,7 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
 
     @@pid_file = Pathname(".doubleshot_test.pid")
     if @@pid_file.exist? && !options.force_tests
-      
+
       begin
         if Process.getpgid(@@pid_file.read.to_i)
           puts ".doubleshot_test.pid exists: Are you running tests elsewhere? (Use --force to override.)"
@@ -125,26 +125,65 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
   private
   def listener
     require "listen"
-    
+
+    monitored = [
+      @config.source.tests,
+      @config.source.ruby,
+      @config.source.java
+    ].select(&:exist?).map(&:to_s)
+
     # This creates a MultiListener
-    Listen.to(@config.source.tests.to_s, @config.source.ruby.to_s, @config.source.java.to_s).change do |modified, added, removed|
+    Listen.to(*monitored).change do |modified, added, removed|
       modified.each do |location|
         path = Pathname(location)
 
         next unless path.extname == ".rb" or path.extname == ".java"
 
-        test = if path.basename.to_s =~ /_(spec|test).rb/ && path.child_of?(@config.source.tests)
-          path
-        else
-          relative_path = if path.extname == ".rb"
-                            path.relative_path_from(@config.source.ruby.expand_path)
-                          else
-                            path.relative_path_from(@config.source.java.expand_path)
-                          end
-          matcher = relative_path.sub(/(\w+)\.(rb|java)/, "\\1_{spec,test}.rb")
-          matchers = [ matcher, Pathname(matcher.to_s.split("/")[1..-1].join("/")) ]
+        test = nil
 
-          match = matchers.detect do |matcher|
+        if path.child_of?(@config.source.tests)
+          if path.basename.to_s =~ /_(spec|test).rb/
+            test = path
+          else
+            next
+          end
+        else
+          case path.extname
+          when ".rb" then
+            if @config.source.ruby.exist?
+              test = path.relative_path_from(@config.source.ruby.expand_path)
+            else
+              next
+            end
+          when ".java" then
+            if @config.source.java.exist?
+              test = path.relative_path_from(@config.source.java.expand_path)
+            else
+              next
+            end
+          end
+
+          matcher = test.sub(/(\w+)\.(rb|java)/, "\\1_{spec,test}.rb")
+          matchers = [ matcher ]
+
+          # If this is a nested path, then create a lower priority matcher
+          # without the first portion of the path, so that a path like:
+          #
+          #   "lib/doubleshot/configuration/source_locations.rb"
+          #
+          # would search for the following paths:
+          #
+          #   test/doubleshot/configuration/source_locations_{spec,test}.rb
+          #   test/configuration/source_locations_{spec,test}.rb
+          #
+          # So if you follow the exact lib structure convention in your test folder,
+          # those files will get precedence, but otherwise, you can drop the
+          # project-name so you don't have to nest ALL-THE-THINGS.
+          unless matcher.basename == matcher
+            matchers << Pathname(matcher.to_s.split("/")[1..-1].join("/"))
+          end
+
+          test = matchers.detect do |matcher|
             if match = Pathname::glob(@config.source.tests + matcher).first
               break match
             end
