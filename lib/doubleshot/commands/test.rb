@@ -137,7 +137,7 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
       modified.each do |location|
         path = Pathname(location)
 
-        next unless path.extname == ".rb" or path.extname == ".java"
+        next unless !path.hidden? || path.extname == ".rb" || path.extname == ".java"
 
         test = nil
 

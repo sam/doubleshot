@@ -12,4 +12,15 @@ class Pathname
   def to_url
     java.io.File.new(to_s).to_url.to_s
   end
+
+  def hidden?
+    path = expand_path
+
+    until path.root?
+      return true if path.basename.to_s.start_with? "."
+      path = path.parent
+    end
+
+    false
+  end
 end
