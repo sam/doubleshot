@@ -163,7 +163,7 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
             end
           end
 
-          matcher = test.sub(/(\w+)\.(rb|java)/, "\\1_{spec,test}.rb")
+          matcher = Pathname(test.sub(/(\w+)\.(rb|java)/, "\\1_{spec,test}.rb").to_s.underscore)
           matchers = [ matcher ]
 
           # If this is a nested path, then create a lower priority matcher
