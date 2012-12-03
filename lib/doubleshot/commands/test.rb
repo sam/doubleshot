@@ -183,6 +183,17 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
             matchers << Pathname(matcher.to_s.split("/")[1..-1].join("/"))
           end
 
+          # If a Java source follows the package group directory structure, eg:
+          #
+          #   org/substantiality
+          #
+          # Then strip the group id portion of the path in an attempt to match
+          # tests at the root of the tests directory.
+          group_path = @config.group.to_s.split(".").join("/") + "/"
+          if path.extname == ".java" && matcher.to_s[group_path]
+            matchers << matcher.sub(group_path, "")
+          end
+
           test = matchers.detect do |matcher|
             if match = Pathname::glob(@config.source.tests + matcher).first
               break match

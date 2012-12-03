@@ -4,7 +4,7 @@ Doubleshot.new do |config|
 
   config.project = "doubleshot"
   config.group   = "org.sam.doubleshot"
-  config.version = "1.0.1"
+  config.version = "1.0.2"
 
   config.gem "minitest", ">= 3.0.1"
   config.gem "minitest-wscolor", ">= 0"
