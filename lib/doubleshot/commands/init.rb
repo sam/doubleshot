@@ -117,11 +117,7 @@ class Doubleshot::CLI::Commands::Init < Doubleshot::CLI
       begin
         eval(contents, Doubleshot::CLI::binding)
       rescue LoadError, SyntaxError => e
-        original_line = e.backtrace.find { |line| line.include?(path.to_s) }
-        msg  = "There was a #{e.class} while evaluating #{gemspec_pathname.basename}: \n#{e.message}"
-        msg << " from\n  #{original_line}" if original_line
-        msg << "\n"
-        raise GemspecError, msg
+        raise Gem::InvalidSpecificationException, "There was a #{e.class} while evaluating gemspec: \n#{e.message}"
       end
     end
   end
