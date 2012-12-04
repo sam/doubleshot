@@ -222,7 +222,7 @@ class Doubleshot::CLI::Commands::Test < Doubleshot::CLI
 
           puts "Completed in #{duration}s"
         else
-          puts "\nNo matching test for #{path.relative_path_from(@config.source.ruby.expand_path).to_s}"
+          puts "\nNo matching test for #{path.relative_path_from(Pathname::pwd.expand_path)}"
         end
       end
     end
