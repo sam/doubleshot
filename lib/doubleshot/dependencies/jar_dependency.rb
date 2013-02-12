@@ -42,7 +42,7 @@ class Doubleshot
       end
 
       def to_s(long_form = false)
-        @name
+        @classifier.blank? ? @name : "#{@group}:#{@artifact}:#{@packaging}:#{@classifier}:#{@version}"
       end
 
       def path=(path)
