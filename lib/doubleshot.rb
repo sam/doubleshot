@@ -181,7 +181,7 @@ class Doubleshot
     if classpath_cache.exist?
       # We survived the cleanup checks, go ahead and just load
       # the cached version of your JARs.
-      cached_paths = YAML::load(classpath_cache)
+      cached_paths = YAML::load(classpath_cache.read)
 
       lockfile.jars.each do |jar|
         jar.path = cached_paths[jar.to_s]
