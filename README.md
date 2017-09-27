@@ -1,10 +1,10 @@
-#Doubleshot
+# Doubleshot
 
 Latest test results:
 
 [![Build Status](https://secure.travis-ci.org/sam/doubleshot.png)](http://travis-ci.org/sam/doubleshot)
 
-##Overview
+## Overview
 
 Doubleshot is for Developers using JRuby.
 
@@ -57,19 +57,19 @@ Pathname("Doubleshot.example").open("w+") do |example|
 end
 ```
 
-##Requirements
+## Requirements
 * Java 7 or later
 * Maven
 * JRuby 1.7 or later
 * Ruby 1.9 syntax only
 
-##Installation
+## Installation
 
 ```
 gem install doubleshot
 ```
 
-##Development
+## Development
 
 Here's how to get Doubleshot running locally yourself. You'll need Java, Maven and JRuby (1.7.x or -head) installed. Then, clone the repo:
 
@@ -85,7 +85,7 @@ All that just to clarify the process. The only thing left you actually need to d
 bin/doubleshot test --ci
 ```
 
-##Project Layout
+## Project Layout
 
 The *default* project using Doubleshot as its build-tool will have the following layout:
 
@@ -149,4 +149,4 @@ Then there's a good change you don't have Java7 installed (the default on OSX is
 
 Download and install the current version here: http://jdk7.java.net/download.html
 
-##Happy coding!
+## Happy coding!
