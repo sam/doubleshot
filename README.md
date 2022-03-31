@@ -6,6 +6,8 @@ Latest test results:
 
 ##Overview
 
+This is old, and you should not use it!
+
 Doubleshot is for Developers using JRuby.
 
 It lets you write Java and Ruby, perform Continuous Testing (meaning whenever a file changes, both Java and Ruby code is sandboxed and reloaded and the appropriate tests run), and package it all up as a Gem or JAR.
